@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Duke {
     //Prints separator component after text is printed
@@ -6,9 +7,23 @@ public class Duke {
         System.out.println("______________________________________________________________________________");
     }
     //Handles commands entered by the user
-    public static void handleUserCommand(String command) {
+    public static void handleNewTask(String[] tasks, String newTask, int taskCount) {
+        tasks[taskCount] = newTask;
         printSeparator();
-        System.out.println(" " + command);
+        System.out.println(" Added task: " + newTask);
+        printSeparator();
+    }
+    //Print list of tasks when user requests
+    public static void printTaskList(String[] tasks) {
+        int taskNumber = 1;
+        printSeparator();
+        if(tasks.length == 0) {
+            System.out.println("No tasks available...");
+        }
+        for(String task : tasks) {
+            System.out.println(" " + taskNumber + ": " + task);
+            taskNumber++;
+        }
         printSeparator();
     }
     public static void main(String[] args) {
@@ -25,6 +40,9 @@ public class Duke {
                 + "/_____/ _\\__, / \\___/ \n"
                 + "        /____/        ";
         String userCommand;
+        boolean isFinished = true;
+        String[] tasks = new String[100];
+        int taskCount = 0;
         Scanner in = new Scanner(System.in);
 
         System.out.println("Hello from\n" + logo);
@@ -34,12 +52,21 @@ public class Duke {
         printSeparator();
 
         //Loop infinitely until user enters "bye"
-        while(true) {
+        while(isFinished) {
             userCommand = in.nextLine();
-            if(userCommand.equals("bye")) {
+            switch (userCommand) {
+            case "bye":
+                isFinished = false;
+                break;
+            case "list":
+                printTaskList(Arrays.copyOf(tasks, taskCount));
+                break;
+            default:
+                //Add new task into tasks array
+                handleNewTask(tasks, userCommand, taskCount);
+                taskCount++;
                 break;
             }
-            handleUserCommand(userCommand);
         }
 
         printSeparator();
