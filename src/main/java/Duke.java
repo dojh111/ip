@@ -1,14 +1,17 @@
 import java.util.Scanner;
 import java.util.Arrays;
 
+/**
+ * Duke is a chat bot which can help the user do multiple tasks
+ */
 public class Duke {
-    //Prints separator component after text is printed
+    /** Prints separator component after text is printed */
     public static void printSeparator() {
         System.out.println("______________________________________________________________________________");
     }
 
-    //Handles commands entered by the user
-    public static void handleNewTask(Task[] tasks, String description, int taskCount) {
+    /** Adds user input into the task list */
+    public static void addNewTask(Task[] tasks, String description, int taskCount) {
         Task newTask = new Task(description);
         tasks[taskCount] = newTask;
         printSeparator();
@@ -16,39 +19,40 @@ public class Duke {
         printSeparator();
     }
 
-    //Print list of tasks when user requests
+    /** Print list of tasks when user requests */
     public static void printTaskList(Task[] tasks) {
         int taskNumber = 1;
         printSeparator();
-        if(tasks.length == 0) {
+        if (tasks.length == 0) {
             System.out.println("No tasks available... (｡◕‿‿◕｡)");
         }
-        for(Task task : tasks) {
+        for (Task task : tasks) {
             System.out.println(" " + taskNumber + ":[" + task.getStatusIcon() + "] " + task.description);
             taskNumber++;
         }
         printSeparator();
     }
 
-    //Set isDone of Task object to true
-    public static void markTaskAsDone(Task[] tasks, String description, int taskCount) {
-        //Determine index of task to be marked as done
-        String[] splitDescription = description.split(" ");
-        if(splitDescription.length == 1) {
+    /** Sets isDone of selected task to true */
+    public static void setTaskAsDone(Task[] tasks, String[] splitUserInput, int taskCount) {
+        //Determine index of task to be marked as done - this part can pass in broken array straight (To change)
+        if (splitUserInput.length == 1) {
             System.out.println("Invalid command entered... (ㆆ _ ㆆ)");
             printSeparator();
             return;
         }
-        int taskNumber = Integer.parseInt(splitDescription[1]) - 1;
+        int taskNumber = Integer.parseInt(splitUserInput[1]) - 1;
         printSeparator();
+
         //Check if taskNumber is out of bounds
-        if(taskNumber < 0 || taskNumber > taskCount - 1) {
+        if (taskNumber < 0 || taskNumber > taskCount - 1) {
             System.out.println("Invalid task number entered... (ㆆ _ ㆆ)");
             printSeparator();
             return;
         }
+
         //TaskNumber is valid
-        tasks[taskNumber].markAsDone();
+        tasks[taskNumber].setAsDone();
         System.out.println("NICE! (｡◕‿‿◕｡) I've marked the task as done!:");
         System.out.println("  [" + "\u2713" + "] " + tasks[taskNumber].description);
         printSeparator();
@@ -68,12 +72,13 @@ public class Duke {
                 + "/_____/ _\\__, / \\___/ \n"
                 + "        /____/        ";
         String userInput;
-        String[] command;
-        boolean isFinished = true;
+        String[] splitUserInput;
         Task[] tasks = new Task[100];
         int taskCount = 0;
+        boolean isFinished = true;
         Scanner in = new Scanner(System.in);
 
+        //Print startup sequence
         System.out.println("Hello from\n" + logo);
         printSeparator();
         System.out.println(" Hello! I'm Walter  ◕_◕");
@@ -81,10 +86,10 @@ public class Duke {
         printSeparator();
 
         //Loop infinitely until user enters "bye"
-        while(isFinished) {
+        while (isFinished) {
             userInput = in.nextLine();
-            command = userInput.split(" ");
-            switch (command[0]) {
+            splitUserInput = userInput.split(" ");
+            switch (splitUserInput[0]) {
             case "bye":
                 isFinished = false;
                 break;
@@ -92,16 +97,17 @@ public class Duke {
                 printTaskList(Arrays.copyOf(tasks, taskCount));
                 break;
             case "done":
-                markTaskAsDone(tasks, userInput, taskCount);
+                setTaskAsDone(tasks, splitUserInput, taskCount);
                 break;
             default:
                 //Add new task into tasks array
-                handleNewTask(tasks, userInput, taskCount);
+                addNewTask(tasks, userInput, taskCount);
                 taskCount++;
                 break;
             }
         }
 
+        //Print closing sequence
         printSeparator();
         System.out.println(" I'm sad to see you go ε(´סּ︵סּ`)з. Hope to see you again soon! ／人◕ ‿‿ ◕人＼");
         System.out.println(endLogo);

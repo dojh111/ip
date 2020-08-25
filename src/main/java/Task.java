@@ -1,3 +1,6 @@
+/**
+ * The Task class provides a template for the Task object where description and status is stored
+ */
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -7,13 +10,13 @@ public class Task {
         this.isDone = false;
     }
 
-    //Returns tick or X symbols
+    /** Returns tick or X icons */
     public String getStatusIcon() {
         return (isDone ? "\u2713" : "\u2718");
     }
 
-    //Set isDone to true
-    public void markAsDone() {
+    /** Sets isDone to true */
+    public void setAsDone() {
         isDone = true;
     }
 }
