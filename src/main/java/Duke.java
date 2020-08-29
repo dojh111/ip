@@ -183,7 +183,7 @@ public class Duke {
 
         //Print closing sequence
         printSeparator();
-        System.out.println(" I'm sad to see you go ε(´סּ︵סּ`)з. Hope to see you again soon! ／人◕ ‿‿ ◕人＼");
+        System.out.println(" I'm sad to see you go. Hope to see you again soon! :D");
         System.out.println(endLogo);
         printSeparator();
     }
