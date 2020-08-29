@@ -11,11 +11,71 @@ public class Duke {
     }
 
     /** Adds user input into the task list */
-    public static void addNewTask(Task[] tasks, String description, int taskCount) {
-        Task newTask = new Task(description);
-        tasks[taskCount] = newTask;
+    public static void addTodoTask(Task[] tasks, String[] splitUserInput, int taskCount) {
+        String description = "";
+        for (int i = 1; i < splitUserInput.length; i++) {
+            description += splitUserInput[i] + " ";
+        }
+        tasks[taskCount] = new Todo(description);
+    }
+
+    /** Adds new deadline task into the task list */
+    public static void addDeadlineTask(Task[] tasks, String[] splitUserInput, int taskCount) {
+        String description;
+        String by;
+        int indexOfBy = 0;
+        for (int i = 0; i < splitUserInput.length; i++) {
+            if (splitUserInput[i].equals("/by")) {
+                indexOfBy = i;
+                break;
+            }
+        }
+        description = determineDescription(splitUserInput, indexOfBy);
+        by = determineAdditionInformation(splitUserInput, indexOfBy);
+        tasks[taskCount] = new Deadline(description, by);
+    }
+
+    /** Adds new event task into the task list */
+    public static void addEventTask(Task[] tasks, String[] splitUserInput, int taskCount) {
+        String description;
+        String at;
+        int indexOfAt = 0;
+        for (int i = 0; i < splitUserInput.length; i++) {
+            if (splitUserInput[i].equals("/at")) {
+                indexOfAt = i;
+                break;
+            }
+        }
+        description = determineDescription(splitUserInput, indexOfAt);
+        at = determineAdditionInformation(splitUserInput, indexOfAt);
+        tasks[taskCount] = new Event(description, at);
+    }
+
+    /** Determines the description of user input task */
+    public static String determineDescription(String[] splitUserInput, int indexOfBy) {
+        String description = "";
+        for (int i = 0; i < indexOfBy; i++) {
+            description += splitUserInput[i] + " ";
+        }
+        return description;
+    }
+
+    /** Determines additional information of user input task */
+    public static String determineAdditionInformation(String[] splitUserInput, int indexOfBy) {
+        String additionalInformation = "";
+        for (int i = indexOfBy + 1; i < splitUserInput.length; i++) {
+            additionalInformation += splitUserInput[i] + " ";
+        }
+        return additionalInformation;
+    }
+
+    /** Print confirmation text when a new task is added */
+    public static void printTaskAddedConfirmation(Task[] tasks, int taskCount) {
+        int numberOfTasks = taskCount + 1;
         printSeparator();
-        System.out.println(" Added task: " + description);
+        System.out.println(" Got it, I've added this task: ");
+        System.out.println("   " + tasks[taskCount]);
+        System.out.println(" Now you have " + numberOfTasks + " in the list.");
         printSeparator();
     }
 
@@ -25,9 +85,11 @@ public class Duke {
         printSeparator();
         if (tasks.length == 0) {
             System.out.println("No tasks available... (｡◕‿‿◕｡)");
+            return;
         }
+        System.out.println(" Here are the tasks in your list: ");
         for (Task task : tasks) {
-            System.out.println(" " + taskNumber + ":[" + task.getStatusIcon() + "] " + task.description);
+            System.out.println(" " + taskNumber + "." + task);
             taskNumber++;
         }
         printSeparator();
@@ -99,10 +161,22 @@ public class Duke {
             case "done":
                 setTaskAsDone(tasks, splitUserInput, taskCount);
                 break;
-            default:
-                //Add new task into tasks array
-                addNewTask(tasks, userInput, taskCount);
+            case "todo":
+                addTodoTask(tasks, splitUserInput, taskCount);
+                printTaskAddedConfirmation(tasks, taskCount);
                 taskCount++;
+                break;
+            case "deadline":
+                addDeadlineTask(tasks, Arrays.copyOfRange(splitUserInput, 1, splitUserInput.length), taskCount);
+                printTaskAddedConfirmation(tasks, taskCount);
+                taskCount++;
+                break;
+            case "event":
+                addEventTask(tasks, Arrays.copyOfRange(splitUserInput, 1, splitUserInput.length), taskCount);
+                printTaskAddedConfirmation(tasks, taskCount);
+                taskCount++;
+                break;
+            default:
                 break;
             }
         }
@@ -113,4 +187,5 @@ public class Duke {
         System.out.println(endLogo);
         printSeparator();
     }
+
 }
