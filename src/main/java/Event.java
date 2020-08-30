@@ -2,6 +2,11 @@
  * The Event class inherits from the Task class and is used to create event objects
  */
 public class Event extends Task {
+
+    public static final String EVENT_ICON = "[E]";
+    public static final String MESSAGE_INFO_START = " (At: ";
+    public static final String MESSAGE_INFO_END = ")";
+
     protected String at;
 
     public Event(String description, String at) {
@@ -11,6 +16,6 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (At: " + at + ")";
+        return EVENT_ICON + super.toString() + MESSAGE_INFO_START + at + MESSAGE_INFO_END;
     }
 }

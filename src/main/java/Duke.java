@@ -5,89 +5,157 @@ import java.util.Arrays;
  * Duke is a chat bot which can help the user do multiple tasks
  */
 public class Duke {
+    //Identifiers and values
+    public static final int ARRAY_SIZE_TASKS = 100;
+    public static final String DEADLINE_IDENTIFIER = "/by";
+    public static final String EVENT_IDENTIFIER = "/at";
+    public static final String WHITESPACE_IDENTIFIER = " ";
+    public static final String COMMAND_TODO = "todo";
+    public static final String COMMAND_DEADLINE = "deadline";
+    public static final String COMMAND_EVENT = "event";
+    public static final String REPLACEMENT_BLANK_SPACES = "";
+
+    //Printed Messages
+    public static final String MESSAGE_DOUBLE_WHITESPACE = "   ";
+    public static final String MESSAGE_LINE_SEPARATOR =
+            "______________________________________________________________________________";
+    public static final String MESSAGE_NOW_YOU_HAVE = " Now you have ";
+    public static final String MESSAGE_IN_THE_LIST = " in the list.";
+    public static final String MESSAGE_ERROR_TASK_UNAVAILABLE = "No tasks available... (｡◕‿‿◕｡)";
+    public static final String MESSAGE_TASKS_IN_LIST = " Here are the tasks in your list: ";
+    public static final String MESSAGE_ERROR_INVALID_COMMAND = "Invalid command entered... (ㆆ _ ㆆ)";
+    public static final String MESSAGE_ERROR_INVALID_NUMBER = "Invalid task number entered... (ㆆ _ ㆆ)";
+    public static final String MESSAGE_TASK_MARKED = "NICE! (｡◕‿‿◕｡) I've marked the task as done!:";
+    public static final String MESSAGE_TASK_ADDED_CONFIRM = " Got it, I've added this task: ";
+    public static final String MESSAGE_HELLO_FROM = "Hello from\n";
+    public static final String MESSAGE_INTRO_GREETING = " Hello! I'm Walter  ◕_◕";
+    public static final String MESSAGE_INTRO_WALTER_QUERY = " What can I do for you?";
+    public static final String MESSAGE_CLOSING = " I'm sad to see you go. Hope to see you again soon! :D";
+
     /** Prints separator component after text is printed */
     public static void printSeparator() {
-        System.out.println("______________________________________________________________________________");
+        System.out.println(MESSAGE_LINE_SEPARATOR);
     }
 
-    /** Adds user input into the task list */
-    public static void addTodoTask(Task[] tasks, String[] splitUserInput, int taskCount) {
-        String description = "";
-        for (int i = 1; i < splitUserInput.length; i++) {
-            description += splitUserInput[i] + " ";
-        }
-        tasks[taskCount] = new Todo(description);
+    /**
+     * Prints startup greet sequence
+     *
+     * @params logo  The logo for Walter chat bot
+     */
+    public static void printStartupSequence(String logo) {
+        System.out.println(MESSAGE_HELLO_FROM + logo);
+        printSeparator();
+        System.out.println(MESSAGE_INTRO_GREETING);
+        System.out.println(MESSAGE_INTRO_WALTER_QUERY);
+        printSeparator();
     }
 
-    /** Adds new deadline task into the task list */
-    public static void addDeadlineTask(Task[] tasks, String[] splitUserInput, int taskCount) {
+    /**
+     * Prints closing sequence
+     *
+     * @params endLogo  The closing sequence logo for Walter
+     */
+    public static void printClosingSequence(String endLogo) {
+        printSeparator();
+        System.out.println(MESSAGE_CLOSING);
+        System.out.println(endLogo);
+        printSeparator();
+    }
+
+    /**
+     * Removes the command passed into the method and replaces it with white space
+     *
+     * @params userInput  Original string typed by user and to be modified
+     * @params commandToRemove  Command to be removed from string
+     */
+    public static String removeCommandFromInput(String userInput, String commandToRemove) {
+        String modifiedUserInput = userInput.replace(commandToRemove, REPLACEMENT_BLANK_SPACES);
+        return modifiedUserInput.trim();
+    }
+
+    /**
+     * Returns a string array with the task's description and additional information
+     *
+     * @params userInput Original string typed by user and to be modified
+     * @params commandToRemove  Command to be removed from string
+     * @params identifier  Identifier token to split the string with
+     **/
+    public static String[] determineTaskInformation(String userInput, String commandToRemove, String identifier) {
+        String modifiedString = removeCommandFromInput(userInput, commandToRemove);
+        return modifiedString.split(identifier);
+    }
+
+    /**
+     * Adds user input into the task list
+     *
+     * @params tasks  Array of current stored tasks
+     * @params userInput  Original input by user
+     * @params taskCount  Current count of tasks stored
+     */
+    public static void addTodoTask(Task[] tasks, String userInput, int taskCount) {
+        tasks[taskCount] = new Todo(removeCommandFromInput(userInput, COMMAND_TODO));
+    }
+
+    /**
+     * Adds new deadline task into the task list
+     *
+     * @params tasks  Array of current stored tasks
+     * @params userInput  Original input by user
+     * @params taskCount  Current count of tasks stored
+     */
+    public static void addDeadlineTask(Task[] tasks, String userInput, int taskCount) {
         String description;
         String by;
-        int indexOfBy = 0;
-        for (int i = 0; i < splitUserInput.length; i++) {
-            if (splitUserInput[i].equals("/by")) {
-                indexOfBy = i;
-                break;
-            }
-        }
-        description = determineDescription(splitUserInput, indexOfBy);
-        by = determineAdditionInformation(splitUserInput, indexOfBy);
+        String[] informationStrings = determineTaskInformation(userInput, COMMAND_DEADLINE, DEADLINE_IDENTIFIER);
+        description = informationStrings[0].trim();
+        by = informationStrings[1].trim();
         tasks[taskCount] = new Deadline(description, by);
     }
 
-    /** Adds new event task into the task list */
-    public static void addEventTask(Task[] tasks, String[] splitUserInput, int taskCount) {
+    /**
+     * Adds new event task into the task list
+     *
+     * @params tasks  Array of current stored tasks
+     * @params userInput  Original input by user
+     * @params taskCount  Current count of tasks stored
+     * */
+    public static void addEventTask(Task[] tasks, String userInput, int taskCount) {
         String description;
         String at;
-        int indexOfAt = 0;
-        for (int i = 0; i < splitUserInput.length; i++) {
-            if (splitUserInput[i].equals("/at")) {
-                indexOfAt = i;
-                break;
-            }
-        }
-        description = determineDescription(splitUserInput, indexOfAt);
-        at = determineAdditionInformation(splitUserInput, indexOfAt);
+        String[] informationStrings = determineTaskInformation(userInput, COMMAND_EVENT, EVENT_IDENTIFIER);
+        description = informationStrings[0].trim();
+        at = informationStrings[1].trim();
         tasks[taskCount] = new Event(description, at);
     }
 
-    /** Determines the description of user input task */
-    public static String determineDescription(String[] splitUserInput, int indexOfBy) {
-        String description = "";
-        for (int i = 0; i < indexOfBy; i++) {
-            description += splitUserInput[i] + " ";
-        }
-        return description;
-    }
-
-    /** Determines additional information of user input task */
-    public static String determineAdditionInformation(String[] splitUserInput, int indexOfBy) {
-        String additionalInformation = "";
-        for (int i = indexOfBy + 1; i < splitUserInput.length; i++) {
-            additionalInformation += splitUserInput[i] + " ";
-        }
-        return additionalInformation;
-    }
-
-    /** Print confirmation text when a new task is added */
+    /**
+     * Print confirmation text when a new task is added
+     *
+     * @params tasks  Array of current stored tasks
+     * @params taskCount  Current count of tasks stored
+     */
     public static void printTaskAddedConfirmation(Task[] tasks, int taskCount) {
         int numberOfTasks = taskCount + 1;
         printSeparator();
-        System.out.println(" Got it, I've added this task: ");
-        System.out.println("   " + tasks[taskCount]);
-        System.out.println(" Now you have " + numberOfTasks + " in the list.");
+        System.out.println(MESSAGE_TASK_ADDED_CONFIRM);
+        System.out.println(MESSAGE_DOUBLE_WHITESPACE + tasks[taskCount]);
+        System.out.println(MESSAGE_NOW_YOU_HAVE + numberOfTasks + MESSAGE_IN_THE_LIST);
         printSeparator();
     }
 
-    /** Print list of tasks when user requests */
+    /**
+     * Print list of tasks when user requests
+     *
+     * @params tasks  Array of current stored tasks
+     */
     public static void printTaskList(Task[] tasks) {
         int taskNumber = 1;
         printSeparator();
         if (tasks.length == 0) {
-            System.out.println("No tasks available... (｡◕‿‿◕｡)");
+            System.out.println(MESSAGE_ERROR_TASK_UNAVAILABLE);
             return;
         }
-        System.out.println(" Here are the tasks in your list: ");
+        System.out.println(MESSAGE_TASKS_IN_LIST);
         for (Task task : tasks) {
             System.out.println(" " + taskNumber + "." + task);
             taskNumber++;
@@ -95,11 +163,17 @@ public class Duke {
         printSeparator();
     }
 
-    /** Sets isDone of selected task to true */
+    /**
+     * Sets isDone of selected task to true
+     *
+     * @params tasks  Array of current stored tasks
+     * @params splitUserInput  Array of strings after original user input has been split by whitespace
+     * @params taskCount  Current count of tasks stored
+     */
     public static void setTaskAsDone(Task[] tasks, String[] splitUserInput, int taskCount) {
         //Determine index of task to be marked as done - this part can pass in broken array straight (To change)
         if (splitUserInput.length == 1) {
-            System.out.println("Invalid command entered... (ㆆ _ ㆆ)");
+            System.out.println(MESSAGE_ERROR_INVALID_COMMAND);
             printSeparator();
             return;
         }
@@ -108,14 +182,14 @@ public class Duke {
 
         //Check if taskNumber is out of bounds
         if (taskNumber < 0 || taskNumber > taskCount - 1) {
-            System.out.println("Invalid task number entered... (ㆆ _ ㆆ)");
+            System.out.println(MESSAGE_ERROR_INVALID_NUMBER);
             printSeparator();
             return;
         }
 
         //TaskNumber is valid
         tasks[taskNumber].setAsDone();
-        System.out.println("NICE! (｡◕‿‿◕｡) I've marked the task as done!:");
+        System.out.println(MESSAGE_TASK_MARKED);
         System.out.println("  [" + "\u2713" + "] " + tasks[taskNumber].description);
         printSeparator();
     }
@@ -135,22 +209,18 @@ public class Duke {
                 + "        /____/        ";
         String userInput;
         String[] splitUserInput;
-        Task[] tasks = new Task[100];
+        Task[] tasks = new Task[ARRAY_SIZE_TASKS];
         int taskCount = 0;
         boolean isFinished = true;
         Scanner in = new Scanner(System.in);
 
         //Print startup sequence
-        System.out.println("Hello from\n" + logo);
-        printSeparator();
-        System.out.println(" Hello! I'm Walter  ◕_◕");
-        System.out.println(" What can I do for you?");
-        printSeparator();
+        printStartupSequence(logo);
 
         //Loop infinitely until user enters "bye"
         while (isFinished) {
             userInput = in.nextLine();
-            splitUserInput = userInput.split(" ");
+            splitUserInput = userInput.split(WHITESPACE_IDENTIFIER);
             switch (splitUserInput[0]) {
             case "bye":
                 isFinished = false;
@@ -162,17 +232,17 @@ public class Duke {
                 setTaskAsDone(tasks, splitUserInput, taskCount);
                 break;
             case "todo":
-                addTodoTask(tasks, splitUserInput, taskCount);
+                addTodoTask(tasks, userInput, taskCount);
                 printTaskAddedConfirmation(tasks, taskCount);
                 taskCount++;
                 break;
             case "deadline":
-                addDeadlineTask(tasks, Arrays.copyOfRange(splitUserInput, 1, splitUserInput.length), taskCount);
+                addDeadlineTask(tasks, userInput, taskCount);
                 printTaskAddedConfirmation(tasks, taskCount);
                 taskCount++;
                 break;
             case "event":
-                addEventTask(tasks, Arrays.copyOfRange(splitUserInput, 1, splitUserInput.length), taskCount);
+                addEventTask(tasks, userInput, taskCount);
                 printTaskAddedConfirmation(tasks, taskCount);
                 taskCount++;
                 break;
@@ -182,10 +252,7 @@ public class Duke {
         }
 
         //Print closing sequence
-        printSeparator();
-        System.out.println(" I'm sad to see you go. Hope to see you again soon! :D");
-        System.out.println(endLogo);
-        printSeparator();
+        printClosingSequence(endLogo);
     }
 
 }
