@@ -36,6 +36,11 @@ public class Walter {
     public static final String EXCEPTION_EMPTY_TODO = "Oh no! The description of the todo cannot be empty ;-;";
     public static final String EXCEPTION_INVALID_TASK_NUMBER = "Invalid task number entered... Please try again!";
     public static final String EXCEPTION_EMPTY_DONE = "Oh no... You have to enter a task number. Please try again!";
+    public static final String EXCEPTION_TIMEDEVENT_INTRO = "Oh no! ;-;\nThe ";
+    public static final String EXCEPTION_TIMEDEVENT_BODY =
+            " command requires both description and time information in the format of: \n";
+    public static final String EXCEPTION_TIMEDEVENT_DESCRIPTION = "[description] ";
+    public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
 
     //ASCII art logos
     public static final String END_LOGO = "________              \n"
@@ -123,35 +128,53 @@ public class Walter {
     }
 
     /**
-     * Adds new deadline task into the task list
+     * Adds new timed event tasks such as events or deadlines into the task list
      *
      * @params tasks  Array of current stored tasks
      * @params userInput  Original input by user
      * @params taskCount  Current count of tasks stored
-     */
-    public static void addDeadlineTask(Task[] tasks, String userInput, int taskCount) {
-        String description;
-        String by;
-        String[] informationStrings = determineTaskInformation(userInput, COMMAND_DEADLINE, DEADLINE_IDENTIFIER);
-        description = informationStrings[0].trim();
-        by = informationStrings[1].trim();
-        tasks[taskCount] = new Deadline(description, by);
-    }
-
-    /**
-     * Adds new event task into the task list
-     *
-     * @params tasks  Array of current stored tasks
-     * @params userInput  Original input by user
-     * @params taskCount  Current count of tasks stored
+     * @params command  The command entered - Either event or deadline
+     * @params eventIdentifier  Identifier to determine string information - Either /at or /by
      * */
-    public static void addEventTask(Task[] tasks, String userInput, int taskCount) {
+    public static void addNewTimedEvent(Task[] tasks, String userInput, int taskCount, String command,
+            String eventIdentifier) throws WalterException {
         String description;
-        String at;
-        String[] informationStrings = determineTaskInformation(userInput, COMMAND_EVENT, EVENT_IDENTIFIER);
+        String timeInformation;
+        boolean fieldsArePresent = true;
+
+        String[] informationStrings = determineTaskInformation(userInput, command, eventIdentifier);
+
+        //Check if both fields have been fulfilled
+        for (String information : informationStrings) {
+            if (information.equals(BLANK_SPACE)) {
+                fieldsArePresent = false;
+                break;
+            }
+        }
+
+        //Check if additional information was given
+        if (informationStrings.length < 2 || !fieldsArePresent) {
+            String exceptionMessage = EXCEPTION_TIMEDEVENT_INTRO + command +
+                    EXCEPTION_TIMEDEVENT_BODY +
+                    EXCEPTION_TIMEDEVENT_DESCRIPTION + eventIdentifier + EXCEPTION_TIMEDEVENT_TIMEINFO;
+            throw new WalterException(exceptionMessage);
+        }
+
+        //Set variables
         description = informationStrings[0].trim();
-        at = informationStrings[1].trim();
-        tasks[taskCount] = new Event(description, at);
+        timeInformation = informationStrings[1].trim();
+
+        //Create new task objects
+        switch (command) {
+        case "event":
+            tasks[taskCount] = new Event(description, timeInformation);
+            break;
+        case "deadline":
+            tasks[taskCount] = new Deadline(description, timeInformation);
+            break;
+        default:
+            break;
+        }
     }
 
     /**
@@ -196,17 +219,16 @@ public class Walter {
      * @params splitUserInput  Array of strings after original user input has been split by whitespace
      * @params taskCount  Current count of tasks stored
      */
-    public static void setTaskAsDone(Task[] tasks, String[] splitUserInput, int taskCount) throws WalterException {
+    public static void setTaskAsDone(Task[] tasks, String[] splitUserInput) throws WalterException {
         //Determine index of task to be marked as done
         if (splitUserInput.length == 1) {
             throw new WalterException(EXCEPTION_EMPTY_DONE);
-            //System.out.println(MESSAGE_ERROR_INVALID_COMMAND);
         }
         int taskNumber = Integer.parseInt(splitUserInput[1]) - 1;
-        printSeparator();
 
         //TaskNumber is valid
         tasks[taskNumber].setAsDone();
+        printSeparator();
         System.out.println(MESSAGE_TASK_MARKED);
         System.out.println("  [" + TICK_ICON + "] " + tasks[taskNumber].description);
         printSeparator();
@@ -237,7 +259,7 @@ public class Walter {
                     printTaskList(Arrays.copyOf(tasks, taskCount));
                     break;
                 case "done":
-                    setTaskAsDone(tasks, splitUserInput, taskCount);
+                    setTaskAsDone(tasks, splitUserInput);
                     break;
                 case "todo":
                     addTodoTask(tasks, userInput, taskCount);
@@ -245,12 +267,12 @@ public class Walter {
                     taskCount++;
                     break;
                 case "deadline":
-                    addDeadlineTask(tasks, userInput, taskCount);
+                    addNewTimedEvent(tasks, userInput, taskCount, COMMAND_DEADLINE, DEADLINE_IDENTIFIER);
                     printTaskAddedConfirmation(tasks, taskCount);
                     taskCount++;
                     break;
                 case "event":
-                    addEventTask(tasks, userInput, taskCount);
+                    addNewTimedEvent(tasks, userInput, taskCount, COMMAND_EVENT, EVENT_IDENTIFIER);
                     printTaskAddedConfirmation(tasks, taskCount);
                     taskCount++;
                     break;
