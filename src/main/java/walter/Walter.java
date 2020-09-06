@@ -1,3 +1,11 @@
+package walter;
+
+import walter.exceptions.WalterException;
+import walter.tasks.Deadline;
+import walter.tasks.Event;
+import walter.tasks.Task;
+import walter.tasks.Todo;
+
 import java.util.Scanner;
 import java.util.Arrays;
 
@@ -27,7 +35,7 @@ public class Walter {
     public static final String MESSAGE_TASK_MARKED = "NICE! (｡◕‿‿◕｡) I've marked the task as done!:";
     public static final String MESSAGE_TASK_ADDED_CONFIRM = " Got it, I've added this task: ";
     public static final String MESSAGE_HELLO_FROM = "Hello from\n";
-    public static final String MESSAGE_INTRO_GREETING = " Hello! I'm Walter  ◕_◕";
+    public static final String MESSAGE_INTRO_GREETING = " Hello! I'm walter.walter  ◕_◕";
     public static final String MESSAGE_INTRO_WALTER_QUERY = " What can I do for you?";
     public static final String MESSAGE_CLOSING = " I'm sad to see you go. Hope to see you again soon! :D";
 
@@ -41,6 +49,8 @@ public class Walter {
             " command requires both description and time information in the format of: \n";
     public static final String EXCEPTION_TIMEDEVENT_DESCRIPTION = "[description] ";
     public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
+    public static final String EXCEPTION_DONE_EXPECTED_INTEGER =
+            "I'm sorry, I don't understand that ;-;. Please enter a number instead!";
 
     //ASCII art logos
     public static final String END_LOGO = "________              \n"
@@ -64,7 +74,7 @@ public class Walter {
     /**
      * Prints startup greet sequence
      *
-     * @params logo  The logo for Walter chat bot
+     * @params logo  The logo for walter.walter chat bot
      */
     public static void printStartupSequence() {
         System.out.println(MESSAGE_HELLO_FROM + WALTER_LOGO);
@@ -77,7 +87,7 @@ public class Walter {
     /**
      * Prints closing sequence
      *
-     * @params endLogo  The closing sequence logo for Walter
+     * @params endLogo  The closing sequence logo for walter.walter
      */
     public static void printClosingSequence() {
         printSeparator();
@@ -230,7 +240,7 @@ public class Walter {
         tasks[taskNumber].setAsDone();
         printSeparator();
         System.out.println(MESSAGE_TASK_MARKED);
-        System.out.println("  [" + TICK_ICON + "] " + tasks[taskNumber].description);
+        System.out.println("  [" + TICK_ICON + "] " + tasks[taskNumber].getDescription());
         printSeparator();
     }
 
@@ -282,11 +292,16 @@ public class Walter {
                 }
 
             } catch (WalterException e) {
-                System.out.println(e.errorMessage);
+                //Catch exceptions and print error messages unique to Walter
+                System.out.println(e.getErrorMessage());
 
             } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+                //Catch exceptions when index given is out of bounds or invalid
                 System.out.println(EXCEPTION_INVALID_TASK_NUMBER);
 
+            } catch (NumberFormatException e) {
+                //Catch exception when string is given for a field which requires number
+                System.out.println(EXCEPTION_DONE_EXPECTED_INTEGER);
             }
         }
 

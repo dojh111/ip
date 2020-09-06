@@ -1,5 +1,7 @@
+package walter.tasks;
+
 /**
- * The Event class inherits from the Task class and is used to create event objects
+ * The walter.tasks.Event class inherits from the walter.tasks.Task class and is used to create event objects
  */
 public class Event extends Task {
 

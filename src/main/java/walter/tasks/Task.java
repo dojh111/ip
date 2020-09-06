@@ -1,5 +1,7 @@
+package walter.tasks;
+
 /**
- * The Task class provides a template for the Task object where description and status is stored
+ * The walter.tasks.Task class provides a template for the walter.tasks.Task object where description and status is stored
  */
 public abstract class Task {
 
@@ -20,6 +22,10 @@ public abstract class Task {
 
     public void setAsDone() {
         isDone = true;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override

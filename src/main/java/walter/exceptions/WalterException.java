@@ -1,5 +1,7 @@
+package walter.exceptions;
+
 /**
- * Exception class for exceptions specific to Walter
+ * Exception class for exceptions specific to walter.walter
  */
 public class WalterException extends Exception {
 
@@ -8,5 +10,9 @@ public class WalterException extends Exception {
     public WalterException (String errorMessage) {
         super(errorMessage);
         this.errorMessage = errorMessage;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
