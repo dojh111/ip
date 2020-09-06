@@ -13,7 +13,7 @@ public class Walter {
     public static final String COMMAND_TODO = "todo";
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
-    public static final String REPLACEMENT_BLANK_SPACES = "";
+    public static final String BLANK_SPACE = "";
     public static final String TICK_ICON = "\u2713";
 
     //Printed Messages
@@ -24,8 +24,6 @@ public class Walter {
     public static final String MESSAGE_IN_THE_LIST = " in the list.";
     public static final String MESSAGE_ERROR_TASK_UNAVAILABLE = "No tasks available... (｡◕‿‿◕｡)";
     public static final String MESSAGE_TASKS_IN_LIST = " Here are the tasks in your list: ";
-    public static final String MESSAGE_ERROR_INVALID_COMMAND = "Invalid command entered... (ㆆ _ ㆆ)";
-    public static final String MESSAGE_ERROR_INVALID_NUMBER = "Invalid task number entered... (ㆆ _ ㆆ)";
     public static final String MESSAGE_TASK_MARKED = "NICE! (｡◕‿‿◕｡) I've marked the task as done!:";
     public static final String MESSAGE_TASK_ADDED_CONFIRM = " Got it, I've added this task: ";
     public static final String MESSAGE_HELLO_FROM = "Hello from\n";
@@ -35,6 +33,9 @@ public class Walter {
 
     //Exception Messages
     public static final String EXCEPTION_INVALID_COMMAND = "I do not know what that means ;-;, please try again!";
+    public static final String EXCEPTION_EMPTY_TODO = "Oh no! The description of the todo cannot be empty ;-;";
+    public static final String EXCEPTION_INVALID_TASK_NUMBER = "Invalid task number entered... Please try again!";
+    public static final String EXCEPTION_EMPTY_DONE = "Oh no... You have to enter a task number. Please try again!";
 
     //ASCII art logos
     public static final String END_LOGO = "________              \n"
@@ -87,7 +88,7 @@ public class Walter {
      * @params commandToRemove  Command to be removed from string
      */
     public static String removeCommandFromInput(String userInput, String commandToRemove) {
-        String modifiedUserInput = userInput.replace(commandToRemove, REPLACEMENT_BLANK_SPACES);
+        String modifiedUserInput = userInput.replace(commandToRemove, BLANK_SPACE);
         return modifiedUserInput.trim();
     }
 
@@ -110,8 +111,15 @@ public class Walter {
      * @params userInput  Original input by user
      * @params taskCount  Current count of tasks stored
      */
-    public static void addTodoTask(Task[] tasks, String userInput, int taskCount) {
-        tasks[taskCount] = new Todo(removeCommandFromInput(userInput, COMMAND_TODO));
+    public static void addTodoTask(Task[] tasks, String userInput, int taskCount) throws WalterException {
+        String taskDescription = removeCommandFromInput(userInput, COMMAND_TODO);
+
+        //Check for exception where user input for task is empty
+        if (taskDescription.equals(BLANK_SPACE)) {
+            throw new WalterException(EXCEPTION_EMPTY_TODO);
+        }
+
+        tasks[taskCount] = new Todo(taskDescription);
     }
 
     /**
@@ -188,22 +196,14 @@ public class Walter {
      * @params splitUserInput  Array of strings after original user input has been split by whitespace
      * @params taskCount  Current count of tasks stored
      */
-    public static void setTaskAsDone(Task[] tasks, String[] splitUserInput, int taskCount) {
-        //Determine index of task to be marked as done - this part can pass in broken array straight (To change)
+    public static void setTaskAsDone(Task[] tasks, String[] splitUserInput, int taskCount) throws WalterException {
+        //Determine index of task to be marked as done
         if (splitUserInput.length == 1) {
-            System.out.println(MESSAGE_ERROR_INVALID_COMMAND);
-            printSeparator();
-            return;
+            throw new WalterException(EXCEPTION_EMPTY_DONE);
+            //System.out.println(MESSAGE_ERROR_INVALID_COMMAND);
         }
         int taskNumber = Integer.parseInt(splitUserInput[1]) - 1;
         printSeparator();
-
-        //Check if taskNumber is out of bounds
-        if (taskNumber < 0 || taskNumber > taskCount - 1) {
-            System.out.println(MESSAGE_ERROR_INVALID_NUMBER);
-            printSeparator();
-            return;
-        }
 
         //TaskNumber is valid
         tasks[taskNumber].setAsDone();
@@ -256,10 +256,15 @@ public class Walter {
                     break;
                 default:
                     //Throw exception for invalid command - Break statement unreachable
-                    throw new WalterException();
+                    throw new WalterException(EXCEPTION_INVALID_COMMAND);
                 }
+
             } catch (WalterException e) {
-                System.out.println(EXCEPTION_INVALID_COMMAND);
+                System.out.println(e.errorMessage);
+
+            } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+                System.out.println(EXCEPTION_INVALID_TASK_NUMBER);
+
             }
         }
 
