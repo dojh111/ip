@@ -1,5 +1,7 @@
+package walter.tasks;
+
 /**
- * The Todo class inherits from the Task class and is used to create todo objects
+ * The walter.tasks.Todo class inherits from the walter.tasks.Task class and is used to create todo objects
  */
 public class Todo extends Task {
 

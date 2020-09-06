@@ -1,5 +1,7 @@
+package walter.tasks;
+
 /**
- * The Deadline class inherits from the Task class and is used to create deadline objects
+ * The walter.tasks.Deadline class inherits from the walter.tasks.Task class and is used to create deadline objects
  */
 public class Deadline extends Task {
     public static final String D = "[D]";
