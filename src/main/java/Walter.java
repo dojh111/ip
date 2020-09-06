@@ -4,7 +4,7 @@ import java.util.Arrays;
 /**
  * Duke is a chat bot which can help the user do multiple tasks
  */
-public class Duke {
+public class Walter {
     //Identifiers and values
     public static final int ARRAY_SIZE_TASKS = 100;
     public static final String DEADLINE_IDENTIFIER = "/by";
@@ -32,6 +32,9 @@ public class Duke {
     public static final String MESSAGE_INTRO_GREETING = " Hello! I'm Walter  ◕_◕";
     public static final String MESSAGE_INTRO_WALTER_QUERY = " What can I do for you?";
     public static final String MESSAGE_CLOSING = " I'm sad to see you go. Hope to see you again soon! :D";
+
+    //Exception Messages
+    public static final String EXCEPTION_INVALID_COMMAND = "I do not know what that means ;-;, please try again!";
 
     //ASCII art logos
     public static final String END_LOGO = "________              \n"
@@ -225,33 +228,38 @@ public class Duke {
         while (isFinished) {
             userInput = in.nextLine();
             splitUserInput = userInput.split(WHITESPACE_IDENTIFIER);
-            switch (splitUserInput[0]) {
-            case "bye":
-                isFinished = false;
-                break;
-            case "list":
-                printTaskList(Arrays.copyOf(tasks, taskCount));
-                break;
-            case "done":
-                setTaskAsDone(tasks, splitUserInput, taskCount);
-                break;
-            case "todo":
-                addTodoTask(tasks, userInput, taskCount);
-                printTaskAddedConfirmation(tasks, taskCount);
-                taskCount++;
-                break;
-            case "deadline":
-                addDeadlineTask(tasks, userInput, taskCount);
-                printTaskAddedConfirmation(tasks, taskCount);
-                taskCount++;
-                break;
-            case "event":
-                addEventTask(tasks, userInput, taskCount);
-                printTaskAddedConfirmation(tasks, taskCount);
-                taskCount++;
-                break;
-            default:
-                break;
+            try {
+                switch (splitUserInput[0]) {
+                case "bye":
+                    isFinished = false;
+                    break;
+                case "list":
+                    printTaskList(Arrays.copyOf(tasks, taskCount));
+                    break;
+                case "done":
+                    setTaskAsDone(tasks, splitUserInput, taskCount);
+                    break;
+                case "todo":
+                    addTodoTask(tasks, userInput, taskCount);
+                    printTaskAddedConfirmation(tasks, taskCount);
+                    taskCount++;
+                    break;
+                case "deadline":
+                    addDeadlineTask(tasks, userInput, taskCount);
+                    printTaskAddedConfirmation(tasks, taskCount);
+                    taskCount++;
+                    break;
+                case "event":
+                    addEventTask(tasks, userInput, taskCount);
+                    printTaskAddedConfirmation(tasks, taskCount);
+                    taskCount++;
+                    break;
+                default:
+                    //Throw exception for invalid command - Break statement unreachable
+                    throw new WalterException();
+                }
+            } catch (WalterException e) {
+                System.out.println(EXCEPTION_INVALID_COMMAND);
             }
         }
 
