@@ -14,6 +14,7 @@ public class Duke {
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
     public static final String REPLACEMENT_BLANK_SPACES = "";
+    public static final String TICK_ICON = "\u2713";
 
     //Printed Messages
     public static final String MESSAGE_DOUBLE_WHITESPACE = "   ";
@@ -32,6 +33,20 @@ public class Duke {
     public static final String MESSAGE_INTRO_WALTER_QUERY = " What can I do for you?";
     public static final String MESSAGE_CLOSING = " I'm sad to see you go. Hope to see you again soon! :D";
 
+    //ASCII art logos
+    public static final String END_LOGO = "________              \n"
+            + "___  __ )____  ______ \n"
+            + "__  __  |_  / / /  _ \\\n"
+            + "_  /_/ /_  /_/ //  __/\n"
+            + "/_____/ _\\__, / \\___/ \n"
+            + "        /____/        ";
+    public static final String WALTER_LOGO = "____    __    ____  ___       __      .___________. _______ .______      \n"
+            + "\\   \\  /  \\  /   / /   \\     |  |     |           ||   ____||   _  \\     \n"
+            + " \\   \\/    \\/   / /  ^  \\    |  |     `---|  |----`|  |__   |  |_)  |    \n"
+            + "  \\            / /  /_\\  \\   |  |         |  |     |   __|  |      /     \n"
+            + "   \\    /\\    / /  _____  \\  |  `----.    |  |     |  |____ |  |\\  \\----.\n"
+            + "    \\__/  \\__/ /__/     \\__\\ |_______|    |__|     |_______|| _| `._____|\n";
+
     /** Prints separator component after text is printed */
     public static void printSeparator() {
         System.out.println(MESSAGE_LINE_SEPARATOR);
@@ -42,8 +57,8 @@ public class Duke {
      *
      * @params logo  The logo for Walter chat bot
      */
-    public static void printStartupSequence(String logo) {
-        System.out.println(MESSAGE_HELLO_FROM + logo);
+    public static void printStartupSequence() {
+        System.out.println(MESSAGE_HELLO_FROM + WALTER_LOGO);
         printSeparator();
         System.out.println(MESSAGE_INTRO_GREETING);
         System.out.println(MESSAGE_INTRO_WALTER_QUERY);
@@ -55,10 +70,10 @@ public class Duke {
      *
      * @params endLogo  The closing sequence logo for Walter
      */
-    public static void printClosingSequence(String endLogo) {
+    public static void printClosingSequence() {
         printSeparator();
         System.out.println(MESSAGE_CLOSING);
-        System.out.println(endLogo);
+        System.out.println(END_LOGO);
         printSeparator();
     }
 
@@ -190,23 +205,12 @@ public class Duke {
         //TaskNumber is valid
         tasks[taskNumber].setAsDone();
         System.out.println(MESSAGE_TASK_MARKED);
-        System.out.println("  [" + "\u2713" + "] " + tasks[taskNumber].description);
+        System.out.println("  [" + TICK_ICON + "] " + tasks[taskNumber].description);
         printSeparator();
     }
 
     public static void main(String[] args) {
-        String logo = "____    __    ____  ___       __      .___________. _______ .______      \n"
-                + "\\   \\  /  \\  /   / /   \\     |  |     |           ||   ____||   _  \\     \n"
-                + " \\   \\/    \\/   / /  ^  \\    |  |     `---|  |----`|  |__   |  |_)  |    \n"
-                + "  \\            / /  /_\\  \\   |  |         |  |     |   __|  |      /     \n"
-                + "   \\    /\\    / /  _____  \\  |  `----.    |  |     |  |____ |  |\\  \\----.\n"
-                + "    \\__/  \\__/ /__/     \\__\\ |_______|    |__|     |_______|| _| `._____|\n";
-        String endLogo = "________              \n"
-                + "___  __ )____  ______ \n"
-                + "__  __  |_  / / /  _ \\\n"
-                + "_  /_/ /_  /_/ //  __/\n"
-                + "/_____/ _\\__, / \\___/ \n"
-                + "        /____/        ";
+        //Initialise variables
         String userInput;
         String[] splitUserInput;
         Task[] tasks = new Task[ARRAY_SIZE_TASKS];
@@ -215,7 +219,7 @@ public class Duke {
         Scanner in = new Scanner(System.in);
 
         //Print startup sequence
-        printStartupSequence(logo);
+        printStartupSequence();
 
         //Loop infinitely until user enters "bye"
         while (isFinished) {
@@ -252,7 +256,7 @@ public class Duke {
         }
 
         //Print closing sequence
-        printClosingSequence(endLogo);
+        printClosingSequence();
     }
 
 }
