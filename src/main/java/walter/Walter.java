@@ -21,7 +21,6 @@ public class Walter {
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
     public static final String BLANK_SPACE = "";
-    public static final String TICK_ICON = "\u2713";
 
     //Printed Messages
     public static final String MESSAGE_DOUBLE_WHITESPACE = "   ";
@@ -32,6 +31,7 @@ public class Walter {
     public static final String MESSAGE_ERROR_TASK_UNAVAILABLE = "No tasks available... (｡◕‿‿◕｡)";
     public static final String MESSAGE_TASKS_IN_LIST = " Here are the tasks in your list: ";
     public static final String MESSAGE_TASK_MARKED = "NICE! (｡◕‿‿◕｡) I've marked the task as done!:";
+    public static final String MESSAGE_TASK_DELETED = "Alright! I've removed this task from the list:";
     public static final String MESSAGE_TASK_ADDED_CONFIRM = " Got it, I've added this task: ";
     public static final String MESSAGE_HELLO_FROM = "Hello from\n";
     public static final String MESSAGE_INTRO_GREETING = " Hello! I'm walter.walter  ◕_◕";
@@ -221,6 +221,15 @@ public class Walter {
     }
 
     /**
+     * Checks for invalid command and throws WalterException
+     */
+    public static void checkForValidInput(String[] splitUserInput) throws WalterException {
+        if (splitUserInput.length == 1) {
+            throw new WalterException(EXCEPTION_EMPTY_DONE);
+        }
+    }
+
+    /**
      * Sets isDone of selected task to true
      *
      * @params tasks  Array of current stored tasks
@@ -228,17 +237,44 @@ public class Walter {
      * @params taskCount  Current count of tasks stored
      */
     public static void setTaskAsDone(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException {
-        //Determine index of task to be marked as done
-        if (splitUserInput.length == 1) {
-            throw new WalterException(EXCEPTION_EMPTY_DONE);
-        }
+        checkForValidInput(splitUserInput);
         int taskNumber = Integer.parseInt(splitUserInput[1]) - 1;
+        String markedItemDetails;
 
         //TaskNumber is valid
         tasks.get(taskNumber).setAsDone();
+        markedItemDetails = tasks.get(taskNumber).toString();
+
+        printSetOrDeleteConfirmMessage(MESSAGE_TASK_MARKED, markedItemDetails);
+    }
+
+    /**
+     * Removes task from the tasks ArrayList
+     *
+     * @param tasks  Array of current stored tasks
+     * @param splitUserInput  Array of strings after original user input has been split by whitespace
+     */
+    public static void deleteTask(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException {
+        checkForValidInput(splitUserInput);
+        int taskToDelete = Integer.parseInt(splitUserInput[1]) - 1;
+        String deleteItemDetails = tasks.get(taskToDelete).toString();
+
+        //TaskNumber is valid
+        tasks.remove(taskToDelete);
+
+        printSetOrDeleteConfirmMessage(MESSAGE_TASK_DELETED, deleteItemDetails);
+    }
+
+    /**
+     * Prints the confirmation messages for setTaskAsDone and deleteTask
+     *
+     * @param message  The header message to inform the user whether action is set or delete
+     * @param itemDetails  Details of the item that was set or deleted
+     */
+    public static void printSetOrDeleteConfirmMessage(String message, String itemDetails) {
         printSeparator();
-        System.out.println(MESSAGE_TASK_MARKED);
-        System.out.println("  [" + TICK_ICON + "] " + tasks.get(taskNumber).getDescription());
+        System.out.println(message);
+        System.out.println(" " + itemDetails);
         printSeparator();
     }
 
@@ -267,6 +303,9 @@ public class Walter {
                     break;
                 case "done":
                     setTaskAsDone(tasks, splitUserInput);
+                    break;
+                case "delete":
+                    deleteTask(tasks, splitUserInput);
                     break;
                 case "todo":
                     addTodoTask(tasks, userInput);
