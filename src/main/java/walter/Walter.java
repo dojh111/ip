@@ -6,8 +6,11 @@ import walter.tasks.Event;
 import walter.tasks.Task;
 import walter.tasks.Todo;
 
-import java.util.Scanner;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
 
 /**
  * Duke is a chat bot which can help the user do multiple tasks
@@ -125,7 +128,8 @@ public class Walter {
      * @params userInput  Original input by user
      * @params taskCount  Current count of tasks stored
      */
-    public static void addTodoTask(ArrayList<Task> tasks, String userInput) throws WalterException {
+
+    public static void addTodoTask(ArrayList<Task> tasks, String userInput) throws WalterException, IOException {
         String taskDescription = removeCommandFromInput(userInput, COMMAND_TODO);
 
         //Check for exception where user input for task is empty
@@ -134,6 +138,8 @@ public class Walter {
         }
 
         tasks.add(new Todo(taskDescription));
+
+        writeToFile(tasks);
     }
 
     /**
@@ -146,7 +152,7 @@ public class Walter {
      * @params eventIdentifier  Identifier to determine string information - Either /at or /by
      * */
     public static void addNewTimedEvent(ArrayList<Task> tasks, String userInput, String command,
-            String eventIdentifier) throws WalterException {
+            String eventIdentifier) throws WalterException, IOException {
         String description;
         String timeInformation;
         boolean fieldsArePresent = true;
@@ -184,6 +190,8 @@ public class Walter {
         default:
             break;
         }
+
+        writeToFile(tasks);
     }
 
     /**
@@ -236,8 +244,11 @@ public class Walter {
      * @params splitUserInput  Array of strings after original user input has been split by whitespace
      * @params taskCount  Current count of tasks stored
      */
-    public static void setTaskAsDone(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException {
+    public static void setTaskAsDone(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException, IOException {
         checkForValidInput(splitUserInput);
+        if (splitUserInput.length == 1) {
+            throw new WalterException(EXCEPTION_EMPTY_DONE);
+        }
         int taskNumber = Integer.parseInt(splitUserInput[1]) - 1;
         String markedItemDetails;
 
@@ -276,6 +287,58 @@ public class Walter {
         System.out.println(message);
         System.out.println(" " + itemDetails);
         printSeparator();
+
+        writeToFile(tasks);
+    }
+
+    /**
+     * Writes data from the tasks array onto a file, so that data can be saved
+     *
+     * @param tasks  ArrayList of tasks to be written onto the file
+     */
+    public static void writeToFile(Task[] tasks) throws IOException {
+        //Clearing entire file
+        FileWriter fwClear = new FileWriter("data/walter.txt");
+        fwClear.write("");
+        fwClear.close();
+
+        //Append information into file
+        FileWriter fw = new FileWriter("data/walter.txt", true);
+        for (Task task : tasks) {
+            String taskToSave = task.getTaskIcon() + " | " + task.getStatusIcon() + " | "
+                    + task.getDescription() + System.lineSeparator();
+            fw.write(taskToSave);
+        }
+        fw.close();
+    }
+
+    public static void readFileContents(Task[] tasks, int taskCount) throws IOException, WalterException {
+        File f = new File("data/walter.txt");
+
+        //Read from file if exists, else create new directory and files
+        if (f.exists()) {
+            Scanner s = new Scanner(f);
+            //Re-create task objects in the array
+            while (s.hasNext()) {
+                String taskInformation = s.nextLine();
+                String[] taskComponents = taskInformation.split(" | ");
+                switch (taskComponents[0]) {
+                case "[T]":
+                    break;
+                case "[D]":
+                    break;
+                case "[E]":
+                    break;
+                }
+            }
+        } else {
+            //No existing file detected. Create new directory and file
+            boolean directoryCreated = f.mkdir();
+            boolean fileCreated = f.createNewFile();
+            if (directoryCreated && fileCreated) {
+                System.out.println("New directory and files have been created!");
+            }
+        }
     }
 
     public static void main(String[] args) {
@@ -288,6 +351,13 @@ public class Walter {
 
         //Print startup sequence
         printStartupSequence();
+
+        //Read information from saved files
+        try {
+            readFileContents(tasks);
+        } catch (IOException e) {
+            System.out.println("Oh no, something went wrong ;-;");
+        }
 
         //Loop infinitely until user enters "bye"
         while (isFinished) {
@@ -335,6 +405,8 @@ public class Walter {
             } catch (NumberFormatException e) {
                 //Catch exception when string is given for a field which requires number
                 System.out.println(EXCEPTION_DONE_EXPECTED_INTEGER);
+            } catch (IOException e) {
+                System.out.println("Oh no, something went wrong while saving!");
             }
         }
 
