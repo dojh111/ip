@@ -25,6 +25,11 @@ public class Walter {
     public static final String COMMAND_EVENT = "event";
     public static final String BLANK_SPACE = "";
 
+    //File Path and other constants
+    public static final String FILE_PATH = "data/walter.txt";
+    public static final String SAVE_DELIMITER = "@";
+    public static final String FILE_MESSAGE_CREATED_NEW = "New directory and files have been created! :D";
+
     //Printed Messages
     public static final String MESSAGE_DOUBLE_WHITESPACE = "   ";
     public static final String MESSAGE_LINE_SEPARATOR =
@@ -53,6 +58,8 @@ public class Walter {
     public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
     public static final String EXCEPTION_DONE_EXPECTED_INTEGER =
             "I'm sorry, I don't understand that ;-;. Please enter a number instead!";
+    public static final String EXCEPTION_FILE_ERROR = "Oh no, something went wrong ;-;";
+    public static final String EXCEPTION_FILE_WRITE_ERROR = "Oh no, something went wrong while saving!";
 
     //ASCII art logos
     public static final String END_LOGO = "________              \n"
@@ -61,7 +68,7 @@ public class Walter {
             + "_  /_/ /_  /_/ //  __/\n"
             + "/_____/ _\\__, / \\___/ \n"
             + "        /____/        ";
-    public static final String WALTER_LOGO = "____    __    ____  ___       __      .___________. _______ .______      \n"
+    public static final String WALTER_LOGO = "____    __    ____  ___       __      .___________. _______ .______   \n"
             + "\\   \\  /  \\  /   / /   \\     |  |     |           ||   ____||   _  \\     \n"
             + " \\   \\/    \\/   / /  ^  \\    |  |     `---|  |----`|  |__   |  |_)  |    \n"
             + "  \\            / /  /_\\  \\   |  |         |  |     |   __|  |      /     \n"
@@ -138,7 +145,6 @@ public class Walter {
         }
 
         tasks.add(new Todo(taskDescription));
-
         writeToFile(tasks);
     }
 
@@ -190,7 +196,6 @@ public class Walter {
         default:
             break;
         }
-
         writeToFile(tasks);
     }
 
@@ -244,7 +249,7 @@ public class Walter {
      * @params splitUserInput  Array of strings after original user input has been split by whitespace
      * @params taskCount  Current count of tasks stored
      */
-    public static void setTaskAsDone(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException, IOException {
+    public static void setTaskAsDone(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException {
         checkForValidInput(splitUserInput);
         if (splitUserInput.length == 1) {
             throw new WalterException(EXCEPTION_EMPTY_DONE);
@@ -265,15 +270,15 @@ public class Walter {
      * @param tasks  Array of current stored tasks
      * @param splitUserInput  Array of strings after original user input has been split by whitespace
      */
-    public static void deleteTask(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException {
+    public static void deleteTask(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException, IOException {
         checkForValidInput(splitUserInput);
         int taskToDelete = Integer.parseInt(splitUserInput[1]) - 1;
         String deleteItemDetails = tasks.get(taskToDelete).toString();
 
         //TaskNumber is valid
         tasks.remove(taskToDelete);
-
         printSetOrDeleteConfirmMessage(MESSAGE_TASK_DELETED, deleteItemDetails);
+        writeToFile(tasks);
     }
 
     /**
@@ -296,22 +301,22 @@ public class Walter {
      */
     public static void writeToFile(ArrayList<Task> tasks) throws IOException {
         //Clearing entire file
-        FileWriter fwClear = new FileWriter("data/walter.txt");
+        FileWriter fwClear = new FileWriter(FILE_PATH);
         fwClear.write("");
         fwClear.close();
 
         //Append information into file
-        FileWriter fw = new FileWriter("data/walter.txt", true);
+        FileWriter fw = new FileWriter(FILE_PATH, true);
         for (Task task : tasks) {
-            String taskToSave = task.getTaskIcon() + "@" + task.getStatusIcon() + "@"
-                    + task.getDescription() + "@" + task.getTimingInformation() + System.lineSeparator();
+            String taskToSave = task.getTaskIcon() + SAVE_DELIMITER + task.getStatusIcon() + SAVE_DELIMITER
+                    + task.getDescription() + SAVE_DELIMITER + task.getTimingInformation() + System.lineSeparator();
             fw.write(taskToSave);
         }
         fw.close();
     }
 
     public static void readFileContents(ArrayList<Task> tasks) throws IOException {
-        File f = new File("data/walter.txt");
+        File f = new File(FILE_PATH);
 
         //Read from file if exists, else create new directory and files
         if (f.exists()) {
@@ -319,7 +324,7 @@ public class Walter {
             //Re-create task objects in the array
             while (s.hasNext()) {
                 String taskInformation = s.nextLine();
-                String[] taskComponents = taskInformation.split("@");
+                String[] taskComponents = taskInformation.split(SAVE_DELIMITER);
                 switch (taskComponents[0]) {
                 case "[T]":
                     tasks.add(new Todo(taskComponents[2]));
@@ -337,7 +342,7 @@ public class Walter {
             boolean directoryCreated = f.mkdir();
             boolean fileCreated = f.createNewFile();
             if (directoryCreated && fileCreated) {
-                System.out.println("New directory and files have been created!");
+                System.out.println(FILE_MESSAGE_CREATED_NEW);
             }
         }
     }
@@ -357,7 +362,7 @@ public class Walter {
         try {
             readFileContents(tasks);
         } catch (IOException e) {
-            System.out.println("Oh no, something went wrong ;-;");
+            System.out.println(EXCEPTION_FILE_ERROR);
         }
 
         //Loop infinitely until user enters "bye"
@@ -407,7 +412,7 @@ public class Walter {
                 //Catch exception when string is given for a field which requires number
                 System.out.println(EXCEPTION_DONE_EXPECTED_INTEGER);
             } catch (IOException e) {
-                System.out.println("Oh no, something went wrong while saving!");
+                System.out.println(EXCEPTION_FILE_WRITE_ERROR);
             }
         }
 
