@@ -18,6 +18,10 @@ public class Deadline extends Task {
         return DEADLINE_ICON;
     }
 
+    public String getTimingInformation() {
+        return by;
+    }
+
     @Override
     public String toString() {
         return DEADLINE_ICON + super.toString() + MESSAGE_INFO_START + by + MESSAGE_INFO_END;

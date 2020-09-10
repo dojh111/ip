@@ -30,6 +30,8 @@ public abstract class Task {
 
     public abstract String getTaskIcon();
 
+    public abstract String getTimingInformation();
+
     @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;

@@ -6,6 +6,7 @@ package walter.tasks;
 public class Todo extends Task {
 
     public static final String TODO_ICON = "[T]";
+    public static final String TIME_INFO = "";
 
     public Todo(String description) {
         super(description);
@@ -13,6 +14,10 @@ public class Todo extends Task {
 
     public String getTaskIcon() {
         return TODO_ICON;
+    }
+
+    public String getTimingInformation() {
+        return TIME_INFO;
     }
 
     @Override

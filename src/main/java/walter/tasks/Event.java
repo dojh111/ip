@@ -20,6 +20,10 @@ public class Event extends Task {
         return EVENT_ICON;
     }
 
+    public String getTimingInformation() {
+        return at;
+    }
+
     @Override
     public String toString() {
         return EVENT_ICON + super.toString() + MESSAGE_INFO_START + at + MESSAGE_INFO_END;

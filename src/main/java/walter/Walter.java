@@ -287,8 +287,6 @@ public class Walter {
         System.out.println(message);
         System.out.println(" " + itemDetails);
         printSeparator();
-
-        writeToFile(tasks);
     }
 
     /**
@@ -296,7 +294,7 @@ public class Walter {
      *
      * @param tasks  ArrayList of tasks to be written onto the file
      */
-    public static void writeToFile(Task[] tasks) throws IOException {
+    public static void writeToFile(ArrayList<Task> tasks) throws IOException {
         //Clearing entire file
         FileWriter fwClear = new FileWriter("data/walter.txt");
         fwClear.write("");
@@ -305,14 +303,14 @@ public class Walter {
         //Append information into file
         FileWriter fw = new FileWriter("data/walter.txt", true);
         for (Task task : tasks) {
-            String taskToSave = task.getTaskIcon() + " | " + task.getStatusIcon() + " | "
-                    + task.getDescription() + System.lineSeparator();
+            String taskToSave = task.getTaskIcon() + "@" + task.getStatusIcon() + "@"
+                    + task.getDescription() + "@" + task.getTimingInformation() + System.lineSeparator();
             fw.write(taskToSave);
         }
         fw.close();
     }
 
-    public static void readFileContents(Task[] tasks, int taskCount) throws IOException, WalterException {
+    public static void readFileContents(ArrayList<Task> tasks) throws IOException {
         File f = new File("data/walter.txt");
 
         //Read from file if exists, else create new directory and files
@@ -321,13 +319,16 @@ public class Walter {
             //Re-create task objects in the array
             while (s.hasNext()) {
                 String taskInformation = s.nextLine();
-                String[] taskComponents = taskInformation.split(" | ");
+                String[] taskComponents = taskInformation.split("@");
                 switch (taskComponents[0]) {
                 case "[T]":
+                    tasks.add(new Todo(taskComponents[2]));
                     break;
                 case "[D]":
+                    tasks.add(new Deadline(taskComponents[2], taskComponents[3]));
                     break;
                 case "[E]":
+                    tasks.add(new Event(taskComponents[2], taskComponents[3]));
                     break;
                 }
             }
