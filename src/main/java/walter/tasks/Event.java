@@ -16,6 +16,10 @@ public class Event extends Task {
         this.at = at;
     }
 
+    public String getTaskIcon() {
+        return EVENT_ICON;
+    }
+
     @Override
     public String toString() {
         return EVENT_ICON + super.toString() + MESSAGE_INFO_START + at + MESSAGE_INFO_END;

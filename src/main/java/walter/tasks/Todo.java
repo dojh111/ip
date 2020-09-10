@@ -11,6 +11,10 @@ public class Todo extends Task {
         super(description);
     }
 
+    public String getTaskIcon() {
+        return TODO_ICON;
+    }
+
     @Override
     public String toString() {
         return TODO_ICON + super.toString();
