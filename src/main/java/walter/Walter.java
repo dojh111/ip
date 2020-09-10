@@ -7,14 +7,13 @@ import walter.tasks.Task;
 import walter.tasks.Todo;
 
 import java.util.Scanner;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  * Duke is a chat bot which can help the user do multiple tasks
  */
 public class Walter {
     //Identifiers and values
-    public static final int ARRAY_SIZE_TASKS = 100;
     public static final String DEADLINE_IDENTIFIER = "/by";
     public static final String EVENT_IDENTIFIER = "/at";
     public static final String WHITESPACE_IDENTIFIER = " ";
@@ -126,7 +125,7 @@ public class Walter {
      * @params userInput  Original input by user
      * @params taskCount  Current count of tasks stored
      */
-    public static void addTodoTask(Task[] tasks, String userInput, int taskCount) throws WalterException {
+    public static void addTodoTask(ArrayList<Task> tasks, String userInput) throws WalterException {
         String taskDescription = removeCommandFromInput(userInput, COMMAND_TODO);
 
         //Check for exception where user input for task is empty
@@ -134,7 +133,7 @@ public class Walter {
             throw new WalterException(EXCEPTION_EMPTY_TODO);
         }
 
-        tasks[taskCount] = new Todo(taskDescription);
+        tasks.add(new Todo(taskDescription));
     }
 
     /**
@@ -146,7 +145,7 @@ public class Walter {
      * @params command  The command entered - Either event or deadline
      * @params eventIdentifier  Identifier to determine string information - Either /at or /by
      * */
-    public static void addNewTimedEvent(Task[] tasks, String userInput, int taskCount, String command,
+    public static void addNewTimedEvent(ArrayList<Task> tasks, String userInput, String command,
             String eventIdentifier) throws WalterException {
         String description;
         String timeInformation;
@@ -177,10 +176,10 @@ public class Walter {
         //Create new task objects
         switch (command) {
         case "event":
-            tasks[taskCount] = new Event(description, timeInformation);
+            tasks.add(new Event(description, timeInformation));
             break;
         case "deadline":
-            tasks[taskCount] = new Deadline(description, timeInformation);
+            tasks.add(new Deadline(description, timeInformation));
             break;
         default:
             break;
@@ -193,12 +192,11 @@ public class Walter {
      * @params tasks  Array of current stored tasks
      * @params taskCount  Current count of tasks stored
      */
-    public static void printTaskAddedConfirmation(Task[] tasks, int taskCount) {
-        int numberOfTasks = taskCount + 1;
+    public static void printTaskAddedConfirmation(ArrayList<Task> tasks) {
         printSeparator();
         System.out.println(MESSAGE_TASK_ADDED_CONFIRM);
-        System.out.println(MESSAGE_DOUBLE_WHITESPACE + tasks[taskCount]);
-        System.out.println(MESSAGE_NOW_YOU_HAVE + numberOfTasks + MESSAGE_IN_THE_LIST);
+        System.out.println(MESSAGE_DOUBLE_WHITESPACE + tasks.get(tasks.size() - 1).toString());
+        System.out.println(MESSAGE_NOW_YOU_HAVE + tasks.size() + MESSAGE_IN_THE_LIST);
         printSeparator();
     }
 
@@ -207,10 +205,10 @@ public class Walter {
      *
      * @params tasks  Array of current stored tasks
      */
-    public static void printTaskList(Task[] tasks) {
+    public static void printTaskList(ArrayList<Task> tasks) {
         int taskNumber = 1;
         printSeparator();
-        if (tasks.length == 0) {
+        if (tasks.size() == 0) {
             System.out.println(MESSAGE_ERROR_TASK_UNAVAILABLE);
             return;
         }
@@ -229,7 +227,7 @@ public class Walter {
      * @params splitUserInput  Array of strings after original user input has been split by whitespace
      * @params taskCount  Current count of tasks stored
      */
-    public static void setTaskAsDone(Task[] tasks, String[] splitUserInput) throws WalterException {
+    public static void setTaskAsDone(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException {
         //Determine index of task to be marked as done
         if (splitUserInput.length == 1) {
             throw new WalterException(EXCEPTION_EMPTY_DONE);
@@ -237,10 +235,10 @@ public class Walter {
         int taskNumber = Integer.parseInt(splitUserInput[1]) - 1;
 
         //TaskNumber is valid
-        tasks[taskNumber].setAsDone();
+        tasks.get(taskNumber).setAsDone();
         printSeparator();
         System.out.println(MESSAGE_TASK_MARKED);
-        System.out.println("  [" + TICK_ICON + "] " + tasks[taskNumber].getDescription());
+        System.out.println("  [" + TICK_ICON + "] " + tasks.get(taskNumber).getDescription());
         printSeparator();
     }
 
@@ -248,8 +246,7 @@ public class Walter {
         //Initialise variables
         String userInput;
         String[] splitUserInput;
-        Task[] tasks = new Task[ARRAY_SIZE_TASKS];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
         boolean isFinished = true;
         Scanner in = new Scanner(System.in);
 
@@ -266,25 +263,22 @@ public class Walter {
                     isFinished = false;
                     break;
                 case "list":
-                    printTaskList(Arrays.copyOf(tasks, taskCount));
+                    printTaskList(tasks);
                     break;
                 case "done":
                     setTaskAsDone(tasks, splitUserInput);
                     break;
                 case "todo":
-                    addTodoTask(tasks, userInput, taskCount);
-                    printTaskAddedConfirmation(tasks, taskCount);
-                    taskCount++;
+                    addTodoTask(tasks, userInput);
+                    printTaskAddedConfirmation(tasks);
                     break;
                 case "deadline":
-                    addNewTimedEvent(tasks, userInput, taskCount, COMMAND_DEADLINE, DEADLINE_IDENTIFIER);
-                    printTaskAddedConfirmation(tasks, taskCount);
-                    taskCount++;
+                    addNewTimedEvent(tasks, userInput, COMMAND_DEADLINE, DEADLINE_IDENTIFIER);
+                    printTaskAddedConfirmation(tasks);
                     break;
                 case "event":
-                    addNewTimedEvent(tasks, userInput, taskCount, COMMAND_EVENT, EVENT_IDENTIFIER);
-                    printTaskAddedConfirmation(tasks, taskCount);
-                    taskCount++;
+                    addNewTimedEvent(tasks, userInput, COMMAND_EVENT, EVENT_IDENTIFIER);
+                    printTaskAddedConfirmation(tasks);
                     break;
                 default:
                     //Throw exception for invalid command - Break statement unreachable
@@ -295,7 +289,7 @@ public class Walter {
                 //Catch exceptions and print error messages unique to Walter
                 System.out.println(e.getErrorMessage());
 
-            } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            } catch (NullPointerException | IndexOutOfBoundsException e) {
                 //Catch exceptions when index given is out of bounds or invalid
                 System.out.println(EXCEPTION_INVALID_TASK_NUMBER);
 
