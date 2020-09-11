@@ -26,9 +26,10 @@ public class Walter {
     public static final String BLANK_SPACE = "";
 
     //File Path and other constants
-    public static final String FILE_PATH = "data/walter.txt";
-    public static final String SAVE_DELIMITER = "@";
+    public static final String FILE_PATH = "walter.txt";
+    public static final String SAVE_DELIMITER = "--";
     public static final String FILE_MESSAGE_CREATED_NEW = "New directory and files have been created! :D";
+    public static final String FILE_MESSAGE_NO_SAVE_DETECTED = "No previous saves detected! Creating save file...";
 
     //Printed Messages
     public static final String MESSAGE_DOUBLE_WHITESPACE = "   ";
@@ -58,7 +59,7 @@ public class Walter {
     public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
     public static final String EXCEPTION_DONE_EXPECTED_INTEGER =
             "I'm sorry, I don't understand that ;-;. Please enter a number instead!";
-    public static final String EXCEPTION_FILE_ERROR = "Oh no, something went wrong ;-;";
+    public static final String EXCEPTION_FILE_ERROR = "Oh no, something went wrong while creating a save file ;-;";
     public static final String EXCEPTION_FILE_WRITE_ERROR = "Oh no, something went wrong while saving!";
 
     //ASCII art logos
@@ -74,6 +75,9 @@ public class Walter {
             + "  \\            / /  /_\\  \\   |  |         |  |     |   __|  |      /     \n"
             + "   \\    /\\    / /  _____  \\  |  `----.    |  |     |  |____ |  |\\  \\----.\n"
             + "    \\__/  \\__/ /__/     \\__\\ |_______|    |__|     |_______|| _| `._____|\n";
+    public static final String TODO_ICON = "[T]";
+    public static final String DEADLINE_ICON = "[D]";
+    public static final String EVENT_ICON = "[E]";
 
     /** Prints separator component after text is printed */
     public static void printSeparator() {
@@ -300,7 +304,7 @@ public class Walter {
      * @param tasks  ArrayList of tasks to be written onto the file
      */
     public static void writeToFile(ArrayList<Task> tasks) throws IOException {
-        //Clearing entire file
+        //Clearing file before writing
         FileWriter fwClear = new FileWriter(FILE_PATH);
         fwClear.write("");
         fwClear.close();
@@ -315,6 +319,9 @@ public class Walter {
         fw.close();
     }
 
+    /**
+     * Recreates tasks array by reading data from file. If no file available, create new file
+     */
     public static void readFileContents(ArrayList<Task> tasks) throws IOException {
         File f = new File(FILE_PATH);
 
@@ -326,22 +333,22 @@ public class Walter {
                 String taskInformation = s.nextLine();
                 String[] taskComponents = taskInformation.split(SAVE_DELIMITER);
                 switch (taskComponents[0]) {
-                case "[T]":
+                case TODO_ICON:
                     tasks.add(new Todo(taskComponents[2]));
                     break;
-                case "[D]":
+                case DEADLINE_ICON:
                     tasks.add(new Deadline(taskComponents[2], taskComponents[3]));
                     break;
-                case "[E]":
+                case EVENT_ICON:
                     tasks.add(new Event(taskComponents[2], taskComponents[3]));
                     break;
                 }
             }
         } else {
-            //No existing file detected. Create new directory and file
-            boolean directoryCreated = f.mkdir();
+            //No existing file detected. Create new save file
+            System.out.println(FILE_MESSAGE_NO_SAVE_DETECTED);
             boolean fileCreated = f.createNewFile();
-            if (directoryCreated && fileCreated) {
+            if (fileCreated) {
                 System.out.println(FILE_MESSAGE_CREATED_NEW);
             }
         }
