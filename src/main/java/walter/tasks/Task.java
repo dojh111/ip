@@ -20,6 +20,10 @@ public abstract class Task {
         return (isDone ? TICK_ICON : CROSS_ICON);
     }
 
+    public boolean getStatus() {
+        return isDone;
+    }
+
     public void setAsDone() {
         isDone = true;
     }

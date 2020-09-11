@@ -1,1 +1,5 @@
-
+[T]--1--get watermelon--
+[D]--1--quiz 2--this sunday
+[T]--1--test--
+[T]--0--Buy more bread--
+[E]--1--Group meeting--tonight 8-9pm

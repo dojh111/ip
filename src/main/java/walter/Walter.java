@@ -28,7 +28,7 @@ public class Walter {
     //File Path and other constants
     public static final String FILE_PATH = "walter.txt";
     public static final String SAVE_DELIMITER = "--";
-    public static final String FILE_MESSAGE_CREATED_NEW = "New directory and files have been created! :D";
+    public static final String FILE_MESSAGE_CREATED_SUCCESS = "Save file creation successful! :D";
     public static final String FILE_MESSAGE_NO_SAVE_DETECTED = "No previous saves detected! Creating save file...";
 
     //Printed Messages
@@ -253,7 +253,8 @@ public class Walter {
      * @params splitUserInput  Array of strings after original user input has been split by whitespace
      * @params taskCount  Current count of tasks stored
      */
-    public static void setTaskAsDone(ArrayList<Task> tasks, String[] splitUserInput) throws WalterException {
+    public static void setTaskAsDone(ArrayList<Task> tasks, String[] splitUserInput)
+            throws WalterException, IOException {
         checkForValidInput(splitUserInput);
         if (splitUserInput.length == 1) {
             throw new WalterException(EXCEPTION_EMPTY_DONE);
@@ -266,6 +267,7 @@ public class Walter {
         markedItemDetails = tasks.get(taskNumber).toString();
 
         printSetOrDeleteConfirmMessage(MESSAGE_TASK_MARKED, markedItemDetails);
+        writeToFile(tasks);
     }
 
     /**
@@ -312,7 +314,14 @@ public class Walter {
         //Append information into file
         FileWriter fw = new FileWriter(FILE_PATH, true);
         for (Task task : tasks) {
-            String taskToSave = task.getTaskIcon() + SAVE_DELIMITER + task.getStatusIcon() + SAVE_DELIMITER
+            int taskStatus;
+            //Determine status to write to file based on task status
+            if (task.getStatus()) {
+                taskStatus = 1;
+            } else {
+                taskStatus = 0;
+            }
+            String taskToSave = task.getTaskIcon() + SAVE_DELIMITER + taskStatus + SAVE_DELIMITER
                     + task.getDescription() + SAVE_DELIMITER + task.getTimingInformation() + System.lineSeparator();
             fw.write(taskToSave);
         }
@@ -343,13 +352,17 @@ public class Walter {
                     tasks.add(new Event(taskComponents[2], taskComponents[3]));
                     break;
                 }
+                //Set status of task to done if required
+                if (Integer.parseInt(taskComponents[1]) == 1) {
+                    tasks.get(tasks.size() - 1).setAsDone();
+                }
             }
         } else {
             //No existing file detected. Create new save file
             System.out.println(FILE_MESSAGE_NO_SAVE_DETECTED);
             boolean fileCreated = f.createNewFile();
             if (fileCreated) {
-                System.out.println(FILE_MESSAGE_CREATED_NEW);
+                System.out.println(FILE_MESSAGE_CREATED_SUCCESS);
             }
         }
     }
