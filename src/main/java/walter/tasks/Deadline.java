@@ -7,6 +7,7 @@ public class Deadline extends Task {
     public static final String DEADLINE_ICON = "[D]";
     public static final String MESSAGE_INFO_START = " (By: ";
     public static final String MESSAGE_INFO_END = ")";
+
     protected String by;
 
     public Deadline(String description, String by) {

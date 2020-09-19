@@ -5,6 +5,7 @@ import walter.exceptions.WalterException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
 public class Parser {
     //Exception messages
@@ -14,12 +15,13 @@ public class Parser {
             " command requires both description and time information in the format of: \n";
     public static final String EXCEPTION_TIMEDEVENT_DESCRIPTION = "[description] ";
     public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
-    public static final String EXCEPTION_INVALID_DATE_FORMAT = "Invalid date format entered: \n [YYYY-MM-DD]";
+    public static final String EXCEPTION_INVALID_DATE_FORMAT = "Please enter date in this format:\n[YYYY-MM-DD]";
 
     public static final String BLANK_SPACE = "";
     public static final String WHITESPACE_IDENTIFIER = " ";
     public static final String HYPHEN_IDENTIFIER = "-";
     public static final int DATE_FORMAT_SIZE = 3;
+    public static final String DATE_FORMAT = "MMM d yyyy";
 
     /**
      * Removes the command passed into the method and replaces it with white space
@@ -72,26 +74,40 @@ public class Parser {
         }
     }
 
-    public static LocalDate determineDateInformation(String timeInformation) {
+    /** Returns an arraylist which contains information to replace date in original string */
+    public static ArrayList<String> determineDateInformation(String timeInformation) {
         String[] splitTimeInformation = timeInformation.split(WHITESPACE_IDENTIFIER);
-        LocalDate taskDate = LocalDate.parse("9999-12-01");
+        ArrayList<String> replacementStrings = new ArrayList<>();
 
         //Check if substring contains 2 '-' to try to parse into date information
         for (String stringInformation : splitTimeInformation) {
             if (stringInformation.contains(HYPHEN_IDENTIFIER)) {
                 if (checkForValidDateFormat(stringInformation)) {
                     try {
-                        taskDate = LocalDate.parse(stringInformation);
-                        break;
+                        replacementStrings = formatDateInformation(stringInformation);
                     } catch (DateTimeParseException e) {
                         System.out.println(EXCEPTION_INVALID_DATE_FORMAT);
                     }
+                    break;
                 }
             }
         }
-        return taskDate;
+        return replacementStrings;
     }
 
+    public static ArrayList<String> formatDateInformation(String stringInformation) {
+        LocalDate taskDate;
+        ArrayList<String> replacementStrings = new ArrayList<>();
+
+        replacementStrings.add(stringInformation);
+        taskDate = LocalDate.parse(stringInformation);
+        String formattedDate = taskDate.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+        replacementStrings.add(formattedDate);
+
+        return replacementStrings;
+    }
+
+    /** Returns true when string contains 3 members separated by 2 hyphens */
     public static boolean checkForValidDateFormat(String stringInformation) {
         String[] splitDate = stringInformation.split(HYPHEN_IDENTIFIER);
 

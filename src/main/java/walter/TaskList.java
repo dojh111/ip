@@ -54,7 +54,8 @@ public class TaskList {
      */
     public void addNewTimedEvent(String userInput, String command, String eventIdentifier) throws WalterException {
         String description;
-        String timeInformation;
+        String additionalInformation;
+        ArrayList<String> dateInformation;
 
         String[] informationStrings = Parser.determineTaskInformation(userInput, command, eventIdentifier);
 
@@ -62,15 +63,26 @@ public class TaskList {
 
         //Set variables
         description = informationStrings[0].trim();
-        timeInformation = informationStrings[1].trim();
+        additionalInformation = informationStrings[1].trim();
+
+        dateInformation = Parser.determineDateInformation(additionalInformation);
+        if (dateInformation.size() == 2) {
+            //Index 1 of dateInformation contains the original string index to be replaced
+            //Index 2 of dateInformation contains the formatted date
+            String unformattedDate = dateInformation.get(0);
+            String formattedDate = dateInformation.get(1);
+            additionalInformation = additionalInformation.replace(unformattedDate, formattedDate);
+
+            //Remember to add date object into constructor
+        }
 
         //Create new task objects
         switch (command) {
         case "event":
-            taskList.add(new Event(description, timeInformation));
+            taskList.add(new Event(description, additionalInformation));
             break;
         case "deadline":
-            taskList.add(new Deadline(description, timeInformation));
+            taskList.add(new Deadline(description, additionalInformation));
             break;
         default:
             break;
