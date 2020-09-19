@@ -4,6 +4,7 @@ import walter.exceptions.WalterException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Parser {
     //Exception messages
@@ -13,9 +14,12 @@ public class Parser {
             " command requires both description and time information in the format of: \n";
     public static final String EXCEPTION_TIMEDEVENT_DESCRIPTION = "[description] ";
     public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
+    public static final String EXCEPTION_INVALID_DATE_FORMAT = "Invalid date format entered: \n [YYYY-MM-DD]";
 
     public static final String BLANK_SPACE = "";
     public static final String WHITESPACE_IDENTIFIER = " ";
+    public static final String HYPHEN_IDENTIFIER = "-";
+    public static final int DATE_FORMAT_SIZE = 3;
 
     /**
      * Removes the command passed into the method and replaces it with white space
@@ -66,6 +70,42 @@ public class Parser {
                     EXCEPTION_TIMEDEVENT_DESCRIPTION + eventIdentifier + EXCEPTION_TIMEDEVENT_TIMEINFO;
             throw new WalterException(exceptionMessage);
         }
+    }
+
+    public static LocalDate determineDateInformation(String timeInformation) {
+        String[] splitTimeInformation = timeInformation.split(WHITESPACE_IDENTIFIER);
+        LocalDate taskDate = LocalDate.parse("9999-12-01");
+
+        //Check if substring contains 2 '-' to try to parse into date information
+        for (String stringInformation : splitTimeInformation) {
+            if (stringInformation.contains(HYPHEN_IDENTIFIER)) {
+                if (checkForValidDateFormat(stringInformation)) {
+                    try {
+                        taskDate = LocalDate.parse(stringInformation);
+                        break;
+                    } catch (DateTimeParseException e) {
+                        System.out.println(EXCEPTION_INVALID_DATE_FORMAT);
+                    }
+                }
+            }
+        }
+        return taskDate;
+    }
+
+    public static boolean checkForValidDateFormat(String stringInformation) {
+        String[] splitDate = stringInformation.split(HYPHEN_IDENTIFIER);
+
+        //Check for empty fields
+        for (String subString : splitDate) {
+            if (subString.equals(BLANK_SPACE)) {
+                return false;
+            }
+        }
+        //Check for only 3 inputs
+        if (splitDate.length == DATE_FORMAT_SIZE) {
+            return true;
+        }
+        return false;
     }
 
     /** Splits string by white space and returns array of strings */
