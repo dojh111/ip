@@ -7,6 +7,7 @@ import walter.tasks.Task;
 import walter.tasks.Todo;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class TaskList {
@@ -55,6 +56,7 @@ public class TaskList {
     public void addNewTimedEvent(String userInput, String command, String eventIdentifier) throws WalterException {
         String description;
         String additionalInformation;
+        String unformattedDate = "9999-12-31";
         ArrayList<String> dateInformation;
 
         String[] informationStrings = Parser.determineTaskInformation(userInput, command, eventIdentifier);
@@ -69,20 +71,18 @@ public class TaskList {
         if (dateInformation.size() == 2) {
             //Index 1 of dateInformation contains the original string index to be replaced
             //Index 2 of dateInformation contains the formatted date
-            String unformattedDate = dateInformation.get(0);
+            unformattedDate = dateInformation.get(0);
             String formattedDate = dateInformation.get(1);
             additionalInformation = additionalInformation.replace(unformattedDate, formattedDate);
-
-            //Remember to add date object into constructor
         }
 
         //Create new task objects
         switch (command) {
         case "event":
-            taskList.add(new Event(description, additionalInformation));
+            taskList.add(new Event(description, additionalInformation, unformattedDate));
             break;
         case "deadline":
-            taskList.add(new Deadline(description, additionalInformation));
+            taskList.add(new Deadline(description, additionalInformation, unformattedDate));
             break;
         default:
             break;

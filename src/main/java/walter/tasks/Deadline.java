@@ -1,5 +1,7 @@
 package walter.tasks;
 
+import java.time.LocalDate;
+
 /**
  * The walter.tasks.Deadline class inherits from the walter.tasks.Task class and is used to create deadline objects
  */
@@ -9,10 +11,12 @@ public class Deadline extends Task {
     public static final String MESSAGE_INFO_END = ")";
 
     protected String by;
+    protected LocalDate date;
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, String by, String date) {
         super(description);
         this.by = by;
+        this.date = LocalDate.parse(date);
     }
 
     public String getTaskIcon() {
@@ -21,6 +25,10 @@ public class Deadline extends Task {
 
     public String getTimingInformation() {
         return by;
+    }
+
+    public String getDate() {
+        return date.toString();
     }
 
     @Override

@@ -42,19 +42,28 @@ public class Storage {
             while (fileScanner.hasNext()) {
                 String taskInformation = fileScanner.nextLine();
                 String[] taskComponents = taskInformation.split(SAVE_DELIMITER);
-                switch (taskComponents[0]) {
+                String taskIcon = taskComponents[0];
+                String taskStatus = taskComponents[1];
+                String taskDescription = taskComponents[2];
+                String taskTimingInformation;
+                String taskDate;
+                switch (taskIcon) {
                 case TODO_ICON:
-                    taskList.add(new Todo(taskComponents[2]));
+                    taskList.add(new Todo(taskDescription));
                     break;
                 case DEADLINE_ICON:
-                    taskList.add(new Deadline(taskComponents[2], taskComponents[3]));
+                    taskTimingInformation = taskComponents[3];
+                    taskDate = taskComponents[4];
+                    taskList.add(new Deadline(taskDescription, taskTimingInformation, taskDate));
                     break;
                 case EVENT_ICON:
-                    taskList.add(new Event(taskComponents[2], taskComponents[3]));
+                    taskTimingInformation = taskComponents[3];
+                    taskDate = taskComponents[4];
+                    taskList.add(new Event(taskDescription, taskTimingInformation, taskDate));
                     break;
                 }
                 //Set status of task to done if required
-                if (Integer.parseInt(taskComponents[1]) == 1) {
+                if (Integer.parseInt(taskStatus) == 1) {
                     taskList.get(taskList.size() - 1).setAsDone();
                 }
             }
@@ -92,7 +101,8 @@ public class Storage {
             }
             //Create text string to write so save file
             String taskToSave = task.getTaskIcon() + SAVE_DELIMITER + taskStatus + SAVE_DELIMITER
-                    + task.getDescription() + SAVE_DELIMITER + task.getTimingInformation() + System.lineSeparator();
+                    + task.getDescription() + SAVE_DELIMITER + task.getTimingInformation() + SAVE_DELIMITER
+                    + task.getDate() +System.lineSeparator();
             fileWriter.write(taskToSave);
         }
         fileWriter.close();

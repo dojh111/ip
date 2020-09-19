@@ -118,10 +118,7 @@ public class Parser {
             }
         }
         //Check for only 3 inputs
-        if (splitDate.length == DATE_FORMAT_SIZE) {
-            return true;
-        }
-        return false;
+        return splitDate.length == DATE_FORMAT_SIZE;
     }
 
     /** Splits string by white space and returns array of strings */

@@ -7,6 +7,7 @@ public class Todo extends Task {
 
     public static final String TODO_ICON = "[T]";
     public static final String TIME_INFO = "";
+    public static final String DATE = "";
 
     public Todo(String description) {
         super(description);
@@ -18,6 +19,10 @@ public class Todo extends Task {
 
     public String getTimingInformation() {
         return TIME_INFO;
+    }
+
+    public String getDate() {
+        return DATE;
     }
 
     @Override
