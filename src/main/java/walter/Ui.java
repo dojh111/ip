@@ -3,6 +3,7 @@ package walter;
 import walter.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Ui {
 
@@ -37,7 +38,6 @@ public class Ui {
     //Exception error messages
     public static final String EXCEPTION_FILE_ERROR = "Oh no, something went wrong while creating a save file ;-;";
     public static final String EXCEPTION_INVALID_TASK_NUMBER = "Invalid task number entered... Please try again!";
-
     public static final String EXCEPTION_DONE_EXPECTED_INTEGER =
             "I'm sorry, I don't understand that ;-;. Please enter a number instead!";
     public static final String EXCEPTION_FILE_WRITE_ERROR = "Oh no, something went wrong while saving!";
@@ -62,6 +62,13 @@ public class Ui {
         System.out.println(MESSAGE_CLOSING);
         System.out.println(END_LOGO);
         printSeparator();
+    }
+
+    /** Reads user command and returns command */
+    public String readUserCommand() {
+        Scanner in = new Scanner(System.in);
+
+        return in.nextLine();
     }
 
     /**

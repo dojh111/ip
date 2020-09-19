@@ -6,6 +6,7 @@ public class Parser {
 
     public static final String EXCEPTION_EMPTY_FIELD = "Oh no... You have to enter a task number. Please try again!";
     public static final String BLANK_SPACE = "";
+    public static final String WHITESPACE_IDENTIFIER = " ";
 
     /**
      * Removes the command passed into the method and replaces it with white space
@@ -37,5 +38,15 @@ public class Parser {
         if (splitUserInput.length == 1) {
             throw new WalterException(EXCEPTION_EMPTY_FIELD);
         }
+    }
+
+    /** Splits string by white space and returns array of strings */
+    public String[] divideUserCommand(String userInput) {
+        return userInput.split(WHITESPACE_IDENTIFIER);
+    }
+
+    /** Determines command from string */
+    public String determineCommand(String[] splitUserInput) {
+        return splitUserInput[0];
     }
 }

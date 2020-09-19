@@ -12,7 +12,6 @@ public class Walter {
     //Identifiers and values
     public static final String DEADLINE_IDENTIFIER = "/by";
     public static final String EVENT_IDENTIFIER = "/at";
-    public static final String WHITESPACE_IDENTIFIER = " ";
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
 
@@ -42,21 +41,22 @@ public class Walter {
 
     public void run() {
         String userInput;
+        String command;
         String[] splitUserInput;
         String details;
-        boolean isFinished = true;
-        Scanner in = new Scanner(System.in);
+        boolean isFinished = false;
 
         ui.printStartupSequence();
 
         //Loop infinitely until user enters "bye"
-        while (isFinished) {
-            userInput = in.nextLine();
-            splitUserInput = userInput.split(WHITESPACE_IDENTIFIER);
+        while (!isFinished) {
+            userInput = ui.readUserCommand();
+            splitUserInput = parse.divideUserCommand(userInput);
+            command = parse.determineCommand(splitUserInput);
             try {
-                switch (splitUserInput[0]) {
+                switch (command) {
                 case "bye":
-                    isFinished = false;
+                    isFinished = true;
                     break;
                 case "list":
                     ui.printTaskList(tasks.getTaskList());
@@ -87,7 +87,6 @@ public class Walter {
                     storage.writeToFile(tasks.getTaskList());
                     break;
                 default:
-                    //Throw exception for invalid command - Break statement unreachable
                     throw new WalterException(EXCEPTION_INVALID_COMMAND);
                 }
 
