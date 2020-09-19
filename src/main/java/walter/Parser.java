@@ -3,8 +3,14 @@ package walter;
 import walter.exceptions.WalterException;
 
 public class Parser {
-
+    //Exception messages
     public static final String EXCEPTION_EMPTY_FIELD = "Oh no... You have to enter a task number. Please try again!";
+    public static final String EXCEPTION_TIMEDEVENT_INTRO = "Oh no! ;-;\nThe ";
+    public static final String EXCEPTION_TIMEDEVENT_BODY =
+            " command requires both description and time information in the format of: \n";
+    public static final String EXCEPTION_TIMEDEVENT_DESCRIPTION = "[description] ";
+    public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
+
     public static final String BLANK_SPACE = "";
     public static final String WHITESPACE_IDENTIFIER = " ";
 
@@ -31,12 +37,31 @@ public class Parser {
         return modifiedString.split(identifier);
     }
 
-    /**
-     * Checks for invalid command and throws WalterException
-     */
+    /** Checks for invalid command and throws WalterException */
     public static void checkForValidInput(String[] splitUserInput) throws WalterException {
         if (splitUserInput.length == 1) {
             throw new WalterException(EXCEPTION_EMPTY_FIELD);
+        }
+    }
+
+    public static void checkForValidFieldEntered(String[] informationStrings, String command, String eventIdentifier)
+            throws WalterException {
+        boolean fieldsArePresent = true;
+
+        //Check if both fields have been fulfilled
+        for (String information : informationStrings) {
+            if (information.equals(BLANK_SPACE)) {
+                fieldsArePresent = false;
+                break;
+            }
+        }
+
+        //Check for valid information
+        if (informationStrings.length < 2 || !fieldsArePresent) {
+            String exceptionMessage = EXCEPTION_TIMEDEVENT_INTRO + command +
+                    EXCEPTION_TIMEDEVENT_BODY +
+                    EXCEPTION_TIMEDEVENT_DESCRIPTION + eventIdentifier + EXCEPTION_TIMEDEVENT_TIMEINFO;
+            throw new WalterException(exceptionMessage);
         }
     }
 

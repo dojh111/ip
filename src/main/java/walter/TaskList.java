@@ -13,11 +13,6 @@ public class TaskList {
 
     public static final String BLANK_SPACE = "";
     public static final String COMMAND_TODO = "todo";
-    public static final String EXCEPTION_TIMEDEVENT_INTRO = "Oh no! ;-;\nThe ";
-    public static final String EXCEPTION_TIMEDEVENT_BODY =
-            " command requires both description and time information in the format of: \n";
-    public static final String EXCEPTION_TIMEDEVENT_DESCRIPTION = "[description] ";
-    public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
     public static final String EXCEPTION_EMPTY_TODO = "Oh no! The description of the todo cannot be empty ;-;";
 
     public ArrayList<Task> taskList;
@@ -37,7 +32,6 @@ public class TaskList {
     /**
      * Adds user input into the task list
      *
-     * @params tasks  Array of current stored tasks
      * @params userInput  Original input by user
      */
     public void addTodoTask(String userInput) throws WalterException {
@@ -54,34 +48,17 @@ public class TaskList {
     /**
      * Adds new timed event tasks such as events or deadlines into the task list
      *
-     * @params tasks  Array of current stored tasks
      * @params userInput  Original input by user
-     * @params taskCount  Current count of tasks stored
      * @params command  The command entered - Either event or deadline
      * @params eventIdentifier  Identifier to determine string information - Either /at or /by
      */
     public void addNewTimedEvent(String userInput, String command, String eventIdentifier) throws WalterException {
         String description;
         String timeInformation;
-        boolean fieldsArePresent = true;
 
         String[] informationStrings = Parser.determineTaskInformation(userInput, command, eventIdentifier);
 
-        //Check if both fields have been fulfilled
-        for (String information : informationStrings) {
-            if (information.equals(BLANK_SPACE)) {
-                fieldsArePresent = false;
-                break;
-            }
-        }
-
-        //Check if additional information was given (TO REFACTOR INTO PARSER)
-        if (informationStrings.length < 2 || !fieldsArePresent) {
-            String exceptionMessage = EXCEPTION_TIMEDEVENT_INTRO + command +
-                    EXCEPTION_TIMEDEVENT_BODY +
-                    EXCEPTION_TIMEDEVENT_DESCRIPTION + eventIdentifier + EXCEPTION_TIMEDEVENT_TIMEINFO;
-            throw new WalterException(exceptionMessage);
-        }
+        Parser.checkForValidFieldEntered(informationStrings, command, eventIdentifier);
 
         //Set variables
         description = informationStrings[0].trim();
@@ -103,16 +80,12 @@ public class TaskList {
     /**
      * Sets isDone of selected task to true
      *
-     * @params tasks  Array of current stored tasks
-     * @params splitUserInput  Array of strings after original user input has been split by whitespace
-     * @params taskCount  Current count of tasks stored
+     * @params splitUserInput Array of strings after original user input has been split by whitespace
      */
     public String setTaskAsDone (String[] splitUserInput) throws WalterException {
         Parser.checkForValidInput(splitUserInput);
         int taskNumber = Integer.parseInt(splitUserInput[1]) - 1;
         String markedItemDetails;
-
-        //TaskNumber is valid
         taskList.get(taskNumber).setAsDone();
         markedItemDetails = taskList.get(taskNumber).toString();
 

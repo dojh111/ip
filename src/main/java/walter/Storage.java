@@ -20,6 +20,7 @@ public class Storage {
     public static final String TODO_ICON = "[T]";
     public static final String DEADLINE_ICON = "[D]";
     public static final String EVENT_ICON = "[E]";
+    public static final String BLANK_STRING = "";
 
     private final String filePath;
 
@@ -32,14 +33,14 @@ public class Storage {
      */
     public ArrayList<Task> readFileContents() throws IOException {
         ArrayList<Task> taskList = new ArrayList<>();
-        File f = new File(filePath);
+        File saveFile = new File(filePath);
 
         //Read from file if exists, else create new directory and files
-        if (f.exists()) {
-            Scanner s = new Scanner(f);
+        if (saveFile.exists()) {
+            Scanner fileScanner = new Scanner(saveFile);
             //Re-create task objects in the array
-            while (s.hasNext()) {
-                String taskInformation = s.nextLine();
+            while (fileScanner.hasNext()) {
+                String taskInformation = fileScanner.nextLine();
                 String[] taskComponents = taskInformation.split(SAVE_DELIMITER);
                 switch (taskComponents[0]) {
                 case TODO_ICON:
@@ -60,7 +61,7 @@ public class Storage {
         } else {
             //No existing file detected. Create new save file
             System.out.println(FILE_MESSAGE_NO_SAVE_DETECTED);
-            boolean fileCreated = f.createNewFile();
+            boolean fileCreated = saveFile.createNewFile();
             if (fileCreated) {
                 System.out.println(FILE_MESSAGE_CREATED_SUCCESS);
             }
@@ -76,11 +77,11 @@ public class Storage {
     public void writeToFile(ArrayList<Task> tasks) throws IOException {
         //Clearing file before writing
         FileWriter fwClear = new FileWriter(filePath);
-        fwClear.write("");
+        fwClear.write(BLANK_STRING);
         fwClear.close();
 
         //Append information into file
-        FileWriter fw = new FileWriter(filePath, true);
+        FileWriter fileWriter = new FileWriter(filePath, true);
         for (Task task : tasks) {
             int taskStatus;
             //Determine status to write to file based on task status
@@ -89,10 +90,11 @@ public class Storage {
             } else {
                 taskStatus = 0;
             }
+            //Create text string to write so save file
             String taskToSave = task.getTaskIcon() + SAVE_DELIMITER + taskStatus + SAVE_DELIMITER
                     + task.getDescription() + SAVE_DELIMITER + task.getTimingInformation() + System.lineSeparator();
-            fw.write(taskToSave);
+            fileWriter.write(taskToSave);
         }
-        fw.close();
+        fileWriter.close();
     }
 }

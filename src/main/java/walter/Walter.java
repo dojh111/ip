@@ -18,10 +18,8 @@ public class Walter {
     public static final String MESSAGE_TASK_MARKED = "NICE! (｡◕‿‿◕｡) I've marked the task as done!:";
     public static final String MESSAGE_TASK_DELETED = "Alright! I've removed this task from the list:";
 
-
     //Exception Messages
     public static final String EXCEPTION_INVALID_COMMAND = "I do not know what that means ;-;, please try again!";
-
 
     private Storage storage;
     private TaskList tasks;
@@ -30,6 +28,7 @@ public class Walter {
 
     public Walter(String filePath) {
         ui = new Ui();
+        parse = new Parser();
         storage = new Storage(filePath);
         try {
             tasks = new TaskList(storage.readFileContents());
