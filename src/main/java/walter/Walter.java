@@ -85,6 +85,8 @@ public class Walter {
                     ui.printTaskAddedConfirmation(tasks.getTaskList());
                     storage.writeToFile(tasks.getTaskList());
                     break;
+                case "schedule":
+                    tasks.getSchedule(splitUserInput);
                 default:
                     throw new WalterException(EXCEPTION_INVALID_COMMAND);
                 }

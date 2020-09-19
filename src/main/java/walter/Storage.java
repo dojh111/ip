@@ -81,7 +81,7 @@ public class Storage {
     /**
      * Writes data from the tasks array onto a file, so that data can be saved
      *
-     * @param tasks  ArrayList of tasks to be written onto the file
+     * @param tasks ArrayList of tasks to be written onto the file
      */
     public void writeToFile(ArrayList<Task> tasks) throws IOException {
         //Clearing file before writing

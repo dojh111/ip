@@ -6,15 +6,18 @@ import walter.tasks.Event;
 import walter.tasks.Task;
 import walter.tasks.Todo;
 
-import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+
+import static java.util.stream.Collectors.toList;
 
 public class TaskList {
 
     public static final String BLANK_SPACE = "";
     public static final String COMMAND_TODO = "todo";
     public static final String EXCEPTION_EMPTY_TODO = "Oh no! The description of the todo cannot be empty ;-;";
+    public static final String DEFAULT_DATE = "9999-12-31";
 
     public ArrayList<Task> taskList;
 
@@ -56,7 +59,7 @@ public class TaskList {
     public void addNewTimedEvent(String userInput, String command, String eventIdentifier) throws WalterException {
         String description;
         String additionalInformation;
-        String unformattedDate = "9999-12-31";
+        String unformattedDate = DEFAULT_DATE;
         ArrayList<String> dateInformation;
 
         String[] informationStrings = Parser.determineTaskInformation(userInput, command, eventIdentifier);
@@ -69,8 +72,6 @@ public class TaskList {
 
         dateInformation = Parser.determineDateInformation(additionalInformation);
         if (dateInformation.size() == 2) {
-            //Index 1 of dateInformation contains the original string index to be replaced
-            //Index 2 of dateInformation contains the formatted date
             unformattedDate = dateInformation.get(0);
             String formattedDate = dateInformation.get(1);
             additionalInformation = additionalInformation.replace(unformattedDate, formattedDate);
@@ -86,6 +87,18 @@ public class TaskList {
             break;
         default:
             break;
+        }
+    }
+
+    public void getSchedule(String[] splitUserInput) {
+        try {
+            String inputDate = LocalDate.parse(splitUserInput[1]).toString();
+            ArrayList<Task> tasksOnDay = (ArrayList<Task>) taskList.stream()
+                    .filter((s) -> s.getDate().equals(inputDate))
+                    .collect(toList());
+
+        } catch (DateTimeParseException e) {
+            Ui.showInvalidDateFormatError();
         }
     }
 
@@ -117,4 +130,5 @@ public class TaskList {
 
         return deleteItemDetails;
     }
+
 }

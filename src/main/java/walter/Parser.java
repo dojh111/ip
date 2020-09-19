@@ -15,7 +15,6 @@ public class Parser {
             " command requires both description and time information in the format of: \n";
     public static final String EXCEPTION_TIMEDEVENT_DESCRIPTION = "[description] ";
     public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
-    public static final String EXCEPTION_INVALID_DATE_FORMAT = "Please enter date in this format:\n[YYYY-MM-DD]";
 
     public static final String BLANK_SPACE = "";
     public static final String WHITESPACE_IDENTIFIER = " ";
@@ -86,7 +85,7 @@ public class Parser {
                     try {
                         replacementStrings = formatDateInformation(stringInformation);
                     } catch (DateTimeParseException e) {
-                        System.out.println(EXCEPTION_INVALID_DATE_FORMAT);
+                        Ui.showInvalidDateFormatError();
                     }
                     break;
                 }
