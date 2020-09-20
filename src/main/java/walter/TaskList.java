@@ -16,13 +16,17 @@ import static java.util.stream.Collectors.toList;
 public class TaskList {
 
     public static final String BLANK_SPACE = "";
-    public static final String COMMAND_TODO = "todo";
+
     public static final String EXCEPTION_EMPTY_TODO = "Oh no! The description of the todo cannot be empty ;-;";
-    public static final String DEFAULT_DATE = "9999-12-31";
-    public static final String DATE_FORMAT = "MMM d yyyy";
-    public static final String COMMAND_FIND = "find";
+    public static final String EXCEPTION_EMPTY_DATE = "Oh no! The please enter a date in YYYY-MM-DD format!";
     public static final String EXCEPTION_EMPTY_SEARCHTERM = "Oh no! The search term cannot be empty!";
 
+    public static final String DEFAULT_DATE = "9999-12-31";
+    public static final String DATE_FORMAT = "MMM d yyyy";
+
+    public static final String COMMAND_TODO = "todo";
+    public static final String COMMAND_FIND = "find";
+    public static final String COMMAND_SCHEDULE = "schedule";
 
     public ArrayList<Task> taskList;
 
@@ -36,22 +40,6 @@ public class TaskList {
 
     public ArrayList<Task> getTaskList() {
         return taskList;
-    }
-
-    /**
-     * Adds user input into the task list
-     *
-     * @params userInput  Original input by user
-     */
-    public void addTodoTask(String userInput) throws WalterException {
-        String taskDescription = Parser.removeCommandFromInput(userInput, COMMAND_TODO);
-
-        //Check for exception where user input for task is empty
-        if (taskDescription.equals(BLANK_SPACE)) {
-            throw new WalterException(EXCEPTION_EMPTY_TODO);
-        }
-
-        taskList.add(new Todo(taskDescription));
     }
 
     /**
@@ -95,11 +83,51 @@ public class TaskList {
         }
     }
 
-    public void getSchedule(String[] splitUserInput) {
+    /**
+     * Adds user input into the task list
+     *
+     * @params userInput  Original input by user
+     */
+    public void addTodoTask(String userInput) throws WalterException {
+        String taskDescription = Parser.removeCommandFromInput(userInput, COMMAND_TODO);
+
+        //Check for exception where user input for task is empty
+        if (taskDescription.equals(BLANK_SPACE)) {
+            throw new WalterException(EXCEPTION_EMPTY_TODO);
+        }
+
+        taskList.add(new Todo(taskDescription));
+    }
+
+    public void findTask(String userInput) throws WalterException {
+        String searchTerm = Parser.removeCommandFromInput(userInput, COMMAND_FIND);
+
+        //Check for exception where user input for task is empty
+        if (searchTerm.equals(BLANK_SPACE)) {
+            throw new WalterException(EXCEPTION_EMPTY_SEARCHTERM);
+        }
+
+        //Filter for tasks with searchterm using stream
+        ArrayList<Task> searchResults = (ArrayList<Task>) taskList.stream()
+                .filter((s) -> s.toString().contains(searchTerm))
+                .collect(toList());
+
+        Ui.printSearchResults(searchResults, searchTerm);
+    }
+
+    public void getSchedule(String userInput) throws WalterException {
+        String searchDate = Parser.removeCommandFromInput(userInput, COMMAND_SCHEDULE);
+
+        //Check for exception where user input for task is empty
+        if (searchDate.equals(BLANK_SPACE)) {
+            throw new WalterException(EXCEPTION_EMPTY_DATE);
+        }
+
         try {
-            LocalDate selectedDate = LocalDate.parse(splitUserInput[1]);
+            LocalDate selectedDate = LocalDate.parse(searchDate);
             String inputDate = selectedDate.toString();
             String formattedDate = selectedDate.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+
             ArrayList<Task> tasksOnDay = (ArrayList<Task>) taskList.stream()
                     .filter((s) -> s.getDate().equals(inputDate))
                     .collect(toList());
@@ -138,17 +166,4 @@ public class TaskList {
         return deleteItemDetails;
     }
 
-    public void findTask(String userInput) throws WalterException {
-        String searchTerm = Parser.removeCommandFromInput(userInput, COMMAND_FIND);
-
-        //Check for exception where user input for task is empty
-        if (searchTerm.equals(BLANK_SPACE)) {
-            throw new WalterException(EXCEPTION_EMPTY_SEARCHTERM);
-        }
-
-        //Filter for tasks with searchterm using stream
-        ArrayList<Task> searchResults = (ArrayList<Task>) taskList.stream()
-                .filter((s) -> s.toString().contains(searchTerm))
-                .collect(toList());
-    }
 }

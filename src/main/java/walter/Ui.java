@@ -2,6 +2,7 @@ package walter;
 
 import walter.tasks.Task;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -124,6 +125,18 @@ public class Ui {
         printSeparator();
         System.out.println("Here are the events you have on " + formattedDate + ":");
         for (Task task : tasksOnDay) {
+            String taskNumber = " " + taskCount + ". ";
+            System.out.println(taskNumber + task.toString());
+            taskCount++;
+        }
+        printSeparator();
+    }
+
+    public static void printSearchResults(ArrayList<Task> searchResults, String searchTerm) {
+        int taskCount = 1;
+        printSeparator();
+        System.out.println("This is what I have found for: " + searchTerm);
+        for (Task task : searchResults) {
             String taskNumber = " " + taskCount + ". ";
             System.out.println(taskNumber + task.toString());
             taskCount++;

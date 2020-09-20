@@ -86,7 +86,8 @@ public class Walter {
                     storage.writeToFile(tasks.getTaskList());
                     break;
                 case "schedule":
-                    tasks.getSchedule(splitUserInput);
+                    tasks.getSchedule(userInput);
+                    break;
                 case "find":
                     tasks.findTask(userInput);
                     break;
