@@ -2,6 +2,11 @@ package walter;
 
 import walter.exceptions.WalterException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+
 public class Parser {
     //Exception messages
     public static final String EXCEPTION_EMPTY_FIELD = "Oh no... You have to enter a task number. Please try again!";
@@ -13,6 +18,9 @@ public class Parser {
 
     public static final String BLANK_SPACE = "";
     public static final String WHITESPACE_IDENTIFIER = " ";
+    public static final String HYPHEN_IDENTIFIER = "-";
+    public static final int DATE_FORMAT_SIZE = 3;
+    public static final String DATE_FORMAT = "MMM d yyyy";
 
     /**
      * Removes the command passed into the method and replaces it with white space
@@ -63,6 +71,53 @@ public class Parser {
                     EXCEPTION_TIMEDEVENT_DESCRIPTION + eventIdentifier + EXCEPTION_TIMEDEVENT_TIMEINFO;
             throw new WalterException(exceptionMessage);
         }
+    }
+
+    /** Returns an arraylist which contains information to replace date in original string */
+    public static ArrayList<String> determineDateInformation(String timeInformation) {
+        String[] splitTimeInformation = timeInformation.split(WHITESPACE_IDENTIFIER);
+        ArrayList<String> replacementStrings = new ArrayList<>();
+
+        //Check if substring contains 2 '-' to try to parse into date information
+        for (String stringInformation : splitTimeInformation) {
+            if (stringInformation.contains(HYPHEN_IDENTIFIER)) {
+                if (checkForValidDateFormat(stringInformation)) {
+                    try {
+                        replacementStrings = formatDateInformation(stringInformation);
+                    } catch (DateTimeParseException e) {
+                        Ui.showInvalidDateFormatError();
+                    }
+                    break;
+                }
+            }
+        }
+        return replacementStrings;
+    }
+
+    public static ArrayList<String> formatDateInformation(String stringInformation) {
+        LocalDate taskDate;
+        ArrayList<String> replacementStrings = new ArrayList<>();
+
+        replacementStrings.add(stringInformation);
+        taskDate = LocalDate.parse(stringInformation);
+        String formattedDate = taskDate.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+        replacementStrings.add(formattedDate);
+
+        return replacementStrings;
+    }
+
+    /** Returns true when string contains 3 members separated by 2 hyphens */
+    public static boolean checkForValidDateFormat(String stringInformation) {
+        String[] splitDate = stringInformation.split(HYPHEN_IDENTIFIER);
+
+        //Check for empty fields
+        for (String subString : splitDate) {
+            if (subString.equals(BLANK_SPACE)) {
+                return false;
+            }
+        }
+        //Check for only 3 inputs
+        return splitDate.length == DATE_FORMAT_SIZE;
     }
 
     /** Splits string by white space and returns array of strings */

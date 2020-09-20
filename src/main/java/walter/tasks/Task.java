@@ -36,6 +36,8 @@ public abstract class Task {
 
     public abstract String getTimingInformation();
 
+    public abstract String getDate();
+
     @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;

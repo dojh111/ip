@@ -6,14 +6,20 @@ import walter.tasks.Event;
 import walter.tasks.Task;
 import walter.tasks.Todo;
 
-import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+
+import static java.util.stream.Collectors.toList;
 
 public class TaskList {
 
     public static final String BLANK_SPACE = "";
     public static final String COMMAND_TODO = "todo";
     public static final String EXCEPTION_EMPTY_TODO = "Oh no! The description of the todo cannot be empty ;-;";
+    public static final String DEFAULT_DATE = "9999-12-31";
+    public static final String DATE_FORMAT = "MMM d yyyy";
 
     public ArrayList<Task> taskList;
 
@@ -54,7 +60,9 @@ public class TaskList {
      */
     public void addNewTimedEvent(String userInput, String command, String eventIdentifier) throws WalterException {
         String description;
-        String timeInformation;
+        String additionalInformation;
+        String unformattedDate = DEFAULT_DATE;
+        ArrayList<String> dateInformation;
 
         String[] informationStrings = Parser.determineTaskInformation(userInput, command, eventIdentifier);
 
@@ -62,18 +70,39 @@ public class TaskList {
 
         //Set variables
         description = informationStrings[0].trim();
-        timeInformation = informationStrings[1].trim();
+        additionalInformation = informationStrings[1].trim();
+
+        dateInformation = Parser.determineDateInformation(additionalInformation);
+        if (dateInformation.size() == 2) {
+            unformattedDate = dateInformation.get(0);
+            String formattedDate = dateInformation.get(1);
+            additionalInformation = additionalInformation.replace(unformattedDate, formattedDate);
+        }
 
         //Create new task objects
         switch (command) {
         case "event":
-            taskList.add(new Event(description, timeInformation));
+            taskList.add(new Event(description, additionalInformation, unformattedDate));
             break;
         case "deadline":
-            taskList.add(new Deadline(description, timeInformation));
+            taskList.add(new Deadline(description, additionalInformation, unformattedDate));
             break;
         default:
             break;
+        }
+    }
+
+    public void getSchedule(String[] splitUserInput) {
+        try {
+            LocalDate selectedDate = LocalDate.parse(splitUserInput[1]);
+            String inputDate = selectedDate.toString();
+            String formattedDate = selectedDate.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+            ArrayList<Task> tasksOnDay = (ArrayList<Task>) taskList.stream()
+                    .filter((s) -> s.getDate().equals(inputDate))
+                    .collect(toList());
+            Ui.printScheduleForDay(tasksOnDay, formattedDate);
+        } catch (DateTimeParseException e) {
+            Ui.showInvalidDateFormatError();
         }
     }
 
@@ -105,4 +134,5 @@ public class TaskList {
 
         return deleteItemDetails;
     }
+
 }
