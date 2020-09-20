@@ -66,7 +66,7 @@ public class Ui {
         printSeparator();
     }
 
-    /** Reads user command and returns command */
+    /** Returns read user command */
     public String readUserCommand() {
         Scanner in = new Scanner(System.in);
 
@@ -76,8 +76,8 @@ public class Ui {
     /**
      * Prints the confirmation messages for setTaskAsDone and deleteTask
      *
-     * @param message  The header message to inform the user whether action is set or delete
-     * @param itemDetails  Details of the item that was set or deleted
+     * @param message The header message to inform the user whether action is set or delete
+     * @param itemDetails Details of the item that was set or deleted
      */
     public void printSetDeleteConfirmMessage(String message, String itemDetails) {
         printSeparator();
@@ -87,10 +87,9 @@ public class Ui {
     }
 
     /**
-     * Print confirmation text when a new task is added
+     * Prints confirmation text when a new task is added
      *
-     * @params tasks  Array of current stored tasks
-     * @params taskCount  Current count of tasks stored
+     * @param tasks Array of current stored tasks
      */
     public void printTaskAddedConfirmation(ArrayList<Task> tasks) {
         printSeparator();
@@ -101,9 +100,9 @@ public class Ui {
     }
 
     /**
-     * Print list of tasks when user requests
+     * Print list of current tasks
      *
-     * @params tasks  Array of current stored tasks
+     * @param tasks Array of current stored tasks
      */
     public void printTaskList(ArrayList<Task> tasks) {
         int taskNumber = 1;
@@ -120,6 +119,13 @@ public class Ui {
         printSeparator();
     }
 
+    /**
+     * Prints returned search results for schedule and find commands
+     *
+     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
+     * @param filterField Searchterm
+     * @param command Either "find" or "schedule"
+     */
     public static void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command) {
         printSeparator();
         if (isEmptyFilteredTasks(filteredTasks, filterField, command)) {
@@ -130,6 +136,7 @@ public class Ui {
         printSeparator();
     }
 
+    /** Returns true when there are empty search results */
     public static boolean isEmptyFilteredTasks(ArrayList<Task> filteredTasks, String filterField, String command) {
         boolean isEmpty = false;
         if (filteredTasks.size() == 0) {
@@ -149,6 +156,7 @@ public class Ui {
         return isEmpty;
     }
 
+    /** Prints the header message for schedule and find functions */
     public static void printFilteredTaskMessage(String filterField, String command) {
         switch (command) {
         case "find":
@@ -162,6 +170,11 @@ public class Ui {
         }
     }
 
+    /**
+     * Prints all tasks that were filtered out
+     *
+     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
+     */
     public static void printFilteredTasksList (ArrayList<Task> filteredTasks) {
         int taskCount = 1;
 

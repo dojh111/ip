@@ -3,7 +3,7 @@ package walter.tasks;
 import java.time.LocalDate;
 
 /**
- * The walter.tasks.Event class inherits from the walter.tasks.Task class and is used to create event objects
+ * The Event class inherits from the Task class and is used to create event objects
  */
 public class Event extends Task {
 

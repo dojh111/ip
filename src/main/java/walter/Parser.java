@@ -27,10 +27,10 @@ public class Parser {
     public static final String DATE_FORMAT = "MMM d yyyy";
 
     /**
-     * Removes the command passed into the method and replaces it with white space
+     * Removes the command passed into the method
      *
-     * @params userInput  Original string typed by user and to be modified
-     * @params commandToRemove  Command to be removed from string
+     * @param userInput Original string typed by user and to be modified
+     * @param commandToRemove Command to be removed from string
      */
     public static String removeCommandFromInput(String userInput, String commandToRemove) {
         String modifiedUserInput = userInput.replace(commandToRemove, BLANK_SPACE);
@@ -40,10 +40,8 @@ public class Parser {
     /**
      * Returns a string array with the task's description and additional information
      *
-     * @params userInput Original string typed by user and to be modified
-     * @params commandToRemove  Command to be removed from string
-     * @params identifier  Identifier token to split the string with
-     **/
+     * @param identifier Identifier token to split the string with
+     */
     public static String[] determineTaskInformation(String userInput, String commandToRemove, String identifier) {
         String modifiedString = removeCommandFromInput(userInput, commandToRemove);
         return modifiedString.split(identifier);
@@ -56,6 +54,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Checks and throws WalterException if no argument was passed in as argument
+     *
+     * @param field Argument to be checked
+     */
     public static void checkForEmptySingleField(String field, String command) throws WalterException {
         if (field.equals(BLANK_SPACE)) {
             switch (command) {
@@ -71,6 +74,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Validates arguments for events with time descriptions
+     *
+     * @param informationStrings Arguments split by whitespaces
+     * @param eventIdentifier Identifier to distinguish events and deadlines
+     */
     public static void checkForValidFieldEntered(String[] informationStrings, String command, String eventIdentifier)
             throws WalterException {
         boolean fieldsArePresent = true;
@@ -113,6 +122,7 @@ public class Parser {
         return replacementStrings;
     }
 
+    /** Formats date object into specified format and returns both original and formatted strings */
     public static ArrayList<String> formatDateInformation(String stringInformation) {
         LocalDate taskDate;
         ArrayList<String> replacementStrings = new ArrayList<>();

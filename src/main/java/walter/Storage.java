@@ -29,7 +29,9 @@ public class Storage {
     }
 
     /**
-     * Recreates tasks array by reading data from file. If no file available, create new file
+     * Builds and returns an ArrayList of tasks from the save file. If no save file is found, a new file is created
+     *
+     * @return ArrayList of tasks
      */
     public ArrayList<Task> readFileContents() throws IOException {
         ArrayList<Task> taskList = new ArrayList<>();

@@ -38,6 +38,7 @@ public class Walter {
         }
     }
 
+    /** Runs the main Walter program until termination */
     public void run() {
         String userInput;
         String command;
