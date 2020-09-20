@@ -7,6 +7,7 @@ import walter.tasks.Task;
 import walter.tasks.Todo;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public class TaskList {
     public static final String COMMAND_TODO = "todo";
     public static final String EXCEPTION_EMPTY_TODO = "Oh no! The description of the todo cannot be empty ;-;";
     public static final String DEFAULT_DATE = "9999-12-31";
+    public static final String DATE_FORMAT = "MMM d yyyy";
 
     public ArrayList<Task> taskList;
 
@@ -92,11 +94,13 @@ public class TaskList {
 
     public void getSchedule(String[] splitUserInput) {
         try {
-            String inputDate = LocalDate.parse(splitUserInput[1]).toString();
+            LocalDate selectedDate = LocalDate.parse(splitUserInput[1]);
+            String inputDate = selectedDate.toString();
+            String formattedDate = selectedDate.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
             ArrayList<Task> tasksOnDay = (ArrayList<Task>) taskList.stream()
                     .filter((s) -> s.getDate().equals(inputDate))
                     .collect(toList());
-
+            Ui.printScheduleForDay(tasksOnDay, formattedDate);
         } catch (DateTimeParseException e) {
             Ui.showInvalidDateFormatError();
         }

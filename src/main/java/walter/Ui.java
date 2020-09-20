@@ -44,7 +44,7 @@ public class Ui {
     public static final String EXCEPTION_INVALID_DATE_FORMAT = "Please enter date in this format:\n[YYYY-MM-DD]";
 
     /** Prints separator component after text is printed */
-    public void printSeparator() {
+    public static void printSeparator() {
         System.out.println(MESSAGE_LINE_SEPARATOR);
     }
 
@@ -119,8 +119,16 @@ public class Ui {
         printSeparator();
     }
 
-    public static void printScheduleForDay(ArrayList<Task> tasksOnDay) {
-        
+    public static void printScheduleForDay(ArrayList<Task> tasksOnDay, String formattedDate) {
+        int taskCount = 1;
+        printSeparator();
+        System.out.println("Here are the events you have on " + formattedDate + ":");
+        for (Task task : tasksOnDay) {
+            String taskNumber = " " + taskCount + ". ";
+            System.out.println(taskNumber + task.toString());
+            taskCount++;
+        }
+        printSeparator();
     }
 
     public void showLoadingError() {

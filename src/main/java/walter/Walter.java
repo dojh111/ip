@@ -87,6 +87,7 @@ public class Walter {
                     break;
                 case "schedule":
                     tasks.getSchedule(splitUserInput);
+                    break;
                 default:
                     throw new WalterException(EXCEPTION_INVALID_COMMAND);
                 }
