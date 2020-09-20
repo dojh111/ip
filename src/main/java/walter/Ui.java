@@ -120,28 +120,56 @@ public class Ui {
         printSeparator();
     }
 
-    public static void printScheduleForDay(ArrayList<Task> tasksOnDay, String formattedDate) {
-        int taskCount = 1;
+    public static void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command) {
         printSeparator();
-        System.out.println("Here are the events you have on " + formattedDate + ":");
-        for (Task task : tasksOnDay) {
-            String taskNumber = " " + taskCount + ". ";
-            System.out.println(taskNumber + task.toString());
-            taskCount++;
+        if (isEmptyFilteredTasks(filteredTasks, filterField, command)) {
+            return;
         }
+        printFilteredTaskMessage(filterField, command);
+        printFilteredTasksList(filteredTasks);
         printSeparator();
     }
 
-    public static void printSearchResults(ArrayList<Task> searchResults, String searchTerm) {
+    public static boolean isEmptyFilteredTasks(ArrayList<Task> filteredTasks, String filterField, String command) {
+        boolean isEmpty = false;
+        if (filteredTasks.size() == 0) {
+            switch (command) {
+            case "find":
+                System.out.println("I could not find any tasks with the word: " + filterField);
+                isEmpty = true;
+                break;
+            case "schedule":
+                System.out.println("You have nothing scheduled on: " + filterField);
+                isEmpty = true;
+                break;
+            default:
+                break;
+            }
+        }
+        return isEmpty;
+    }
+
+    public static void printFilteredTaskMessage(String filterField, String command) {
+        switch (command) {
+        case "find":
+            System.out.println("This is what I have found for: " + filterField);
+            break;
+        case "schedule":
+            System.out.println("Here are the events you have on " + filterField + ":");
+            break;
+        default:
+            break;
+        }
+    }
+
+    public static void printFilteredTasksList (ArrayList<Task> filteredTasks) {
         int taskCount = 1;
-        printSeparator();
-        System.out.println("This is what I have found for: " + searchTerm);
-        for (Task task : searchResults) {
+
+        for (Task task : filteredTasks) {
             String taskNumber = " " + taskCount + ". ";
             System.out.println(taskNumber + task.toString());
             taskCount++;
         }
-        printSeparator();
     }
 
     public void showLoadingError() {

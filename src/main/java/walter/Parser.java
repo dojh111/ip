@@ -15,10 +15,14 @@ public class Parser {
             " command requires both description and time information in the format of: \n";
     public static final String EXCEPTION_TIMEDEVENT_DESCRIPTION = "[description] ";
     public static final String EXCEPTION_TIMEDEVENT_TIMEINFO = " [time information]";
+    public static final String EXCEPTION_EMPTY_TODO = "Oh no! The description of the todo cannot be empty ;-;";
+    public static final String EXCEPTION_EMPTY_DATE = "Oh no! The please enter a date in YYYY-MM-DD format!";
+    public static final String EXCEPTION_EMPTY_SEARCHTERM = "Oh no! The search term cannot be empty!";
 
     public static final String BLANK_SPACE = "";
     public static final String WHITESPACE_IDENTIFIER = " ";
     public static final String HYPHEN_IDENTIFIER = "-";
+
     public static final int DATE_FORMAT_SIZE = 3;
     public static final String DATE_FORMAT = "MMM d yyyy";
 
@@ -52,6 +56,21 @@ public class Parser {
         }
     }
 
+    public static void checkForEmptySingleField(String field, String command) throws WalterException {
+        if (field.equals(BLANK_SPACE)) {
+            switch (command) {
+            case "todo":
+                throw new WalterException(EXCEPTION_EMPTY_TODO);
+            case "find":
+                throw new WalterException(EXCEPTION_EMPTY_SEARCHTERM);
+            case "schedule":
+                throw new WalterException(EXCEPTION_EMPTY_DATE);
+            default:
+                break;
+            }
+        }
+    }
+
     public static void checkForValidFieldEntered(String[] informationStrings, String command, String eventIdentifier)
             throws WalterException {
         boolean fieldsArePresent = true;
@@ -78,7 +97,7 @@ public class Parser {
         String[] splitTimeInformation = timeInformation.split(WHITESPACE_IDENTIFIER);
         ArrayList<String> replacementStrings = new ArrayList<>();
 
-        //Check if substring contains 2 '-' to try to parse into date information
+        //Check if substring contains 2 '-'
         for (String stringInformation : splitTimeInformation) {
             if (stringInformation.contains(HYPHEN_IDENTIFIER)) {
                 if (checkForValidDateFormat(stringInformation)) {
@@ -120,12 +139,12 @@ public class Parser {
         return splitDate.length == DATE_FORMAT_SIZE;
     }
 
-    /** Splits string by white space and returns array of strings */
+    /** Returns array of strings from splitting given string with whitespace */
     public String[] divideUserCommand(String userInput) {
         return userInput.split(WHITESPACE_IDENTIFIER);
     }
 
-    /** Determines command from string */
+    /** Returns command from typed user input */
     public String determineCommand(String[] splitUserInput) {
         return splitUserInput[0];
     }
