@@ -1,5 +1,9 @@
 package walter;
 
+import walter.components.Parser;
+import walter.components.Storage;
+import walter.components.TaskList;
+import walter.components.Ui;
 import walter.exceptions.WalterException;
 
 import java.io.IOException;

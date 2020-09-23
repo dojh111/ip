@@ -1,4 +1,4 @@
-package walter;
+package walter.components;
 
 import walter.exceptions.WalterException;
 import walter.tasks.Task;
