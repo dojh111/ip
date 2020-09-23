@@ -38,6 +38,7 @@ public class Ui {
     public static final String MESSAGE_IN_THE_LIST = " in the list.";
     public static final String MESSAGE_ERROR_TASK_UNAVAILABLE = "No tasks available... (｡◕‿‿◕｡)";
     public static final String MESSAGE_TASKS_IN_LIST = " Here are the tasks in your list: ";
+    public static final String MESSAGE_CLEAR_CONFIRMED = "Done! All tasks have been cleared :)";
 
     //Exception error messages
     public static final String EXCEPTION_FILE_ERROR = "Oh no, something went wrong while creating a save file ;-;";
@@ -255,4 +256,11 @@ public class Ui {
         System.out.println(EXCEPTION_INVALID_DATE_FORMAT);
     }
 
+    /**
+     * Prints confirmation message for taskList being cleared
+     */
+    public void printClearTaskListConfirmation() {
+        printSeparator();
+        System.out.println(MESSAGE_CLEAR_CONFIRMED);
+    }
 }

@@ -7,6 +7,7 @@ import walter.tasks.Task;
 import walter.tasks.Todo;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Storage {
 
     public static final String EXCEPTION_FAILED_IDENTIFICATION = "Oh no, something went wrong while determining "
             + "the task type!";
+    public static final String EXCEPTION_FAILED_FILE_CLEAR = "There seems to be a problem clearing the file...";
 
     private final String filePath;
 
@@ -47,46 +49,76 @@ public class Storage {
         //Read from file if file exists, else create a new save file
         if (saveFile.exists()) {
             Scanner fileScanner = new Scanner(saveFile);
-            //Re-create task objects and add to the ArrayList
-            while (fileScanner.hasNext()) {
-                String taskInformation = fileScanner.nextLine();
-                String[] taskComponents = taskInformation.split(SAVE_DELIMITER);
-                String taskIcon = taskComponents[0];
-                String taskStatus = taskComponents[1];
-                String taskDescription = taskComponents[2];
-                String taskTimingInformation;
-                String taskDate;
-                switch (taskIcon) {
-                case TODO_ICON:
-                    taskList.add(new Todo(taskDescription));
-                    break;
-                case DEADLINE_ICON:
-                    taskTimingInformation = taskComponents[3];
-                    taskDate = taskComponents[4];
-                    taskList.add(new Deadline(taskDescription, taskTimingInformation, taskDate));
-                    break;
-                case EVENT_ICON:
-                    taskTimingInformation = taskComponents[3];
-                    taskDate = taskComponents[4];
-                    taskList.add(new Event(taskDescription, taskTimingInformation, taskDate));
-                    break;
-                default:
-                    throw new WalterException(EXCEPTION_FAILED_IDENTIFICATION);
-                }
-                //Set status of task to done if required
-                if (isTaskDone(taskStatus)) {
-                    taskList.get(taskList.size() - 1).setAsDone();
-                }
-            }
+            createTaskList(taskList, fileScanner);
         } else {
-            //No existing file detected. Create new save file
-            System.out.println(FILE_MESSAGE_NO_SAVE_DETECTED);
-            boolean fileCreated = saveFile.createNewFile();
-            if (fileCreated) {
-                System.out.println(FILE_MESSAGE_CREATED_SUCCESS);
-            }
+            createNewFile(saveFile);
         }
         return taskList;
+    }
+
+    /**
+     * Re-creates all saved task objects and adds the objects to the taskList
+     *
+     * @param taskList The ArrayList to save
+     */
+    public void createTaskList(ArrayList<Task> taskList, Scanner fileScanner) throws WalterException {
+
+        while (fileScanner.hasNext()) {
+
+            String taskInformation = fileScanner.nextLine();
+
+            String[] taskComponents = taskInformation.split(SAVE_DELIMITER);
+
+            String taskIcon = taskComponents[0];
+            String taskStatus = taskComponents[1];
+            String taskDescription = taskComponents[2];
+            String taskTimingInformation;
+            String taskDate;
+
+            switch (taskIcon) {
+            case TODO_ICON:
+                taskList.add(new Todo(taskDescription));
+                break;
+            case DEADLINE_ICON:
+                taskTimingInformation = taskComponents[3];
+                taskDate = taskComponents[4];
+                taskList.add(new Deadline(taskDescription, taskTimingInformation, taskDate));
+                break;
+            case EVENT_ICON:
+                taskTimingInformation = taskComponents[3];
+                taskDate = taskComponents[4];
+                taskList.add(new Event(taskDescription, taskTimingInformation, taskDate));
+                break;
+            default:
+                throw new WalterException(EXCEPTION_FAILED_IDENTIFICATION);
+            }
+            setTaskStatus(taskList, taskStatus);
+        }
+    }
+
+    /**
+     * Creates a new save file when no previous save file was detected
+     *
+     * @param saveFile File object containing file path to create save file
+     */
+    public void createNewFile(File saveFile) throws IOException {
+        System.out.println(FILE_MESSAGE_NO_SAVE_DETECTED);
+        boolean fileCreated = saveFile.createNewFile();
+        if (fileCreated) {
+            System.out.println(FILE_MESSAGE_CREATED_SUCCESS);
+        }
+    }
+
+    /**
+     * Sets status of task according to save file
+     *
+     * @param taskList Current list of tasks created
+     * @param taskStatus Status
+     */
+    public void setTaskStatus(ArrayList<Task> taskList, String taskStatus) {
+        if (isTaskDone(taskStatus)) {
+            taskList.get(taskList.size() - 1).setAsDone();
+        }
     }
 
     /**
@@ -104,10 +136,7 @@ public class Storage {
      * @param tasks ArrayList of tasks to be written onto the file
      */
     public void writeToFile(ArrayList<Task> tasks) throws IOException {
-        //Clear file before writing
-        FileWriter fwClear = new FileWriter(filePath);
-        fwClear.write(BLANK_STRING);
-        fwClear.close();
+        clearFile();
 
         //Append information into file
         FileWriter fileWriter = new FileWriter(filePath, true);
@@ -145,5 +174,18 @@ public class Storage {
         return task.getTaskIcon() + SAVE_DELIMITER + taskStatus + SAVE_DELIMITER
                 + task.getDescription() + SAVE_DELIMITER + task.getTimingInformation() + SAVE_DELIMITER
                 + task.getDate() +System.lineSeparator();
+    }
+
+    /**
+     * Deletes all data written to the Walter.txt save file
+     */
+    public void clearFile() {
+        try {
+            FileWriter fwClear = new FileWriter(filePath);
+            fwClear.write(BLANK_STRING);
+            fwClear.close();
+        } catch (IOException e) {
+            System.out.println(EXCEPTION_FAILED_FILE_CLEAR);
+        }
     }
 }

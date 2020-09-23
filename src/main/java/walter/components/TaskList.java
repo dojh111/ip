@@ -189,4 +189,7 @@ public class TaskList {
         return deleteItemDetails;
     }
 
+    public void clearTaskList() {
+        taskList.clear();
+    }
 }

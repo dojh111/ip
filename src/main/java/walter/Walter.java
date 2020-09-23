@@ -97,6 +97,11 @@ public class Walter {
                 case "find":
                     tasks.findTask(userInput);
                     break;
+                case "clear":
+                    tasks.clearTaskList();
+                    storage.clearFile();
+                    ui.printClearTaskListConfirmation();
+                    break;
                 default:
                     throw new WalterException(EXCEPTION_INVALID_COMMAND);
                 }
