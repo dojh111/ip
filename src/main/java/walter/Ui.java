@@ -46,14 +46,19 @@ public class Ui {
             "I'm sorry, I don't understand that ;-;. Please enter a number instead!";
     public static final String EXCEPTION_FILE_WRITE_ERROR = "Oh no, something went wrong while saving!";
     public static final String EXCEPTION_INVALID_DATE_FORMAT = "Please enter date in this format:\n[YYYY-MM-DD]";
-    public static final String EXCEPTION_UNABLE_TO_DETERMINE_TASK = "Hmm, I could not determine the task, please try again!";
+    public static final String EXCEPTION_UNABLE_TO_DETERMINE_TASK = "Hmm, I could not determine the task, please "
+            + "try again!";
 
-    /** Prints separator component after text is printed */
-    public static void printSeparator() {
+    /**
+     * Prints separator component after text is printed
+     */
+    public void printSeparator() {
         System.out.println(MESSAGE_LINE_SEPARATOR);
     }
 
-    /** Prints startup greet sequence */
+    /**
+     * Prints startup greet sequence
+     */
     public void printStartupSequence() {
         System.out.println(MESSAGE_HELLO_FROM + WALTER_LOGO);
         printSeparator();
@@ -62,7 +67,9 @@ public class Ui {
         printSeparator();
     }
 
-    /** Prints closing sequence */
+    /**
+     * Prints closing sequence
+     */
     public void printClosingSequence() {
         printSeparator();
         System.out.println(MESSAGE_CLOSING);
@@ -70,7 +77,9 @@ public class Ui {
         printSeparator();
     }
 
-    /** Returns read user command */
+    /**
+     * Returns read user command
+     */
     public String readUserCommand() {
         Scanner in = new Scanner(System.in);
 
@@ -133,7 +142,7 @@ public class Ui {
     public void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command)
             throws WalterException {
         printSeparator();
-        if (isEmptyFilteredTasks(filteredTasks, filterField, command)) {
+        if (isFilteredTasksEmpty(filteredTasks, filterField, command)) {
             return;
         }
         printFilteredTaskMessage(filterField, command);
@@ -148,7 +157,7 @@ public class Ui {
      * @param filterField Searchterm
      * @param command Either "find" or "schedule"
      */
-    public static boolean isEmptyFilteredTasks(ArrayList<Task> filteredTasks, String filterField, String command)
+    public boolean isFilteredTasksEmpty(ArrayList<Task> filteredTasks, String filterField, String command)
             throws WalterException {
         boolean isEmpty = false;
         if (filteredTasks.size() == 0) {
@@ -174,7 +183,7 @@ public class Ui {
      * @param filterField Searchterm
      * @param command Either "find" or "schedule"
      */
-    public static void printFilteredTaskMessage(String filterField, String command) throws WalterException {
+    public void printFilteredTaskMessage(String filterField, String command) throws WalterException {
         switch (command) {
         case "find":
             System.out.println("This is what I have found for: " + filterField);
@@ -192,7 +201,7 @@ public class Ui {
      *
      * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
      */
-    public static void printFilteredTasksList (ArrayList<Task> filteredTasks) {
+    public void printFilteredTasksList (ArrayList<Task> filteredTasks) {
         int taskCount = 1;
 
         for (Task task : filteredTasks) {

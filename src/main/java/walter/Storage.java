@@ -26,8 +26,8 @@ public class Storage {
     public static final String EVENT_ICON = "[E]";
     public static final String BLANK_STRING = "";
 
-    public static final String EXCEPTION_FAILED_IDENTIFICATION = "Oh no, something went wrong while determining " +
-            "the task type!";
+    public static final String EXCEPTION_FAILED_IDENTIFICATION = "Oh no, something went wrong while determining "
+            + "the task type!";
 
     private final String filePath;
 
