@@ -23,17 +23,20 @@ public class TaskList {
     public static final String COMMAND_SCHEDULE = "schedule";
 
     private Ui ui;
+    private Parser parse;
 
     public ArrayList<Task> taskList;
 
     public TaskList(ArrayList<Task> taskList) {
         this.taskList = taskList;
         ui = new Ui();
+        parse = new Parser();
     }
 
     public TaskList() {
         this.taskList = new ArrayList<>();
         ui = new Ui();
+        parse = new Parser();
     }
 
     public ArrayList<Task> getTaskList() {
@@ -53,15 +56,15 @@ public class TaskList {
         String unformattedDate = DEFAULT_DATE;
         ArrayList<String> dateInformation;
 
-        String[] informationStrings = Parser.determineTaskInformation(userInput, command, eventIdentifier);
+        String[] informationStrings = parse.determineTaskInformation(userInput, command, eventIdentifier);
 
-        Parser.checkForValidFieldEntered(informationStrings, command, eventIdentifier);
+        parse.checkForValidFieldEntered(informationStrings, command, eventIdentifier);
 
         //Set variables
         description = informationStrings[0].trim();
         additionalInformation = informationStrings[1].trim();
 
-        dateInformation = Parser.determineDateInformation(additionalInformation);
+        dateInformation = parse.determineDateInformation(additionalInformation);
         if (dateInformation.size() == 2) {
             unformattedDate = dateInformation.get(0);
             String formattedDate = dateInformation.get(1);
@@ -83,17 +86,17 @@ public class TaskList {
 
     /** Adds todo task into taskList */
     public void addTodoTask(String userInput) throws WalterException {
-        String taskDescription = Parser.removeCommandFromInput(userInput, COMMAND_TODO);
+        String taskDescription = parse.removeCommandFromInput(userInput, COMMAND_TODO);
 
-        Parser.checkForEmptySingleField(taskDescription, COMMAND_TODO);
+        parse.checkForEmptySingleField(taskDescription, COMMAND_TODO);
 
         taskList.add(new Todo(taskDescription));
     }
 
     public void findTask(String userInput) throws WalterException {
-        String searchTerm = Parser.removeCommandFromInput(userInput, COMMAND_FIND);
+        String searchTerm = parse.removeCommandFromInput(userInput, COMMAND_FIND);
 
-        Parser.checkForEmptySingleField(searchTerm, COMMAND_FIND);
+        parse.checkForEmptySingleField(searchTerm, COMMAND_FIND);
 
         //Filter for tasks with searchterm using stream
         ArrayList<Task> searchResults = (ArrayList<Task>) taskList.stream()
@@ -104,9 +107,9 @@ public class TaskList {
     }
 
     public void getSchedule(String userInput) throws WalterException {
-        String searchDate = Parser.removeCommandFromInput(userInput, COMMAND_SCHEDULE);
+        String searchDate = parse.removeCommandFromInput(userInput, COMMAND_SCHEDULE);
 
-        Parser.checkForEmptySingleField(searchDate, COMMAND_SCHEDULE);
+        parse.checkForEmptySingleField(searchDate, COMMAND_SCHEDULE);
 
         try {
             LocalDate selectedDate = LocalDate.parse(searchDate);
@@ -128,7 +131,7 @@ public class TaskList {
      * @params splitUserInput Array of strings after original user input has been split by whitespace
      */
     public String setTaskAsDone (String[] splitUserInput) throws WalterException {
-        Parser.checkForValidInput(splitUserInput);
+        parse.checkForValidInput(splitUserInput);
         int taskNumber = Integer.parseInt(splitUserInput[1]) - 1;
         String markedItemDetails;
         taskList.get(taskNumber).setAsDone();
@@ -143,7 +146,7 @@ public class TaskList {
      * @param splitUserInput Array of strings after original user input has been split by whitespace
      */
     public String deleteTask (String[]splitUserInput) throws WalterException {
-        Parser.checkForValidInput(splitUserInput);
+        parse.checkForValidInput(splitUserInput);
         int taskToDelete = Integer.parseInt(splitUserInput[1]) - 1;
         String deleteItemDetails = taskList.get(taskToDelete).toString();
         taskList.remove(taskToDelete);

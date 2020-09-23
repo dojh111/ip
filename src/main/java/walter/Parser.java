@@ -38,7 +38,7 @@ public class Parser {
      * @param userInput Original string typed by user and to be modified
      * @param commandToRemove Command to be removed from string
      */
-    public static String removeCommandFromInput(String userInput, String commandToRemove) {
+    public String removeCommandFromInput(String userInput, String commandToRemove) {
         String modifiedUserInput = userInput.replaceFirst(commandToRemove, BLANK_SPACE);
         return modifiedUserInput.trim();
     }
@@ -48,7 +48,7 @@ public class Parser {
      *
      * @param identifier Identifier token to split the string with
      */
-    public static String[] determineTaskInformation(String userInput, String commandToRemove, String identifier) {
+    public String[] determineTaskInformation(String userInput, String commandToRemove, String identifier) {
         String modifiedString = removeCommandFromInput(userInput, commandToRemove);
         return modifiedString.split(identifier);
     }
@@ -58,7 +58,7 @@ public class Parser {
      *
      * @param splitUserInput Original user typed string split by whitespace
      */
-    public static void checkForValidInput(String[] splitUserInput) throws WalterException {
+    public void checkForValidInput(String[] splitUserInput) throws WalterException {
         if (isValidLength(splitUserInput, INVALID_COMMAND_SIZE)) {
             throw new WalterException(EXCEPTION_EMPTY_FIELD);
         }
@@ -69,7 +69,7 @@ public class Parser {
      *
      * @param field Argument to be checked
      */
-    public static void checkForEmptySingleField(String field, String command) throws WalterException {
+    public void checkForEmptySingleField(String field, String command) throws WalterException {
         if (isBlankSpace(field)) {
             switch (command) {
             case "todo":
@@ -90,7 +90,7 @@ public class Parser {
      * @param informationStrings Arguments split by whitespaces
      * @param eventIdentifier Identifier to distinguish events and deadlines
      */
-    public static void checkForValidFieldEntered(String[] informationStrings, String command, String eventIdentifier)
+    public void checkForValidFieldEntered(String[] informationStrings, String command, String eventIdentifier)
             throws WalterException {
         boolean fieldsArePresent = true;
 
@@ -115,14 +115,14 @@ public class Parser {
      * @param splitStrings Array of strings whose length is to be compared with minimum length
      * @param minimumLength The target minimum length that splitStrings has to be
      */
-    public static boolean isInvalidLength(String[] splitStrings, int minimumLength) {
+    public boolean isInvalidLength(String[] splitStrings, int minimumLength) {
         return splitStrings.length < minimumLength;
     }
 
     /**
      * Generates the exception message for WalterException
      */
-    public static String generateExceptionMessage(String command, String eventIdentifier) {
+    public String generateExceptionMessage(String command, String eventIdentifier) {
         return EXCEPTION_TIMEDEVENT_INTRO + command +
                 EXCEPTION_TIMEDEVENT_BODY +
                 EXCEPTION_TIMEDEVENT_DESCRIPTION + eventIdentifier + EXCEPTION_TIMEDEVENT_TIMEINFO;
@@ -133,7 +133,7 @@ public class Parser {
      *
      * @param timeInformation The original field entered by user after the task identifier
      */
-    public static ArrayList<String> determineDateInformation(String timeInformation) {
+    public ArrayList<String> determineDateInformation(String timeInformation) {
         String[] splitTimeInformation = timeInformation.split(WHITESPACE_IDENTIFIER);
         ArrayList<String> replacementStrings = new ArrayList<>();
         Ui ui = new Ui();
@@ -159,7 +159,7 @@ public class Parser {
      *
      * @param stringInformation Date information in string form
      */
-    public static ArrayList<String> formatDateInformation(String stringInformation) {
+    public ArrayList<String> formatDateInformation(String stringInformation) {
         LocalDate taskDate;
         ArrayList<String> replacementStrings = new ArrayList<>();
 
@@ -176,7 +176,7 @@ public class Parser {
      *
      * @param stringInformation Date information in string form
      */
-    public static boolean isValidDateFormat(String stringInformation) {
+    public boolean isValidDateFormat(String stringInformation) {
         String[] splitDate = stringInformation.split(HYPHEN_IDENTIFIER);
 
         //Check for empty fields
@@ -195,7 +195,7 @@ public class Parser {
      * @param splitArray Array of strings whose size is to be compared with the
      * @param targetSize Size that splitArray must be equal to
      */
-    public static boolean isValidLength(String[] splitArray, int targetSize) {
+    public boolean isValidLength(String[] splitArray, int targetSize) {
         return splitArray.length == targetSize;
     }
 
@@ -204,7 +204,7 @@ public class Parser {
      *
      * @param subString Current string in array of split dates
      */
-    public static boolean isBlankSpace(String subString) {
+    public boolean isBlankSpace(String subString) {
         return subString.trim().equals(BLANK_SPACE);
     }
 
