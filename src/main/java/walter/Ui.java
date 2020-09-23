@@ -1,5 +1,6 @@
 package walter;
 
+import walter.exceptions.WalterException;
 import walter.tasks.Task;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class Ui {
             "I'm sorry, I don't understand that ;-;. Please enter a number instead!";
     public static final String EXCEPTION_FILE_WRITE_ERROR = "Oh no, something went wrong while saving!";
     public static final String EXCEPTION_INVALID_DATE_FORMAT = "Please enter date in this format:\n[YYYY-MM-DD]";
+    public static final String EXCEPTION_UNABLE_TO_DETERMINE_TASK = "Hmm, I could not determine the task, please try again!";
 
     /** Prints separator component after text is printed */
     public static void printSeparator() {
@@ -128,7 +130,8 @@ public class Ui {
      * @param filterField Searchterm
      * @param command Either "find" or "schedule"
      */
-    public static void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command) {
+    public void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command)
+            throws WalterException {
         printSeparator();
         if (isEmptyFilteredTasks(filteredTasks, filterField, command)) {
             return;
@@ -145,7 +148,8 @@ public class Ui {
      * @param filterField Searchterm
      * @param command Either "find" or "schedule"
      */
-    public static boolean isEmptyFilteredTasks(ArrayList<Task> filteredTasks, String filterField, String command) {
+    public static boolean isEmptyFilteredTasks(ArrayList<Task> filteredTasks, String filterField, String command)
+            throws WalterException {
         boolean isEmpty = false;
         if (filteredTasks.size() == 0) {
             switch (command) {
@@ -158,7 +162,7 @@ public class Ui {
                 isEmpty = true;
                 break;
             default:
-                break;
+                throw new WalterException(EXCEPTION_UNABLE_TO_DETERMINE_TASK);
             }
         }
         return isEmpty;
@@ -170,7 +174,7 @@ public class Ui {
      * @param filterField Searchterm
      * @param command Either "find" or "schedule"
      */
-    public static void printFilteredTaskMessage(String filterField, String command) {
+    public static void printFilteredTaskMessage(String filterField, String command) throws WalterException {
         switch (command) {
         case "find":
             System.out.println("This is what I have found for: " + filterField);
@@ -179,7 +183,7 @@ public class Ui {
             System.out.println("Here are the events you have on " + filterField + ":");
             break;
         default:
-            break;
+            throw new WalterException(EXCEPTION_UNABLE_TO_DETERMINE_TASK);
         }
     }
 
@@ -198,6 +202,9 @@ public class Ui {
         }
     }
 
+    /**
+     * Prints error message when file creation fails
+     */
     public void showLoadingError() {
         System.out.println(EXCEPTION_FILE_ERROR);
     }
@@ -235,7 +242,7 @@ public class Ui {
     /**
      * Prints error message when an invalid date format is entered
      */
-    public static void showInvalidDateFormatError() {
+    public void showInvalidDateFormatError() {
         System.out.println(EXCEPTION_INVALID_DATE_FORMAT);
     }
 

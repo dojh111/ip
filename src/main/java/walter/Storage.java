@@ -1,5 +1,6 @@
 package walter;
 
+import walter.exceptions.WalterException;
 import walter.tasks.Deadline;
 import walter.tasks.Event;
 import walter.tasks.Task;
@@ -25,6 +26,9 @@ public class Storage {
     public static final String EVENT_ICON = "[E]";
     public static final String BLANK_STRING = "";
 
+    public static final String EXCEPTION_FAILED_IDENTIFICATION = "Oh no, something went wrong while determining " +
+            "the task type!";
+
     private final String filePath;
 
     public Storage(String filePath) {
@@ -36,7 +40,7 @@ public class Storage {
      *
      * @return ArrayList of tasks
      */
-    public ArrayList<Task> readFileContents() throws IOException {
+    public ArrayList<Task> readFileContents() throws IOException, WalterException {
         ArrayList<Task> taskList = new ArrayList<>();
         File saveFile = new File(filePath);
 
@@ -66,6 +70,8 @@ public class Storage {
                     taskDate = taskComponents[4];
                     taskList.add(new Event(taskDescription, taskTimingInformation, taskDate));
                     break;
+                default:
+                    throw new WalterException(EXCEPTION_FAILED_IDENTIFICATION);
                 }
                 //Set status of task to done if required
                 if (isTaskDone(taskStatus)) {
@@ -120,12 +126,10 @@ public class Storage {
      * @param task Current task object
      */
     public int determineTaskStatus(Task task) {
-        int taskStatus;
+        int taskStatus = 0;
 
         if (task.getStatus()) {
             taskStatus = 1;
-        } else {
-            taskStatus = 0;
         }
 
         return taskStatus;

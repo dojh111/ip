@@ -15,8 +15,6 @@ import static java.util.stream.Collectors.toList;
 
 public class TaskList {
 
-    public static final String BLANK_SPACE = "";
-
     public static final String DEFAULT_DATE = "9999-12-31";
     public static final String DATE_FORMAT = "MMM d yyyy";
 
@@ -24,14 +22,18 @@ public class TaskList {
     public static final String COMMAND_FIND = "find";
     public static final String COMMAND_SCHEDULE = "schedule";
 
+    private Ui ui;
+
     public ArrayList<Task> taskList;
 
     public TaskList(ArrayList<Task> taskList) {
         this.taskList = taskList;
+        ui = new Ui();
     }
 
     public TaskList() {
         this.taskList = new ArrayList<>();
+        ui = new Ui();
     }
 
     public ArrayList<Task> getTaskList() {
@@ -98,7 +100,7 @@ public class TaskList {
                 .filter((s) -> s.toString().contains(searchTerm))
                 .collect(toList());
 
-        Ui.printFilteredResults(searchResults, searchTerm, COMMAND_FIND);
+        ui.printFilteredResults(searchResults, searchTerm, COMMAND_FIND);
     }
 
     public void getSchedule(String userInput) throws WalterException {
@@ -114,9 +116,9 @@ public class TaskList {
             ArrayList<Task> tasksOnDay = (ArrayList<Task>) taskList.stream()
                     .filter((s) -> s.getDate().equals(inputDate))
                     .collect(toList());
-            Ui.printFilteredResults(tasksOnDay, formattedDate, COMMAND_SCHEDULE);
+            ui.printFilteredResults(tasksOnDay, formattedDate, COMMAND_SCHEDULE);
         } catch (DateTimeParseException e) {
-            Ui.showInvalidDateFormatError();
+            ui.showInvalidDateFormatError();
         }
     }
 

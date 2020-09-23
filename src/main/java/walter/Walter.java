@@ -34,6 +34,8 @@ public class Walter {
         } catch (IOException e) {
             ui.showLoadingError();
             tasks = new TaskList();
+        } catch (WalterException e) {
+            ui.showWalterError(e.getErrorMessage());
         }
     }
 
@@ -103,8 +105,10 @@ public class Walter {
 
             } catch (NumberFormatException e) {
                 ui.showInvalidInputError();
+
             } catch (IOException e) {
                 ui.showFileSaveError();
+
             }
         }
 
