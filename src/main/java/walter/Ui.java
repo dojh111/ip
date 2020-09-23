@@ -1,11 +1,14 @@
 package walter;
 
+import walter.exceptions.WalterException;
 import walter.tasks.Task;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The UI class handles user input interface and prints messages to the user
+ */
 public class Ui {
 
     //ASCII art logos
@@ -43,13 +46,19 @@ public class Ui {
             "I'm sorry, I don't understand that ;-;. Please enter a number instead!";
     public static final String EXCEPTION_FILE_WRITE_ERROR = "Oh no, something went wrong while saving!";
     public static final String EXCEPTION_INVALID_DATE_FORMAT = "Please enter date in this format:\n[YYYY-MM-DD]";
+    public static final String EXCEPTION_UNABLE_TO_DETERMINE_TASK = "Hmm, I could not determine the task, please "
+            + "try again!";
 
-    /** Prints separator component after text is printed */
-    public static void printSeparator() {
+    /**
+     * Prints separator component after text is printed
+     */
+    public void printSeparator() {
         System.out.println(MESSAGE_LINE_SEPARATOR);
     }
 
-    /** Prints startup greet sequence */
+    /**
+     * Prints startup greet sequence
+     */
     public void printStartupSequence() {
         System.out.println(MESSAGE_HELLO_FROM + WALTER_LOGO);
         printSeparator();
@@ -58,7 +67,9 @@ public class Ui {
         printSeparator();
     }
 
-    /** Prints closing sequence */
+    /**
+     * Prints closing sequence
+     */
     public void printClosingSequence() {
         printSeparator();
         System.out.println(MESSAGE_CLOSING);
@@ -66,7 +77,9 @@ public class Ui {
         printSeparator();
     }
 
-    /** Returns read user command */
+    /**
+     * Returns read user command
+     */
     public String readUserCommand() {
         Scanner in = new Scanner(System.in);
 
@@ -100,7 +113,7 @@ public class Ui {
     }
 
     /**
-     * Print list of current tasks
+     * Prints list of current tasks
      *
      * @param tasks Array of current stored tasks
      */
@@ -126,9 +139,10 @@ public class Ui {
      * @param filterField Searchterm
      * @param command Either "find" or "schedule"
      */
-    public static void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command) {
+    public void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command)
+            throws WalterException {
         printSeparator();
-        if (isEmptyFilteredTasks(filteredTasks, filterField, command)) {
+        if (isFilteredTasksEmpty(filteredTasks, filterField, command)) {
             return;
         }
         printFilteredTaskMessage(filterField, command);
@@ -136,8 +150,15 @@ public class Ui {
         printSeparator();
     }
 
-    /** Returns true when there are empty search results */
-    public static boolean isEmptyFilteredTasks(ArrayList<Task> filteredTasks, String filterField, String command) {
+    /**
+     * Returns true when there are empty search results
+     *
+     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
+     * @param filterField Searchterm
+     * @param command Either "find" or "schedule"
+     */
+    public boolean isFilteredTasksEmpty(ArrayList<Task> filteredTasks, String filterField, String command)
+            throws WalterException {
         boolean isEmpty = false;
         if (filteredTasks.size() == 0) {
             switch (command) {
@@ -150,14 +171,19 @@ public class Ui {
                 isEmpty = true;
                 break;
             default:
-                break;
+                throw new WalterException(EXCEPTION_UNABLE_TO_DETERMINE_TASK);
             }
         }
         return isEmpty;
     }
 
-    /** Prints the header message for schedule and find functions */
-    public static void printFilteredTaskMessage(String filterField, String command) {
+    /**
+     * Prints the header message for schedule and find functions
+     *
+     * @param filterField Searchterm
+     * @param command Either "find" or "schedule"
+     */
+    public void printFilteredTaskMessage(String filterField, String command) throws WalterException {
         switch (command) {
         case "find":
             System.out.println("This is what I have found for: " + filterField);
@@ -166,7 +192,7 @@ public class Ui {
             System.out.println("Here are the events you have on " + filterField + ":");
             break;
         default:
-            break;
+            throw new WalterException(EXCEPTION_UNABLE_TO_DETERMINE_TASK);
         }
     }
 
@@ -175,7 +201,7 @@ public class Ui {
      *
      * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
      */
-    public static void printFilteredTasksList (ArrayList<Task> filteredTasks) {
+    public void printFilteredTasksList (ArrayList<Task> filteredTasks) {
         int taskCount = 1;
 
         for (Task task : filteredTasks) {
@@ -185,27 +211,47 @@ public class Ui {
         }
     }
 
+    /**
+     * Prints error message when file creation fails
+     */
     public void showLoadingError() {
         System.out.println(EXCEPTION_FILE_ERROR);
     }
 
+    /**
+     * Prints error messages from thrown WalterExceptions
+     *
+     * @param errorMessage The message to be displayed according to the error
+     */
     public void showWalterError(String errorMessage) {
         System.out.println(errorMessage);
     }
 
+    /**
+     * Prints error message when invalid number is entered
+     */
     public void showInvalidNumberError() {
         System.out.println(EXCEPTION_INVALID_TASK_NUMBER);
     }
 
+    /**
+     * Prints error message when invalid input is entered
+     */
     public void showInvalidInputError() {
         System.out.println(EXCEPTION_DONE_EXPECTED_INTEGER);
     }
 
+    /**
+     * Prints error message when file error occurs
+     */
     public void showFileSaveError() {
         System.out.println(EXCEPTION_FILE_WRITE_ERROR);
     }
 
-    public static void showInvalidDateFormatError() {
+    /**
+     * Prints error message when an invalid date format is entered
+     */
+    public void showInvalidDateFormatError() {
         System.out.println(EXCEPTION_INVALID_DATE_FORMAT);
     }
 

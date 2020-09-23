@@ -3,10 +3,9 @@ package walter;
 import walter.exceptions.WalterException;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
- * Duke is a chat bot which can help the user do multiple tasks
+ * Walter is a chat bot which can help the user do multiple tasks
  */
 public class Walter {
     //Identifiers and values
@@ -35,6 +34,8 @@ public class Walter {
         } catch (IOException e) {
             ui.showLoadingError();
             tasks = new TaskList();
+        } catch (WalterException e) {
+            ui.showWalterError(e.getErrorMessage());
         }
     }
 
@@ -104,8 +105,10 @@ public class Walter {
 
             } catch (NumberFormatException e) {
                 ui.showInvalidInputError();
+
             } catch (IOException e) {
                 ui.showFileSaveError();
+
             }
         }
 

@@ -1,5 +1,6 @@
 package walter;
 
+import walter.exceptions.WalterException;
 import walter.tasks.Deadline;
 import walter.tasks.Event;
 import walter.tasks.Task;
@@ -11,6 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The storage class handles all file reading and writing operations for Walter
+ */
 public class Storage {
 
     //File Path and other constants
@@ -21,6 +25,9 @@ public class Storage {
     public static final String DEADLINE_ICON = "[D]";
     public static final String EVENT_ICON = "[E]";
     public static final String BLANK_STRING = "";
+
+    public static final String EXCEPTION_FAILED_IDENTIFICATION = "Oh no, something went wrong while determining "
+            + "the task type!";
 
     private final String filePath;
 
@@ -33,14 +40,14 @@ public class Storage {
      *
      * @return ArrayList of tasks
      */
-    public ArrayList<Task> readFileContents() throws IOException {
+    public ArrayList<Task> readFileContents() throws IOException, WalterException {
         ArrayList<Task> taskList = new ArrayList<>();
         File saveFile = new File(filePath);
 
-        //Read from file if exists, else create new directory and files
+        //Read from file if file exists, else create a new save file
         if (saveFile.exists()) {
             Scanner fileScanner = new Scanner(saveFile);
-            //Re-create task objects in the array
+            //Re-create task objects and add to the ArrayList
             while (fileScanner.hasNext()) {
                 String taskInformation = fileScanner.nextLine();
                 String[] taskComponents = taskInformation.split(SAVE_DELIMITER);
@@ -63,9 +70,11 @@ public class Storage {
                     taskDate = taskComponents[4];
                     taskList.add(new Event(taskDescription, taskTimingInformation, taskDate));
                     break;
+                default:
+                    throw new WalterException(EXCEPTION_FAILED_IDENTIFICATION);
                 }
                 //Set status of task to done if required
-                if (Integer.parseInt(taskStatus) == 1) {
+                if (isTaskDone(taskStatus)) {
                     taskList.get(taskList.size() - 1).setAsDone();
                 }
             }
@@ -81,12 +90,21 @@ public class Storage {
     }
 
     /**
-     * Writes data from the tasks array onto a file, so that data can be saved
+     * Returns true if task is saved as done
+     *
+     * @param taskStatus The status of the task, can be 1 for true or 0 for false
+     */
+    public boolean isTaskDone(String taskStatus) {
+        return Integer.parseInt(taskStatus) == 1;
+    }
+
+    /**
+     * Writes data from the tasks array onto a file. File data is cleared first before writing
      *
      * @param tasks ArrayList of tasks to be written onto the file
      */
     public void writeToFile(ArrayList<Task> tasks) throws IOException {
-        //Clearing file before writing
+        //Clear file before writing
         FileWriter fwClear = new FileWriter(filePath);
         fwClear.write(BLANK_STRING);
         fwClear.close();
@@ -94,19 +112,38 @@ public class Storage {
         //Append information into file
         FileWriter fileWriter = new FileWriter(filePath, true);
         for (Task task : tasks) {
-            int taskStatus;
-            //Determine status to write to file based on task status
-            if (task.getStatus()) {
-                taskStatus = 1;
-            } else {
-                taskStatus = 0;
-            }
-            //Create text string to write so save file
-            String taskToSave = task.getTaskIcon() + SAVE_DELIMITER + taskStatus + SAVE_DELIMITER
-                    + task.getDescription() + SAVE_DELIMITER + task.getTimingInformation() + SAVE_DELIMITER
-                    + task.getDate() +System.lineSeparator();
+            int taskStatus = determineTaskStatus(task);
+            String taskToSave = generateSaveText(task, taskStatus);
             fileWriter.write(taskToSave);
         }
         fileWriter.close();
+    }
+
+    /**
+     * Returns the current status of the task. 1 is returned when task is marked as done and 0 is returned if task
+     * is marked as undone
+     *
+     * @param task Current task object
+     */
+    public int determineTaskStatus(Task task) {
+        int taskStatus = 0;
+
+        if (task.getStatus()) {
+            taskStatus = 1;
+        }
+
+        return taskStatus;
+    }
+
+    /**
+     * Returns the string to be saved on the Walter save file
+     *
+     * @param task Current task object
+     * @param taskStatus Task object status represented in integer form
+     */
+    public String generateSaveText(Task task, int taskStatus) {
+        return task.getTaskIcon() + SAVE_DELIMITER + taskStatus + SAVE_DELIMITER
+                + task.getDescription() + SAVE_DELIMITER + task.getTimingInformation() + SAVE_DELIMITER
+                + task.getDate() +System.lineSeparator();
     }
 }
