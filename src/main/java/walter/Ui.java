@@ -2,10 +2,12 @@ package walter;
 
 import walter.tasks.Task;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handle user input interface and print messages to the user
+ */
 public class Ui {
 
     //ASCII art logos
@@ -100,7 +102,7 @@ public class Ui {
     }
 
     /**
-     * Print list of current tasks
+     * Prints list of current tasks
      *
      * @param tasks Array of current stored tasks
      */
@@ -136,7 +138,13 @@ public class Ui {
         printSeparator();
     }
 
-    /** Returns true when there are empty search results */
+    /**
+     * Returns true when there are empty search results
+     *
+     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
+     * @param filterField Searchterm
+     * @param command Either "find" or "schedule"
+     */
     public static boolean isEmptyFilteredTasks(ArrayList<Task> filteredTasks, String filterField, String command) {
         boolean isEmpty = false;
         if (filteredTasks.size() == 0) {
@@ -156,7 +164,12 @@ public class Ui {
         return isEmpty;
     }
 
-    /** Prints the header message for schedule and find functions */
+    /**
+     * Prints the header message for schedule and find functions
+     *
+     * @param filterField Searchterm
+     * @param command Either "find" or "schedule"
+     */
     public static void printFilteredTaskMessage(String filterField, String command) {
         switch (command) {
         case "find":
@@ -189,22 +202,39 @@ public class Ui {
         System.out.println(EXCEPTION_FILE_ERROR);
     }
 
+    /**
+     * Prints error messages from thrown WalterExceptions
+     *
+     * @param errorMessage The message to be displayed according to the error
+     */
     public void showWalterError(String errorMessage) {
         System.out.println(errorMessage);
     }
 
+    /**
+     * Prints error message when invalid number is entered
+     */
     public void showInvalidNumberError() {
         System.out.println(EXCEPTION_INVALID_TASK_NUMBER);
     }
 
+    /**
+     * Prints error message when invalid input is entered
+     */
     public void showInvalidInputError() {
         System.out.println(EXCEPTION_DONE_EXPECTED_INTEGER);
     }
 
+    /**
+     * Prints error message when file error occurs
+     */
     public void showFileSaveError() {
         System.out.println(EXCEPTION_FILE_WRITE_ERROR);
     }
 
+    /**
+     * Prints error message when an invalid date format is entered
+     */
     public static void showInvalidDateFormatError() {
         System.out.println(EXCEPTION_INVALID_DATE_FORMAT);
     }
