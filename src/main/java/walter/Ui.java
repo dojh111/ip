@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Handle user input interface and print messages to the user
+ * The UI class handles user input interface and prints messages to the user
  */
 public class Ui {
 
