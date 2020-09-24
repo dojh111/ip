@@ -62,6 +62,7 @@ As long as the date is input in the correct `YYYY-MM-DD` format, and comes after
 Displays all available commands on the terminal.\
 Format: `help`
 
+
 ### Adding a todo task: `todo`
 Adds a todo task to the task list without any additional information.\
 Format: `todo TASK_DESCRIPTION`
@@ -150,14 +151,35 @@ All Walter data is saved onto the hard disk automatically after any command that
 no need to manually save the data. When no save file is detected on startup, the program will automatically create 
 a new save file.
 
+---
+
 ## FAQ
-**Q:** Can I move my save data to another Computer?\
+**Q:** Can I move my save data to another location/Computer?\
 **A:** Yes you can. After downloading `walter.jar` onto the other device, you can either:
 1. Place a copy of the current `walter.txt` save file in the same directory of `walter.jar` being launching 
 the application
 1. Replace the save file `walter.txt` that was created by the program and found in the same directory as `walter.jar`
 with your own save file.
 
+**Q:** Why does the `schedule` command not return a task that falls on the same date as the given date?\
+**A:** Please ensure when the original task was created, the date was input in the format of `YYYY-MM-DD`, after 
+the `/at` identifier for `event` command and `/by` for `deadline` command. When successful, the input date in the 
+`YYYY-MM-DD` format will be automatically reformatted into a `MMM-DD-YYYY` format.\
+e.g `2022-03-04` will be reformatted into `Mar 04 2022` in the task description.
+
+---
 
 ## Command Summary
 
+Command | Format, Examples
+--------|-----------------
+**Help**|`help`
+**Todo**|`todo TASK_DESCRIPTION` e.g,`todo Watch videos`
+**Event**|`event TASK_DESCRIPTION /at ADDITIONAL_INFORMATION [DATE]` e.g,`event Team meeting /at 8pm tonight`
+**Deadline**|`deadline TASK_DESCRIPTION /by ADDITIONAL_INFORMATION [DATE]` e.g,`deadline Pay bills /by 2022-04-13`
+**List**|`list`
+**Find**|`find KEYWORD [MORE_KEYWORDS]` e.g,`find bread`
+**Schedule**|`schedule DATE` e.g,`schedule 2021-01-09`
+**Delete**|`delete INDEX` e.g,`delete 3`
+**Clear**|`clear`
+**Bye**|`bye`
