@@ -19,8 +19,33 @@ calendar GUI apps.
   * [Saving the data](#saving-the-data)
 * [FAQ](#faq)
 * [Command Summary](#command-summary)
+
+---
   
 ## Quick Start
+1. Ensure you have Java `11` installed in your Computer.
+1. Download the latest `walter.jar` from [here]().
+1. Copy the jar file to a *suitable location* on your computer. 
+*(Note: On the first launch of `walter.jar`, a save file will be created in the same directory
+as the jar file)*
+1. Open a new **terminal** window and navigate to the same directory where your `walter.jar` is located.
+1. Enter the **following command** into the **terminal** window to launch the application: 
+`java -jar walter.jar`. You will be greeted with a welcome screen from Walter on successful launch. 
+*Notice how a new save file is created if no previous save file exists in the same directory as `walter.jar`.*
+1. You are now ready to use *Walter*. Type commands into the **terminal** window and press enter to get *Walter* 
+to execute commands. e.g. typing `help` and pressing enter will bring up all available commands.\
+Here are some example commands you can try:
+    * `help`: Brings up all available commands.
+    * `todo Buy some bread`: Adds a todo task with description `Buy some bread` to the task list.
+    * `event concert /at Stadium 2021-01-09`: Adds an event with description `concert (At: Stadium Jan 9 2021)` 
+    to the task list.
+    * `list`: Lists all available tasks.
+    * `delete 1`: Deletes 1st task shown in list.
+    * `bye`: Exits the program.
+1. Refer to the [Features](#features) section below for further details of each command.
+
+---
+
 ## Features 
 
 ### Viewing help: `help`
