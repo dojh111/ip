@@ -59,18 +59,105 @@ e.g. `/by ADDITIONAL_INFORMATION [DATE]` can be used as `/by This Friday 2021-02
 As long as the date is input in the correct `YYYY-MM-DD` format, and comes after the `/by` or `/at` tags.
 
 ### Viewing help: `help`
+Displays all available commands on the terminal.\
+Format: `help`
+
 ### Adding a todo task: `todo`
+Adds a todo task to the task list without any additional information.\
+Format: `todo TASK_DESCRIPTION`
+
+**Examples:**
+* `todo Call up a friend` Adds a todo task `Call up a friend`
+* `todo Watch videos` Adds another todo task `Watch videos`
+
 ### Adding an event task: `event`
+Adds an event task to the task list with additional timing information.\
+Format: `event TASK_DESCRIPTION /at ADDITIONAL_INFORMATION [DATE]`
+
+* Both the TASK_DESCRIPTION and ADDITIONAL_INFORMATION *(or optional DATE)* fields must be present.
+* If DATE is provided, it must be in the format of `YYYY-MM-DD` for the field to be detected as a date. Else,
+it will be saved as part of the description.
+
+**Examples:**
+* `event Team meeting /at 8pm tonight` Adds event `Team meeting (At: 8pm tognight)` to the task list.
+* `event Concert /at 8-9pm, 2021-01-09` Adds another event `Concert (At: 8-9pm, Jan 9 2021)` to the task list.
+
 ### Adding a deadline task: `deadline`
+Adds a deadline task to the task list with additional timing information.\
+Format: `deadline TASK_DESCRIPTION /by ADDITIONAL_INFORMATION [DATE]`
+
+* Similar to [event](#adding-an-event-task-event).
+* Both the TASK_DESCRIPTION and ADDITIONAL_INFORMATION *(or optional DATE)* fields must be present.
+* If DATE is provided, it must be in the format of `YYYY-MM-DD` for the field to be detected as a date. Else,
+it will be saved as part of the description.
+
+**Examples:**
+* `deadline Return books /by This weekend` Adds deadline `Return books (By: This weekend)` to the task list.
+* `deadline Pay bills /by 2022-04-13` Adds deadline `Pay bills (By: Apr 13 2022)`.
+
 ### Viewing all tasks: `list`
+Displays all available tasks on the task list.\
+Format: `list`
+
 ### Looking for a task: `find`
+Finds all tasks in the task list that contain the given keywords.\
+Format: `find KEYWORD [MORE_KEYWORDS]`
+
+* The search **is** case-sensitive: `books` will **not** match `Books`
+* The search will follow the order of the keywords: `Buy Bread` will **not** match `Bread Buy`
+* Only full words will be matched: `Song` will not match `Songs`
+* Only tasks containing all keywords in the correct order will be returned.
+* Only the description is searched.
+
+**Examples:**
+* `find buy bread` returns `buy bread (By: Next morning)` and `Go and buy bread`
+
 ### Looking for all tasks on a date: `schedule`
+Finds all tasks in the task list that fall on the same date as the given date.\
+Format: `schedule DATE`
+
+* The given date must be in the format of `YYYY-MM-DD`.
+* Only tasks created with a valid date will be returned: Tasks with the dates found only in their description
+will not be returned.
+* Only the dates saved and linked to the task will be searched.
+
+**Examples:**
+* `scheudle 2021-09-01` returns `Concert (At: 8-9pm, Jan 9 2021)` and `Buy gifts (By: Jan 9 2021)`
+
+
 ### Deleting a task: `delete`
+Deletes the specified task from the task list.\
+Format: `delete INDEX`
+
+* Deletes the task at the specified `INDEX`.
+* The index refers to the index number shown in the displayed task [list](#viewing-all-tasks-list).
+* The index **must be a positive integer** e.g 1, 2, 3, ...
+
+**Examples:**
+* `delete 1` deletes the first task from `list`
+* `delete 3` deletes the third task from `list`
+
 ### Clearing all tasks: `clear`
+Clears all entries from the task list.\
+Format: `clear`
+
 ### Exiting the program: `bye`
+Exits the Walter program.\
+Format: `bye`
+
 ### Saving the data
+All Walter data is saved onto the hard disk automatically after any command that changes the data. Hence, there is
+no need to manually save the data. When no save file is detected on startup, the program will automatically create 
+a new save file.
 
 ## FAQ
+**Q:** Can I move my save data to another Computer?\
+**A:** Yes you can. After downloading `walter.jar` onto the other device, you can either:
+1. Place a copy of the current `walter.txt` save file in the same directory of `walter.jar` being launching 
+the application
+1. Replace the save file `walter.txt` that was created by the program and found in the same directory as `walter.jar`
+with your own save file.
+
 
 ## Command Summary
 
