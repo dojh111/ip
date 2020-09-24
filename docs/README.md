@@ -25,12 +25,15 @@ calendar GUI apps.
 ## Quick Start
 1. Ensure you have Java `11` installed in your Computer.
 1. Download the latest `walter.jar` from [here]().
-1. Copy the jar file to a *suitable location* on your computer. 
+1. Copy the jar file to a *suitable location* on your computer.\
 *(Note: On the first launch of `walter.jar`, a save file will be created in the same directory
 as the jar file)*
 1. Open a new **terminal** window and navigate to the same directory where your `walter.jar` is located.
-1. Enter the **following command** into the **terminal** window to launch the application: 
-`java -jar walter.jar`. You will be greeted with a welcome screen from Walter on successful launch. 
+1. Enter the **following command** into the **terminal** window to launch the application:
+````
+java -jar walter.jar
+````
+You will be greeted with a welcome screen from Walter on successful launch.
 *Notice how a new save file is created if no previous save file exists in the same directory as `walter.jar`.*
 1. You are now ready to use *Walter*. Type commands into the **terminal** window and press enter to get *Walter* 
 to execute commands. e.g. typing `help` and pressing enter will bring up all available commands.\
@@ -47,6 +50,13 @@ Here are some example commands you can try:
 ---
 
 ## Features 
+**Notes about the command format:**
+* **Words in `UPPER_CASE` are the parameters to be supplied by the user.**\
+e.g in `todo TASK_DESCRIPTION`, `TASK_DESCRIPTION` is a parameter which can be used as `todo Do work`.
+* **Items in square brackets are optional.**\
+e.g. `/by ADDITIONAL_INFORMATION [DATE]` can be used as `/by This Friday 2021-02-07` or `/by This Friday`.
+* **Dates can be input in any order.**\
+As long as the date is input in the correct `YYYY-MM-DD` format, and comes after the `/by` or `/at` tags.
 
 ### Viewing help: `help`
 ### Adding a todo task: `todo`
