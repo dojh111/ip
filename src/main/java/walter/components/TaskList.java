@@ -31,7 +31,7 @@ public class TaskList {
     private Ui ui;
     private Parser parse;
 
-    public ArrayList<Task> taskList;
+    private ArrayList<Task> taskList;
 
     public TaskList(ArrayList<Task> taskList) {
         this.taskList = taskList;
@@ -45,9 +45,6 @@ public class TaskList {
         parse = new Parser();
     }
 
-    /**
-     * Returns the ArrayList, taskList
-     */
     public ArrayList<Task> getTaskList() {
         return taskList;
     }
@@ -69,6 +66,8 @@ public class TaskList {
         String additionalInformation = informationStrings[1].trim();
 
         ArrayList<String> dateInformation = parse.determineDateInformation(additionalInformation);
+
+        //Pull information from arrayList and replace description with formatted date
         if (dateInformation.size() == 2) {
             unformattedDate = dateInformation.get(0);
             String formattedDate = dateInformation.get(1);
@@ -89,7 +88,7 @@ public class TaskList {
     }
 
     /**
-     * Adds todo task into taskList
+     * Adds a todo task into taskList
      *
      * @param userInput Unaltered input from user
      */
