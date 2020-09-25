@@ -50,6 +50,29 @@ public class Ui {
     public static final String EXCEPTION_UNABLE_TO_DETERMINE_TASK = "Hmm, I could not determine the task, please "
             + "try again!";
 
+    public static final String HELP_MENU =
+            "=============================================================================\n"
+            + "These are the commands that are available:\n"
+            + "Notes about the command format:\n"
+            + " * Words in UPPER_CASE are the parameters to be supplied by the user\n"
+            + " * Items in square brackets are optional, e.g [DATE]\n"
+            + "\n"
+            + "COMMANDS\n"
+            + "*****************************************************************************\n"
+            + "help ------------------------ Displays all available commands on the terminal\n"
+            + "todo DESCRIPTION ------------------------ Adds a todo task with a description\n"
+            + "event DESCRIPTION /at DESCRIPTION [DATE] ----------------- Adds an event task\n"
+            + "deadline DESCRIPTION /by DESCRIPTION [DATE ------------- Adds a deadline task\n"
+            + "list ---------------------------- Displays all current tasks on the task list\n"
+            + "find KEYWORD [KEYWORDS] ------------ Finds all tasks that contain the keyword\n"
+            + "schedule DATE ----------------------------- Finds all tasks that fall on date\n"
+            + "delete INDEX ------------------------ Deletes task at specified index of list\n"
+            + "clear -------------------------------------- Deletes all tasks from task list\n"
+            + "bye ------------------------------------------------------- Exits the program\n"
+            + "*****************************************************************************\n"
+            + "For more detailed information, please visit the online user guide at:\n"
+            + "https://dojh111.github.io/ip/#viewing-help-help\n"
+            + "=============================================================================\n";
     /**
      * Prints separator component after text is printed
      */
@@ -213,6 +236,13 @@ public class Ui {
     }
 
     /**
+     * Prints the help menu
+     */
+    public void showHelpMenu() {
+        System.out.println(HELP_MENU);
+    }
+
+    /**
      * Prints error message when file creation fails
      */
     public void showLoadingError() {
@@ -263,4 +293,5 @@ public class Ui {
         printSeparator();
         System.out.println(MESSAGE_CLEAR_CONFIRMED);
     }
+
 }
