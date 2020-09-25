@@ -11,6 +11,7 @@ calendar GUI apps.
   * [Adding an event task: `event`](#adding-an-event-task-event)
   * [Adding a deadline task: `deadline`](#adding-a-deadline-task-deadline)
   * [Viewing all tasks: `list`](#viewing-all-tasks-list)
+  * [Setting a task as done: `done`]()
   * [Looking for a task: `find`](#looking-for-a-task-find)
   * [Looking for all tasks on a date: `schedule`](#looking-for-all-tasks-on-a-date-schedule)
   * [Deleting a task: `delete`](#deleting-a-task-delete)
@@ -27,15 +28,16 @@ calendar GUI apps.
 1. Download the latest `walter.jar` from [here]().
 1. Copy the jar file to a *suitable location* on your computer.\
 *(Note: On the first launch of `walter.jar`, a save file will be created in the same directory
-as the jar file)*\
-![Start up screen](https://github.com/dojh111/ip/blob/master/docs/images/StartupScreen.png?raw=true)
+as the jar file)*
 1. Open a new **terminal** window and navigate to the same directory where your `walter.jar` is located.
 1. Enter the **following command** into the **terminal** window to launch the application:
 ````
 java -jar walter.jar
 ````
 You will be greeted with a welcome screen from Walter on successful launch.
-*Notice how a new save file is created if no previous save file exists in the same directory as `walter.jar`.*
+*Notice how a new save file is created if no previous save file exists in the same directory as `walter.jar`.*\
+\
+![Start up screen image](https://github.com/dojh111/ip/blob/master/docs/images/StartupScreen.png?raw=true)
 1. You are now ready to use *Walter*. Type commands into the **terminal** window and press enter to get *Walter* 
 to execute commands. e.g. typing `help` and pressing enter will bring up all available commands.\
 Here are some example commands you can try:
@@ -59,10 +61,14 @@ e.g. `/by ADDITIONAL_INFORMATION [DATE]` can be used as `/by This Friday 2021-02
 * **Dates can be input in any order.**\
 As long as the date is input in the correct `YYYY-MM-DD` format, and comes after the `/by` or `/at` tags.
 
+---
 ### Viewing help: `help`
 Displays all available commands on the terminal.\
 Format: `help`
 
+![Help command image](https://github.com/dojh111/ip/blob/master/docs/images/Help.png?raw=true)
+
+---
 
 ### Adding a todo task: `todo`
 Adds a todo task to the task list without any additional information.\
@@ -71,6 +77,8 @@ Format: `todo TASK_DESCRIPTION`
 **Examples:**
 * `todo Call up a friend` Adds a todo task `Call up a friend`
 * `todo Watch videos` Adds another todo task `Watch videos`
+
+---
 
 ### Adding an event task: `event`
 Adds an event task to the task list with additional timing information.\
@@ -83,6 +91,10 @@ it will be saved as part of the description.
 **Examples:**
 * `event Team meeting /at 8pm tonight` Adds event `Team meeting (At: 8pm tognight)` to the task list.
 * `event Concert /at 8-9pm, 2021-01-09` Adds another event `Concert (At: 8-9pm, Jan 9 2021)` to the task list.
+
+![Event command image](https://github.com/dojh111/ip/blob/master/docs/images/Event.png?raw=true)
+
+---
 
 ### Adding a deadline task: `deadline`
 Adds a deadline task to the task list with additional timing information.\
@@ -97,9 +109,28 @@ it will be saved as part of the description.
 * `deadline Return books /by This weekend` Adds deadline `Return books (By: This weekend)` to the task list.
 * `deadline Pay bills /by 2022-04-13` Adds deadline `Pay bills (By: Apr 13 2022)`.
 
+![Deadline command image](https://github.com/dojh111/ip/blob/master/docs/images/Deadline.png?raw=true)
+
+---
+
 ### Viewing all tasks: `list`
 Displays all available tasks on the task list.\
 Format: `list`
+
+---
+
+###Setting a task as done: `done`
+Sets the specified task as done.\
+Format: `done INDEX`
+
+* Sets the task as done at the specified `INDEX`.
+* The index refers to the index number shown in the displayed task [list](#viewing-all-tasks-list).
+* The index **must be a positive integer** e.g 1, 2, 3, ...
+
+**Example:**
+* `done 2` sets the second task from `list` as done.
+ 
+---
 
 ### Looking for a task: `find`
 Finds all tasks in the task list that contain the given keywords.\
@@ -114,6 +145,8 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 **Examples:**
 * `find buy bread` returns `buy bread (By: Next morning)` and `Go and buy bread`
 
+---
+
 ### Looking for all tasks on a date: `schedule`
 Finds all tasks in the task list that fall on the same date as the given date.\
 Format: `schedule DATE`
@@ -126,6 +159,7 @@ will not be returned.
 **Examples:**
 * `scheudle 2021-09-01` returns `Concert (At: 8-9pm, Jan 9 2021)` and `Buy gifts (By: Jan 9 2021)`
 
+---
 
 ### Deleting a task: `delete`
 Deletes the specified task from the task list.\
@@ -139,13 +173,19 @@ Format: `delete INDEX`
 * `delete 1` deletes the first task from `list`
 * `delete 3` deletes the third task from `list`
 
+---
+
 ### Clearing all tasks: `clear`
 Clears all entries from the task list.\
 Format: `clear`
 
+---
+
 ### Exiting the program: `bye`
 Exits the Walter program.\
 Format: `bye`
+
+---
 
 ### Saving the data
 All Walter data is saved onto the hard disk automatically after any command that changes the data. Hence, there is
