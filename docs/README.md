@@ -117,6 +117,8 @@ it will be saved as part of the description.
 Displays all available tasks on the task list.\
 Format: `list`
 
+![list command image](https://github.com/dojh111/ip/blob/master/docs/images/List.png?raw=true)
+
 ---
 
 ###Setting a task as done: `done`
@@ -129,6 +131,8 @@ Format: `done INDEX`
 
 **Example:**
 * `done 2` sets the second task from `list` as done.
+
+![Done command image](https://github.com/dojh111/ip/blob/master/docs/images/Done.png?raw=true)
  
 ---
 
@@ -145,6 +149,8 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 **Examples:**
 * `find buy bread` returns `buy bread (By: Next morning)` and `Go and buy bread`
 
+![Find command image](https://github.com/dojh111/ip/blob/master/docs/images/Find.png?raw=true)
+
 ---
 
 ### Looking for all tasks on a date: `schedule`
@@ -157,7 +163,9 @@ will not be returned.
 * Only the dates saved and linked to the task will be searched.
 
 **Examples:**
-* `scheudle 2021-09-01` returns `Concert (At: 8-9pm, Jan 9 2021)` and `Buy gifts (By: Jan 9 2021)`
+* `schedule 2021-09-01` returns `Concert (At: 8-9pm, Jan 9 2021)` and `Buy gifts (By: Jan 9 2021)`
+
+![Schedule command image](https://github.com/dojh111/ip/blob/master/docs/images/Schedule.png?raw=true)
 
 ---
 
@@ -171,7 +179,9 @@ Format: `delete INDEX`
 
 **Examples:**
 * `delete 1` deletes the first task from `list`
+![Delete1 command image](https://github.com/dojh111/ip/blob/master/docs/images/Delete1.png?raw=true)
 * `delete 3` deletes the third task from `list`
+![Delete3 command image](https://github.com/dojh111/ip/blob/master/docs/images/Delete3.png?raw=true)
 
 ---
 
@@ -219,6 +229,7 @@ Command | Format, Examples
 **Event**|`event TASK_DESCRIPTION /at ADDITIONAL_INFORMATION [DATE]` e.g,`event Team meeting /at 8pm tonight`
 **Deadline**|`deadline TASK_DESCRIPTION /by ADDITIONAL_INFORMATION [DATE]` e.g,`deadline Pay bills /by 2022-04-13`
 **List**|`list`
+**Done**|`done INDEX` e.g, `done 2`
 **Find**|`find KEYWORD [MORE_KEYWORDS]` e.g,`find bread`
 **Schedule**|`schedule DATE` e.g,`schedule 2021-01-09`
 **Delete**|`delete INDEX` e.g,`delete 3`
