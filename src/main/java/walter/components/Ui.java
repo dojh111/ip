@@ -71,7 +71,7 @@ public class Ui {
             + "bye ------------------------------------------------------- Exits the program\n"
             + "*****************************************************************************\n"
             + "For more detailed information, please visit the online user guide at:\n"
-            + "https://dojh111.github.io/ip/#viewing-help-help\n"
+            + "https://dojh111.github.io/ip/\n"
             + "=============================================================================\n";
     /**
      * Prints separator component after text is printed
