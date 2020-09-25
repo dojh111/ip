@@ -27,8 +27,8 @@ calendar GUI apps.
 1. Download the latest `walter.jar` from [here]().
 1. Copy the jar file to a *suitable location* on your computer.\
 *(Note: On the first launch of `walter.jar`, a save file will be created in the same directory
-as the jar file)*
-![StartupScreen](https://github.com/dojh111/ip/blob/master/docs/images/StartupScreen.png)
+as the jar file)*\
+![Start up screen](https://github.com/dojh111/ip/blob/master/docs/images/StartupScreen.png?raw=true)
 1. Open a new **terminal** window and navigate to the same directory where your `walter.jar` is located.
 1. Enter the **following command** into the **terminal** window to launch the application:
 ````
