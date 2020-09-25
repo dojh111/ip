@@ -75,8 +75,8 @@ Adds a todo task to the task list without any additional information.\
 Format: `todo TASK_DESCRIPTION`
 
 **Examples:**
-* `todo Call up a friend` Adds a todo task `Call up a friend`
-* `todo Watch videos` Adds another todo task `Watch videos`
+* `todo Call up a friend` Adds a todo task `Call up a friend` to the task list.
+* `todo Watch videos` Adds another todo task `Watch videos` to the task list.
 
 ---
 
@@ -84,8 +84,8 @@ Format: `todo TASK_DESCRIPTION`
 Adds an event task to the task list with additional timing information.\
 Format: `event TASK_DESCRIPTION /at ADDITIONAL_INFORMATION [DATE]`
 
-* Both the TASK_DESCRIPTION and ADDITIONAL_INFORMATION *(or optional DATE)* fields must be present.
-* If DATE is provided, it must be in the format of `YYYY-MM-DD` for the field to be detected as a date. Else,
+* Both the `TASK_DESCRIPTION` and `ADDITIONAL_INFORMATION` *(or optional `DATE`)* fields must be present.
+* If `DATE` is provided, it must be in the format of `YYYY-MM-DD` for the field to be detected as a date. Else,
 it will be saved as part of the description.
 
 **Examples:**
@@ -101,8 +101,8 @@ Adds a deadline task to the task list with additional timing information.\
 Format: `deadline TASK_DESCRIPTION /by ADDITIONAL_INFORMATION [DATE]`
 
 * Similar to [event](#adding-an-event-task-event).
-* Both the TASK_DESCRIPTION and ADDITIONAL_INFORMATION *(or optional DATE)* fields must be present.
-* If DATE is provided, it must be in the format of `YYYY-MM-DD` for the field to be detected as a date. Else,
+* Both the `TASK_DESCRIPTION` and `ADDITIONAL_INFORMATION` *(or optional `DATE`)* fields must be present.
+* If `DATE` is provided, it must be in the format of `YYYY-MM-DD` for the field to be detected as a date. Else,
 it will be saved as part of the description.
 
 **Examples:**
@@ -133,7 +133,7 @@ Format: `done INDEX`
 * `done 2` sets the second task from `list` as done.
 
 ![Done command image](https://github.com/dojh111/ip/blob/master/docs/images/Done.png?raw=true)
- 
+
 ---
 
 ### Looking for a task: `find`
@@ -142,8 +142,8 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 
 * The search **is** case-sensitive: `books` will **not** match `Books`
 * The search will follow the order of the keywords: `Buy Bread` will **not** match `Bread Buy`
-* Only full words will be matched: `Song` will not match `Songs`
 * Only tasks containing all keywords in the correct order will be returned.
+* Only full words will be matched: `Song` will not match `Songs`
 * Only the description is searched.
 
 **Examples:**
@@ -216,7 +216,7 @@ with your own save file.
 **A:** Please ensure when the original task was created, the date was input in the format of `YYYY-MM-DD`, after 
 the `/at` identifier for `event` command and `/by` for `deadline` command. When successful, the input date in the 
 `YYYY-MM-DD` format will be automatically reformatted into a `MMM-DD-YYYY` format.\
-e.g `2022-03-04` will be reformatted into `Mar 04 2022` in the task description.
+*e.g `2022-03-04` will be reformatted into `Mar 04 2022` in the task description.*
 
 ---
 
