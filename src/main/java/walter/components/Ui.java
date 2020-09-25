@@ -28,7 +28,7 @@ public class Ui {
     //General UI messages
     public static final String MESSAGE_TASK_ADDED_CONFIRM = " Got it, I've added this task: ";
     public static final String MESSAGE_HELLO_FROM = "Hello from\n";
-    public static final String MESSAGE_INTRO_GREETING = " Hello! I'm walter.walter  ◕_◕";
+    public static final String MESSAGE_INTRO_GREETING = " Hello! I'm walter! :D";
     public static final String MESSAGE_INTRO_WALTER_QUERY = " What can I do for you?";
     public static final String MESSAGE_CLOSING = " I'm sad to see you go. Hope to see you again soon! :D";
     public static final String MESSAGE_DOUBLE_WHITESPACE = "   ";
@@ -36,7 +36,7 @@ public class Ui {
             "______________________________________________________________________________";
     public static final String MESSAGE_NOW_YOU_HAVE = " Now you have ";
     public static final String MESSAGE_IN_THE_LIST = " in the list.";
-    public static final String MESSAGE_ERROR_TASK_UNAVAILABLE = "No tasks available... (｡◕‿‿◕｡)";
+    public static final String MESSAGE_ERROR_TASK_UNAVAILABLE = "No tasks available... :D";
     public static final String MESSAGE_TASKS_IN_LIST = " Here are the tasks in your list: ";
     public static final String MESSAGE_CLEAR_CONFIRMED = "Done! All tasks have been cleared :)";
 

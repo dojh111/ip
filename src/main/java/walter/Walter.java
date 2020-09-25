@@ -18,7 +18,7 @@ public class Walter {
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
 
-    public static final String MESSAGE_TASK_MARKED = "NICE! (｡◕‿‿◕｡) I've marked the task as done!:";
+    public static final String MESSAGE_TASK_MARKED = "NICE! I've marked the task as done!:";
     public static final String MESSAGE_TASK_DELETED = "Alright! I've removed this task from the list:";
 
     //Exception Messages
