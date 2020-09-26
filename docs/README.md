@@ -11,7 +11,7 @@ calendar GUI apps.
   * [Adding an event task: `event`](#adding-an-event-task-event)
   * [Adding a deadline task: `deadline`](#adding-a-deadline-task-deadline)
   * [Viewing all tasks: `list`](#viewing-all-tasks-list)
-  * [Setting a task as done: `done`]()
+  * [Setting a task as done: `done`](#setting-a-task-as-done-done)
   * [Looking for a task: `find`](#looking-for-a-task-find)
   * [Looking for all tasks on a date: `schedule`](#looking-for-all-tasks-on-a-date-schedule)
   * [Deleting a task: `delete`](#deleting-a-task-delete)
@@ -121,7 +121,7 @@ Format: `list`
 
 ---
 
-###Setting a task as done: `done`
+### Setting a task as done: `done`
 Sets the specified task as done.\
 Format: `done INDEX`
 
