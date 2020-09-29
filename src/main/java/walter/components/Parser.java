@@ -8,7 +8,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 /**
- * The Parser class handles text parsing for Walter
+ * The Parser class handles text parsing for Walter.
  */
 public class Parser {
     //Exception messages
@@ -33,10 +33,10 @@ public class Parser {
     public static final String DATE_FORMAT = "MMM d yyyy";
 
     /**
-     * Removes the command passed into the method
+     * Removes the command passed into the method.
      *
-     * @param userInput Original string typed by user and to be modified
-     * @param commandToRemove Command to be removed from string
+     * @param userInput Original string typed by user and to be modified.
+     * @param commandToRemove Command to be removed from string.
      */
     public String removeCommandFromInput(String userInput, String commandToRemove) {
         String modifiedUserInput = userInput.replaceFirst(commandToRemove, BLANK_SPACE);
@@ -44,9 +44,9 @@ public class Parser {
     }
 
     /**
-     * Returns a string array with the task's description and additional information
+     * Returns a string array with the task's description and additional information.
      *
-     * @param identifier Identifier token to split the string with
+     * @param identifier Identifier token to split the string with.
      */
     public String[] determineTaskInformation(String userInput, String commandToRemove, String identifier) {
         String modifiedString = removeCommandFromInput(userInput, commandToRemove);
@@ -54,9 +54,9 @@ public class Parser {
     }
 
     /**
-     * Checks for invalid command and throws WalterException
+     * Checks for invalid command and throws WalterException.
      *
-     * @param splitUserInput Original user typed string split by whitespace
+     * @param splitUserInput Original user typed string split by whitespace.
      */
     public void checkForValidInput(String[] splitUserInput) throws WalterException {
         if (isValidLength(splitUserInput, INVALID_COMMAND_SIZE)) {
@@ -65,9 +65,9 @@ public class Parser {
     }
 
     /**
-     * Checks and throws WalterException if no argument was passed in as argument
+     * Checks and throws WalterException if no argument was passed in as argument.
      *
-     * @param field Argument to be checked
+     * @param field Argument to be checked.
      */
     public void checkForEmptySingleField(String field, String command) throws WalterException {
         if (isBlankSpace(field)) {
@@ -85,10 +85,10 @@ public class Parser {
     }
 
     /**
-     * Validates arguments for events with time descriptions
+     * Validates arguments for events with time descriptions.
      *
-     * @param informationStrings Arguments split by whitespaces
-     * @param eventIdentifier Identifier to distinguish events and deadlines
+     * @param informationStrings Arguments split by whitespaces.
+     * @param eventIdentifier Identifier to distinguish events and deadlines.
      */
     public void checkForValidFieldEntered(String[] informationStrings, String command, String eventIdentifier)
             throws WalterException {
@@ -110,17 +110,17 @@ public class Parser {
     }
 
     /**
-     * Returns true if length of string array is lesser than the minimum length
+     * Returns true if length of string array is lesser than the minimum length.
      *
-     * @param splitStrings Array of strings whose length is to be compared with minimum length
-     * @param minimumLength The target minimum length that splitStrings has to be
+     * @param splitStrings Array of strings whose length is to be compared with minimum length.
+     * @param minimumLength The target minimum length that splitStrings has to be.
      */
     public boolean isInvalidLength(String[] splitStrings, int minimumLength) {
         return splitStrings.length < minimumLength;
     }
 
     /**
-     * Generates the exception message for WalterException
+     * Generates the exception message for WalterException.
      */
     public String generateExceptionMessage(String command, String eventIdentifier) {
         return EXCEPTION_TIMEDEVENT_INTRO + command +
@@ -129,9 +129,9 @@ public class Parser {
     }
 
     /**
-     * Returns an arraylist which contains information to replace date in original string
+     * Returns an arraylist which contains information to replace date in original string.
      *
-     * @param timeInformation The original field entered by user after the task identifier
+     * @param timeInformation The original field entered by user after the task identifier.
      */
     public ArrayList<String> determineDateInformation(String timeInformation) {
         String[] splitTimeInformation = timeInformation.split(WHITESPACE_IDENTIFIER);
@@ -140,24 +140,31 @@ public class Parser {
 
         //Check if substring contains 2 '-'
         for (String stringInformation : splitTimeInformation) {
-            if (stringInformation.contains(HYPHEN_IDENTIFIER)) {
-                if (isValidDateFormat(stringInformation)) {
-                    try {
-                        replacementStrings = formatDateInformation(stringInformation);
-                    } catch (DateTimeParseException e) {
-                        ui.showInvalidDateFormatError();
-                    }
-                    break;
+            if (isDateValidFormat(stringInformation)) {
+                try {
+                    replacementStrings = formatDateInformation(stringInformation);
+                } catch (DateTimeParseException e) {
+                    ui.showInvalidDateFormatError();
                 }
+                break;
             }
         }
         return replacementStrings;
     }
 
     /**
-     * Formats date object into specified format and returns both original and formatted strings
+     * Returns true when both conditions are met for the valid date format.
      *
-     * @param stringInformation Date information in string form
+     * @param stringInformation The suspected date object string.
+     */
+    public boolean isDateValidFormat(String stringInformation) {
+        return stringInformation.contains(HYPHEN_IDENTIFIER) && isValidDateFormat(stringInformation);
+    }
+
+    /**
+     * Formats date object into specified format and returns both original and formatted strings.
+     *
+     * @param stringInformation Date information in string form.
      */
     public ArrayList<String> formatDateInformation(String stringInformation) {
         LocalDate taskDate;
@@ -172,9 +179,9 @@ public class Parser {
     }
 
     /**
-     * Returns true when string contains 3 members separated by 2 hyphens
+     * Returns true when string contains 3 members separated by 2 hyphens.
      *
-     * @param stringInformation Date information in string form
+     * @param stringInformation Date information in string form.
      */
     public boolean isValidDateFormat(String stringInformation) {
         String[] splitDate = stringInformation.split(HYPHEN_IDENTIFIER);
@@ -190,37 +197,37 @@ public class Parser {
     }
 
     /**
-     * Returns true when date input fields have valid length
+     * Returns true when date input fields have valid length.
      *
-     * @param splitArray Array of strings whose size is to be compared with the
-     * @param targetSize Size that splitArray must be equal to
+     * @param splitArray Array of strings whose size is to be compared with the.
+     * @param targetSize Size that splitArray must be equal to.
      */
     public boolean isValidLength(String[] splitArray, int targetSize) {
         return splitArray.length == targetSize;
     }
 
     /**
-     * Returns true when field is empty or white space
+     * Returns true when field is empty or white space.
      *
-     * @param subString Current string in array of split dates
+     * @param subString Current string in array of split dates.
      */
     public boolean isBlankSpace(String subString) {
         return subString.trim().equals(BLANK_SPACE);
     }
 
     /**
-     * Returns array of strings from splitting given string with whitespace
+     * Returns array of strings from splitting given string with whitespace.
      *
-     * @param userInput Original string input from user
+     * @param userInput Original string input from user.
      */
     public String[] divideUserCommand(String userInput) {
         return userInput.split(WHITESPACE_IDENTIFIER);
     }
 
     /**
-     * Returns command from typed user input
+     * Returns command from typed user input.
      *
-     * @param splitUserInput Original user typed string split by whitespace
+     * @param splitUserInput Original user typed string split by whitespace.
      */
     public String determineCommand(String[] splitUserInput) {
         return splitUserInput[0];

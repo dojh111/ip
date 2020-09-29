@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import static java.util.stream.Collectors.toList;
 
 /**
- * The TaskList class handles actions on the individual tasks of the taskList
+ * The TaskList class handles actions on the individual tasks of the taskList.
  */
 public class TaskList {
 
@@ -50,11 +50,11 @@ public class TaskList {
     }
 
     /**
-     * Adds new timed event tasks such as events or deadlines into the task list
+     * Adds new timed event tasks such as events or deadlines into the task list.
      *
-     * @param userInput Original input by user
-     * @param command The command entered - Either event or deadline
-     * @param eventIdentifier Identifier to determine string information - Either /at or /by
+     * @param userInput Original input by user.
+     * @param command The command entered - Either event or deadline.
+     * @param eventIdentifier Identifier to determine string information - Either /at or /by.
      */
     public void addNewTimedEvent(String userInput, String command, String eventIdentifier) throws WalterException {
         String unformattedDate = DEFAULT_DATE;
@@ -88,9 +88,9 @@ public class TaskList {
     }
 
     /**
-     * Adds a todo task into taskList
+     * Adds a todo task into taskList.
      *
-     * @param userInput Unaltered input from user
+     * @param userInput Unaltered input from user.
      */
     public void addTodoTask(String userInput) throws WalterException {
         String taskDescription = parse.removeCommandFromInput(userInput, COMMAND_TODO);
@@ -101,9 +101,9 @@ public class TaskList {
     }
 
     /**
-     * Searches for tasks that include the search term and prints the results of the search
+     * Searches for tasks that include the search term and prints the results of the search.
      *
-     * @param userInput Unaltered input from user
+     * @param userInput Unaltered input from user.
      */
     public void findTask(String userInput) throws WalterException {
         String searchTerm = parse.removeCommandFromInput(userInput, COMMAND_FIND);
@@ -116,9 +116,9 @@ public class TaskList {
     }
 
     /**
-     * Returns an ArrayList of tasks that is filtered by the search term using streams
+     * Returns an ArrayList of tasks that is filtered by the search term using streams.
      *
-     * @param searchTerm Keyword that has to be included in task
+     * @param searchTerm Keyword that has to be included in task.
      */
     public ArrayList<Task> filterTaskBySearchTerm(String searchTerm) {
         return (ArrayList<Task>) taskList.stream()
@@ -127,9 +127,9 @@ public class TaskList {
     }
 
     /**
-     * Searches for dated objects that matches date entered by user and prints the results of the search
+     * Searches for dated objects that matches date entered by user and prints the results of the search.
      *
-     * @param userInput Unaltered input from user
+     * @param userInput Unaltered input from user.
      */
     public void getSchedule(String userInput) throws WalterException {
         String searchDate = parse.removeCommandFromInput(userInput, COMMAND_SCHEDULE);
@@ -151,9 +151,9 @@ public class TaskList {
     }
 
     /**
-     * Returns an ArrayList of objects whose date matches the input date
+     * Returns an ArrayList of objects whose date matches the input date.
      *
-     * @param inputDate Date in string format that has to match task object date
+     * @param inputDate Date in string format that has to match task object date.
      */
     public ArrayList<Task> filterTaskByDate(String inputDate) {
         return (ArrayList<Task>) taskList.stream()
@@ -162,9 +162,9 @@ public class TaskList {
     }
 
     /**
-     * Sets isDone of selected task to true
+     * Sets isDone of selected task to true.
      *
-     * @param splitUserInput Array of strings after original user input has been split by whitespace
+     * @param splitUserInput Array of strings after original user input has been split by whitespace.
      */
     public String setTaskAsDone (String[] splitUserInput) throws WalterException {
         parse.checkForValidInput(splitUserInput);
@@ -175,9 +175,9 @@ public class TaskList {
     }
 
     /**
-     * Removes task from the tasks ArrayList
+     * Removes task from the tasks ArrayList.
      *
-     * @param splitUserInput Array of strings after original user input has been split by whitespace
+     * @param splitUserInput Array of strings after original user input has been split by whitespace.
      */
     public String deleteTask (String[]splitUserInput) throws WalterException {
         parse.checkForValidInput(splitUserInput);
@@ -188,6 +188,9 @@ public class TaskList {
         return deleteItemDetails;
     }
 
+    /**
+     * Deletes all tasks currently on task list.
+     */
     public void clearTaskList() {
         taskList.clear();
     }

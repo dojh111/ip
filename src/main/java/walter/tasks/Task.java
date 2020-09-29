@@ -1,7 +1,7 @@
 package walter.tasks;
 
 /**
- * The Task class provides a template for the Task object where description and status is stored
+ * The Task class provides a template for the Task object where description and status is stored.
  */
 public abstract class Task {
 

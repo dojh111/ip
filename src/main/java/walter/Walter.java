@@ -9,7 +9,7 @@ import walter.exceptions.WalterException;
 import java.io.IOException;
 
 /**
- * Walter is a chat bot which can help the user do multiple tasks
+ * Walter is a chat bot which can help the user do multiple tasks.
  */
 public class Walter {
     //Identifiers and values
@@ -44,7 +44,7 @@ public class Walter {
     }
 
     /**
-     * Runs the main Walter program until termination
+     * Runs the main Walter program until termination.
      */
     public void run() {
         String userInput;
@@ -129,6 +129,9 @@ public class Walter {
         ui.printClosingSequence();
     }
 
+    /**
+     * Main entry point for the Walter program.
+     */
     public static void main(String[] args) {
         new Walter("walter.txt").run();
     }

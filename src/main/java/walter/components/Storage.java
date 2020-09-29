@@ -7,21 +7,18 @@ import walter.tasks.Task;
 import walter.tasks.Todo;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * The storage class handles all file reading and writing operations for Walter
+ * The storage class handles all file reading and writing operations for Walter.
  */
 public class Storage {
 
     //File Path and other constants
     public static final String SAVE_DELIMITER = "--";
-    public static final String FILE_MESSAGE_CREATED_SUCCESS = "Save file creation successful! :D";
-    public static final String FILE_MESSAGE_NO_SAVE_DETECTED = "No previous saves detected! Creating save file...";
     public static final String TODO_ICON = "[T]";
     public static final String DEADLINE_ICON = "[D]";
     public static final String EVENT_ICON = "[E]";
@@ -29,18 +26,19 @@ public class Storage {
 
     public static final String EXCEPTION_FAILED_IDENTIFICATION = "Oh no, something went wrong while determining "
             + "the task type!";
-    public static final String EXCEPTION_FAILED_FILE_CLEAR = "There seems to be a problem clearing the file...";
 
     private final String filePath;
+    private Ui ui;
 
     public Storage(String filePath) {
         this.filePath = filePath;
+        ui = new Ui();
     }
 
     /**
-     * Builds and returns an ArrayList of tasks from the save file. If no save file is found, a new file is created
+     * Builds and returns an ArrayList of tasks from the save file. If no save file is found, a new file is created.
      *
-     * @return ArrayList of tasks
+     * @return ArrayList of tasks.
      */
     public ArrayList<Task> readFileContents() throws IOException, WalterException {
         ArrayList<Task> taskList = new ArrayList<>();
@@ -57,9 +55,9 @@ public class Storage {
     }
 
     /**
-     * Re-creates all saved task objects and adds the objects to the taskList
+     * Re-creates all saved task objects and adds the objects to the taskList.
      *
-     * @param taskList The ArrayList to save
+     * @param taskList The ArrayList to save.
      */
     public void createTaskList(ArrayList<Task> taskList, Scanner fileScanner) throws WalterException {
 
@@ -92,28 +90,31 @@ public class Storage {
             default:
                 throw new WalterException(EXCEPTION_FAILED_IDENTIFICATION);
             }
+            //Re-set the tasks status from the save file
             setTaskStatus(taskList, taskStatus);
         }
     }
 
     /**
-     * Creates a new save file when no previous save file was detected
+     * Creates a new save file when no previous save file was detected.
      *
-     * @param saveFile File object containing file path to create save file
+     * @param saveFile File object containing file path to create save file.
      */
     public void createNewFile(File saveFile) throws IOException {
-        System.out.println(FILE_MESSAGE_NO_SAVE_DETECTED);
+        ui.showCreateNewFileMessages();
+
         boolean fileCreated = saveFile.createNewFile();
+
         if (fileCreated) {
-            System.out.println(FILE_MESSAGE_CREATED_SUCCESS);
+            ui.showFileCreateSuccess();
         }
     }
 
     /**
-     * Sets status of task according to save file
+     * Sets status of task according to save file.
      *
-     * @param taskList Current list of tasks created
-     * @param taskStatus Status
+     * @param taskList Current list of tasks created.
+     * @param taskStatus Status.
      */
     public void setTaskStatus(ArrayList<Task> taskList, String taskStatus) {
         if (isTaskDone(taskStatus)) {
@@ -122,18 +123,18 @@ public class Storage {
     }
 
     /**
-     * Returns true if task is saved as done
+     * Returns true if task is saved as done.
      *
-     * @param taskStatus The status of the task, can be 1 for true or 0 for false
+     * @param taskStatus The status of the task, can be 1 for true or 0 for false.
      */
     public boolean isTaskDone(String taskStatus) {
         return Integer.parseInt(taskStatus) == 1;
     }
 
     /**
-     * Writes data from the tasks array onto a file. File data is cleared first before writing
+     * Writes data from the tasks array onto a file. File data is cleared first before writing.
      *
-     * @param tasks ArrayList of tasks to be written onto the file
+     * @param tasks ArrayList of tasks to be written onto the file.
      */
     public void writeToFile(ArrayList<Task> tasks) throws IOException {
         clearFile();
@@ -150,9 +151,9 @@ public class Storage {
 
     /**
      * Returns the current status of the task. 1 is returned when task is marked as done and 0 is returned if task
-     * is marked as undone
+     * is marked as undone.
      *
-     * @param task Current task object
+     * @param task Current task object.
      */
     public int determineTaskStatus(Task task) {
         int taskStatus = 0;
@@ -165,10 +166,10 @@ public class Storage {
     }
 
     /**
-     * Returns the string to be saved on the Walter save file
+     * Returns the string to be saved on the Walter save file.
      *
-     * @param task Current task object
-     * @param taskStatus Task object status represented in integer form
+     * @param task Current task object.
+     * @param taskStatus Task object status represented in integer form.
      */
     public String generateSaveText(Task task, int taskStatus) {
         return task.getTaskIcon() + SAVE_DELIMITER + taskStatus + SAVE_DELIMITER
@@ -177,7 +178,7 @@ public class Storage {
     }
 
     /**
-     * Deletes all data written to the Walter.txt save file
+     * Deletes all data written to the Walter.txt save file.
      */
     public void clearFile() {
         try {
@@ -185,7 +186,7 @@ public class Storage {
             fwClear.write(BLANK_STRING);
             fwClear.close();
         } catch (IOException e) {
-            System.out.println(EXCEPTION_FAILED_FILE_CLEAR);
+            ui.showFileClearError();
         }
     }
 }

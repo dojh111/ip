@@ -3,7 +3,7 @@ package walter.tasks;
 import java.time.LocalDate;
 
 /**
- * The Deadline class inherits from the Task class and is used to create deadline objects
+ * The Deadline class inherits from the Task class and is used to create deadline objects.
  */
 public class Deadline extends Task {
     public static final String DEADLINE_ICON = "[D]";

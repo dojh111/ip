@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * The UI class handles user input interface and prints messages to the user
+ * The UI class handles user input interface and prints messages to the user.
  */
 public class Ui {
 
@@ -39,6 +39,13 @@ public class Ui {
     public static final String MESSAGE_ERROR_TASK_UNAVAILABLE = "No tasks available... :D";
     public static final String MESSAGE_TASKS_IN_LIST = " Here are the tasks in your list: ";
     public static final String MESSAGE_CLEAR_CONFIRMED = "Done! All tasks have been cleared :)";
+    public static final String MESSAGE_EMPTY_SEARCH_RESULT = "I could not find any tasks with the word: ";
+    public static final String MESSAGE_EMPTY_SCHEDULE = "You have nothing scheduled on: ";
+    public static final String MESSAGE_SEARCH_RESULT = "This is what I have found for: ";
+    public static final String MESSAGE_SCHEDULE_RESULT = "Here are the events you have on ";
+    //Storage messages
+    public static final String FILE_MESSAGE_NO_SAVE_DETECTED = "No previous saves detected! Creating save file...";
+    public static final String FILE_MESSAGE_CREATED_SUCCESS = "Save file creation successful! :D";
 
     //Exception error messages
     public static final String EXCEPTION_FILE_ERROR = "Oh no, something went wrong while creating a save file ;-;";
@@ -49,6 +56,7 @@ public class Ui {
     public static final String EXCEPTION_INVALID_DATE_FORMAT = "Please enter date in this format:\n[YYYY-MM-DD]";
     public static final String EXCEPTION_UNABLE_TO_DETERMINE_TASK = "Hmm, I could not determine the task, please "
             + "try again!";
+    public static final String EXCEPTION_FAILED_FILE_CLEAR = "There seems to be a problem clearing the file...";
 
     public static final String HELP_MENU =
             "=============================================================================\n"
@@ -73,15 +81,16 @@ public class Ui {
             + "For more detailed information, please visit the online user guide at:\n"
             + "https://dojh111.github.io/ip/\n"
             + "=============================================================================\n";
+
     /**
-     * Prints separator component after text is printed
+     * Prints separator component after text is printed.
      */
     public void printSeparator() {
         System.out.println(MESSAGE_LINE_SEPARATOR);
     }
 
     /**
-     * Prints startup greet sequence
+     * Prints startup greet sequence.
      */
     public void printStartupSequence() {
         System.out.println(MESSAGE_HELLO_FROM + WALTER_LOGO);
@@ -92,7 +101,7 @@ public class Ui {
     }
 
     /**
-     * Prints closing sequence
+     * Prints closing sequence.
      */
     public void printClosingSequence() {
         printSeparator();
@@ -102,7 +111,7 @@ public class Ui {
     }
 
     /**
-     * Returns read user command
+     * Returns read user command.
      */
     public String readUserCommand() {
         Scanner in = new Scanner(System.in);
@@ -111,10 +120,10 @@ public class Ui {
     }
 
     /**
-     * Prints the confirmation messages for setTaskAsDone and deleteTask
+     * Prints the confirmation messages for setTaskAsDone and deleteTask.
      *
-     * @param message The header message to inform the user whether action is set or delete
-     * @param itemDetails Details of the item that was set or deleted
+     * @param message The header message to inform the user whether action is set or delete.
+     * @param itemDetails Details of the item that was set or deleted.
      */
     public void printSetDeleteConfirmMessage(String message, String itemDetails) {
         printSeparator();
@@ -124,9 +133,9 @@ public class Ui {
     }
 
     /**
-     * Prints confirmation text when a new task is added
+     * Prints confirmation text when a new task is added.
      *
-     * @param tasks Array of current stored tasks
+     * @param tasks Array of current stored tasks.
      */
     public void printTaskAddedConfirmation(ArrayList<Task> tasks) {
         printSeparator();
@@ -137,17 +146,19 @@ public class Ui {
     }
 
     /**
-     * Prints list of current tasks
+     * Prints list of current tasks.
      *
-     * @param tasks Array of current stored tasks
+     * @param tasks Array of current stored tasks.
      */
     public void printTaskList(ArrayList<Task> tasks) {
         int taskNumber = 1;
         printSeparator();
-        if (tasks.size() == 0) {
+
+        if (isTasksEmpty(tasks)) {
             System.out.println(MESSAGE_ERROR_TASK_UNAVAILABLE);
             return;
         }
+
         System.out.println(MESSAGE_TASKS_IN_LIST);
         for (Task task : tasks) {
             System.out.println(" " + taskNumber + "." + task);
@@ -157,63 +168,74 @@ public class Ui {
     }
 
     /**
-     * Prints returned search results for schedule and find commands
+     * Returns true if the task list is empty.
+     */
+    public boolean isTasksEmpty(ArrayList<Task> tasks) {
+        return tasks.size() == 0;
+    }
+
+    /**
+     * Prints returned search results for schedule and find commands.
      *
-     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
-     * @param filterField Searchterm
-     * @param command Either "find" or "schedule"
+     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm.
+     * @param filterField Searchterm.
+     * @param command Either "find" or "schedule".
      */
     public void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command)
             throws WalterException {
         printSeparator();
+
         if (isFilteredTasksEmpty(filteredTasks, filterField, command)) {
             return;
         }
+
         printFilteredTaskMessage(filterField, command);
         printFilteredTasksList(filteredTasks);
         printSeparator();
     }
 
     /**
-     * Returns true when there are empty search results
+     * Returns true when there are empty search results.
      *
-     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
-     * @param filterField Searchterm
-     * @param command Either "find" or "schedule"
+     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm.
+     * @param filterField Searchterm.
+     * @param command Either "find" or "schedule".
      */
     public boolean isFilteredTasksEmpty(ArrayList<Task> filteredTasks, String filterField, String command)
             throws WalterException {
         boolean isEmpty = false;
-        if (filteredTasks.size() == 0) {
+
+        if (isTasksEmpty(filteredTasks)) {
             switch (command) {
             case "find":
-                System.out.println("I could not find any tasks with the word: " + filterField);
+                System.out.println(MESSAGE_EMPTY_SEARCH_RESULT + filterField);
                 isEmpty = true;
                 break;
             case "schedule":
-                System.out.println("You have nothing scheduled on: " + filterField);
+                System.out.println(MESSAGE_EMPTY_SCHEDULE + filterField);
                 isEmpty = true;
                 break;
             default:
                 throw new WalterException(EXCEPTION_UNABLE_TO_DETERMINE_TASK);
             }
         }
+
         return isEmpty;
     }
 
     /**
-     * Prints the header message for schedule and find functions
+     * Prints the header message for schedule and find functions.
      *
-     * @param filterField Searchterm
-     * @param command Either "find" or "schedule"
+     * @param filterField Searchterm.
+     * @param command Either "find" or "schedule".
      */
     public void printFilteredTaskMessage(String filterField, String command) throws WalterException {
         switch (command) {
         case "find":
-            System.out.println("This is what I have found for: " + filterField);
+            System.out.println(MESSAGE_SEARCH_RESULT + filterField);
             break;
         case "schedule":
-            System.out.println("Here are the events you have on " + filterField + ":");
+            System.out.println(MESSAGE_SCHEDULE_RESULT + filterField + ":");
             break;
         default:
             throw new WalterException(EXCEPTION_UNABLE_TO_DETERMINE_TASK);
@@ -221,9 +243,9 @@ public class Ui {
     }
 
     /**
-     * Prints all tasks that were filtered out
+     * Prints all tasks that were filtered out.
      *
-     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm
+     * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm.
      */
     public void printFilteredTasksList (ArrayList<Task> filteredTasks) {
         int taskCount = 1;
@@ -236,62 +258,85 @@ public class Ui {
     }
 
     /**
-     * Prints the help menu
+     * Prints the help menu.
      */
     public void showHelpMenu() {
         System.out.println(HELP_MENU);
     }
 
     /**
-     * Prints error message when file creation fails
+     * Prints error message when file creation fails.
      */
     public void showLoadingError() {
         System.out.println(EXCEPTION_FILE_ERROR);
     }
 
     /**
-     * Prints error messages from thrown WalterExceptions
+     * Prints error messages from thrown WalterExceptions.
      *
-     * @param errorMessage The message to be displayed according to the error
+     * @param errorMessage The message to be displayed according to the error.
      */
     public void showWalterError(String errorMessage) {
         System.out.println(errorMessage);
     }
 
     /**
-     * Prints error message when invalid number is entered
+     * Prints error message when a invalid task number is entered, out of bounds.
      */
     public void showInvalidNumberError() {
         System.out.println(EXCEPTION_INVALID_TASK_NUMBER);
     }
 
     /**
-     * Prints error message when invalid input is entered
+     * Prints error message when an integer is not provided for an integer field.
      */
     public void showInvalidInputError() {
         System.out.println(EXCEPTION_DONE_EXPECTED_INTEGER);
     }
 
     /**
-     * Prints error message when file error occurs
+     * Prints error message when file error occurs.
      */
     public void showFileSaveError() {
         System.out.println(EXCEPTION_FILE_WRITE_ERROR);
     }
 
     /**
-     * Prints error message when an invalid date format is entered
+     * Prints error message when an invalid date format is entered.
      */
     public void showInvalidDateFormatError() {
         System.out.println(EXCEPTION_INVALID_DATE_FORMAT);
     }
 
     /**
-     * Prints confirmation message for taskList being cleared
+     * Prints confirmation message for taskList being cleared.
      */
     public void printClearTaskListConfirmation() {
         printSeparator();
         System.out.println(MESSAGE_CLEAR_CONFIRMED);
     }
 
+    /**
+     * Prints sequence of messages when creating a new save file.
+     */
+    public void showCreateNewFileMessages() {
+        System.out.println(FILE_MESSAGE_NO_SAVE_DETECTED);
+        System.out.println("*");
+        System.out.println("*");
+        System.out.println("*");
+    }
+
+    /**
+     * Prints success message upon file creation success.
+     */
+    public void showFileCreateSuccess() {
+        System.out.println(FILE_MESSAGE_CREATED_SUCCESS);
+    }
+
+    /**
+     * Prints message when writing to a file to clear it fails.
+     */
+    public void showFileClearError() {
+        System.out.println(EXCEPTION_FAILED_FILE_CLEAR);
+    }
 }

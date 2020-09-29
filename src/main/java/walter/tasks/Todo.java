@@ -3,7 +3,7 @@ package walter.tasks;
 import java.time.LocalDate;
 
 /**
- * The Todo class inherits from the Task class and is used to create todo objects
+ * The Todo class inherits from the Task class and is used to create todo objects.
  */
 public class Todo extends Task {
 
