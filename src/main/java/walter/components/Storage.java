@@ -46,8 +46,12 @@ public class Storage {
 
         //Read from file if file exists, else create a new save file
         if (saveFile.exists()) {
+            ui.showFileReading();
+
             Scanner fileScanner = new Scanner(saveFile);
             createTaskList(taskList, fileScanner);
+
+            ui.showFileReadSuccess();
         } else {
             createNewFile(saveFile);
         }

@@ -43,9 +43,13 @@ public class Ui {
     public static final String MESSAGE_EMPTY_SCHEDULE = "You have nothing scheduled on: ";
     public static final String MESSAGE_SEARCH_RESULT = "This is what I have found for: ";
     public static final String MESSAGE_SCHEDULE_RESULT = "Here are the events you have on ";
+
     //Storage messages
     public static final String FILE_MESSAGE_NO_SAVE_DETECTED = "No previous saves detected! Creating save file...";
     public static final String FILE_MESSAGE_CREATED_SUCCESS = "Save file creation successful! :D";
+    public static final String MESSAGE_FOUND_SAVE = "Save file detected! :D";
+    public static final String MESSAGE_READ_FILE = "Reading from file...";
+    public static final String MESSAGE_READ_COMPLETE = "Save file successfully read! :D";
 
     //Exception error messages
     public static final String EXCEPTION_FILE_ERROR = "Oh no, something went wrong while creating a save file ;-;";
@@ -338,5 +342,23 @@ public class Ui {
      */
     public void showFileClearError() {
         System.out.println(EXCEPTION_FAILED_FILE_CLEAR);
+    }
+
+    /**
+     * Prints message when reading from the file
+     */
+    public void showFileReading() {
+        System.out.println(MESSAGE_FOUND_SAVE);
+        System.out.println(MESSAGE_READ_FILE);
+        System.out.println("*");
+        System.out.println("*");
+        System.out.println("*");
+    }
+
+    /**
+     * Prints message when file reading was successful
+     */
+    public void showFileReadSuccess() {
+        System.out.println(MESSAGE_READ_COMPLETE);
     }
 }
