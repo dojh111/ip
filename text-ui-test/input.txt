@@ -1,9 +1,14 @@
 todo borrow book
-list
-deadline return book /by Sunday
-event project meeting /at Mon 2-4pm
+deadline return book /by Sunday 2020-01-09
+event project meeting /at Mon 2-4pm 2020-01-09
 list
 done 1
 done 3
+list
+todo buy bread
+todo buy more bread
+find bread
+schedule 2020-01-09
+delete 3
 list
 bye
