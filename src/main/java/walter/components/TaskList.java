@@ -55,6 +55,7 @@ public class TaskList {
      * @param userInput Original input by user.
      * @param command The command entered - Either event or deadline.
      * @param eventIdentifier Identifier to determine string information - Either /at or /by.
+     * @throws WalterException Thrown when program is unable to determine the command.
      */
     public void addNewTimedEvent(String userInput, String command, String eventIdentifier) throws WalterException {
         String unformattedDate = DEFAULT_DATE;
@@ -91,6 +92,7 @@ public class TaskList {
      * Adds a todo task into taskList.
      *
      * @param userInput Unaltered input from user.
+     * @throws WalterException Thrown when there is an empty field in the command.
      */
     public void addTodoTask(String userInput) throws WalterException {
         String taskDescription = parse.removeCommandFromInput(userInput, COMMAND_TODO);
@@ -104,6 +106,7 @@ public class TaskList {
      * Searches for tasks that include the search term and prints the results of the search.
      *
      * @param userInput Unaltered input from user.
+     * @throws WalterException Thrown when there is an empty field in the command.
      */
     public void findTask(String userInput) throws WalterException {
         String searchTerm = parse.removeCommandFromInput(userInput, COMMAND_FIND);
@@ -130,6 +133,7 @@ public class TaskList {
      * Searches for dated objects that matches date entered by user and prints the results of the search.
      *
      * @param userInput Unaltered input from user.
+     * @throws WalterException Thrown when there is an issue with parsing the date.
      */
     public void getSchedule(String userInput) throws WalterException {
         String searchDate = parse.removeCommandFromInput(userInput, COMMAND_SCHEDULE);
@@ -165,6 +169,7 @@ public class TaskList {
      * Sets isDone of selected task to true.
      *
      * @param splitUserInput Array of strings after original user input has been split by whitespace.
+     * @throws WalterException Thrown when there is an invalid input in the command.
      */
     public String setTaskAsDone (String[] splitUserInput) throws WalterException {
         parse.checkForValidInput(splitUserInput);
@@ -178,6 +183,7 @@ public class TaskList {
      * Removes task from the tasks ArrayList.
      *
      * @param splitUserInput Array of strings after original user input has been split by whitespace.
+     * @throws WalterException Thrown when there is an invalid input in the command.
      */
     public String deleteTask (String[]splitUserInput) throws WalterException {
         parse.checkForValidInput(splitUserInput);

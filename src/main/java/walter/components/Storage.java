@@ -39,6 +39,8 @@ public class Storage {
      * Builds and returns an ArrayList of tasks from the save file. If no save file is found, a new file is created.
      *
      * @return ArrayList of tasks.
+     * @throws IOException Thrown when issues file is corrupted or cannot be found.
+     * @throws WalterException Thrown when there is an error recreating the task objects.
      */
     public ArrayList<Task> readFileContents() throws IOException, WalterException {
         ArrayList<Task> taskList = new ArrayList<>();
@@ -62,6 +64,7 @@ public class Storage {
      * Re-creates all saved task objects and adds the objects to the taskList.
      *
      * @param taskList The ArrayList to save.
+     * @throws WalterException Thrown when an error occurs when task recreation fails.
      */
     public void createTaskList(ArrayList<Task> taskList, Scanner fileScanner) throws WalterException {
 
@@ -103,6 +106,7 @@ public class Storage {
      * Creates a new save file when no previous save file was detected.
      *
      * @param saveFile File object containing file path to create save file.
+     * @throws IOException Thrown when file creation fails.
      */
     public void createNewFile(File saveFile) throws IOException {
         ui.showCreateNewFileMessages();
@@ -118,7 +122,7 @@ public class Storage {
      * Sets status of task according to save file.
      *
      * @param taskList Current list of tasks created.
-     * @param taskStatus Status.
+     * @param taskStatus Current status of task.
      */
     public void setTaskStatus(ArrayList<Task> taskList, String taskStatus) {
         if (isTaskDone(taskStatus)) {

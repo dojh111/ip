@@ -57,6 +57,7 @@ public class Parser {
      * Checks for invalid command and throws WalterException.
      *
      * @param splitUserInput Original user typed string split by whitespace.
+     * @throws WalterException Thrown when invalid inut length.
      */
     public void checkForValidInput(String[] splitUserInput) throws WalterException {
         if (isValidLength(splitUserInput, INVALID_COMMAND_SIZE)) {
@@ -68,6 +69,7 @@ public class Parser {
      * Checks and throws WalterException if no argument was passed in as argument.
      *
      * @param field Argument to be checked.
+     * @throws WalterException Thrown when a blank space is detected in user input.
      */
     public void checkForEmptySingleField(String field, String command) throws WalterException {
         if (isBlankSpace(field)) {

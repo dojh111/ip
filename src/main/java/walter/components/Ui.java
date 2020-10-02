@@ -184,6 +184,7 @@ public class Ui {
      * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm.
      * @param filterField Searchterm.
      * @param command Either "find" or "schedule".
+     * @throws WalterException Thrown when the command cannot be determined.
      */
     public void printFilteredResults(ArrayList<Task> filteredTasks, String filterField, String command)
             throws WalterException {
@@ -204,6 +205,7 @@ public class Ui {
      * @param filteredTasks The ArrayList of Tasks that were filtered to contain the searchterm.
      * @param filterField Searchterm.
      * @param command Either "find" or "schedule".
+     * @throws WalterException Thrown when the command cannot be determined.
      */
     public boolean isFilteredTasksEmpty(ArrayList<Task> filteredTasks, String filterField, String command)
             throws WalterException {
@@ -232,6 +234,7 @@ public class Ui {
      *
      * @param filterField Searchterm.
      * @param command Either "find" or "schedule".
+     * @throws WalterException Thrown when the command cannot be determined.
      */
     public void printFilteredTaskMessage(String filterField, String command) throws WalterException {
         switch (command) {

@@ -1,7 +1,7 @@
 package walter.exceptions;
 
 /**
- * Exception class for exceptions specific to walter.walter
+ * Exception class for exceptions specific to walter
  */
 public class WalterException extends Exception {
 
